@@ -1,0 +1,100 @@
+Jest ו-React Testing
+=====================
+
+שיעור 10: Jest ו-React Testing
+=================================
+
+מבוא
+====
+
+מדריך מקיף ל-Jest ו-React Testing Library.
+
+התקנה
+======
+
+```bash
+npm install -D jest @testing-library/react @testing-library/jest-dom
+```
+
+הגדרה
+======
+
+jest.config.js:
+
+```javascript
+module.exports = {
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/setupTests.js']
+};
+```
+
+setupTests.js:
+
+```javascript
+import '@testing-library/jest-dom';
+```
+
+דוגמאות
+=======
+
+1. בדיקת Render:
+----------------
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import Button from './Button';
+
+test('renders button', () => {
+  render(<Button>Click me</Button>);
+  expect(screen.getByText('Click me')).toBeInTheDocument();
+});
+```
+
+2. בדיקת Events:
+-----------------
+
+```jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import Button from './Button';
+
+test('calls onClick', () => {
+  const handleClick = jest.fn();
+  render(<Button onClick={handleClick}>Click</Button>);
+  fireEvent.click(screen.getByText('Click'));
+  expect(handleClick).toHaveBeenCalled();
+});
+```
+
+3. בדיקת State:
+----------------
+
+```jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import Counter from './Counter';
+
+test('increments count', () => {
+  render(<Counter />);
+  const button = screen.getByText('Increment');
+  fireEvent.click(button);
+  expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+```
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך להשתמש ב-Jest
+✓ איך לבדוק Components
+✓ איך לבדוק Events
+
+בשיעור הבא נלמד:
+→ CI/CD
+→ אוטומציה
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+Jest ו-React Testing
+גרסה 1.0

@@ -1,0 +1,183 @@
+טיפים לפריסה מוצלחת ל-Firebase
+=================================
+
+שיעור 6: טיפים לפריסה
+======================
+
+מבוא
+====
+
+טיפים וטריקים לפריסה מוצלחת
+ל-Firebase Hosting.
+
+טיפ 1: בדיקת Build מקומי
+==========================
+
+לפני פריסה, תמיד בדוק:
+
+```bash
+npm run build
+```
+
+ואז פתח את dist/ בדפדפן.
+
+טיפ 2: Preview Channels
+========================
+
+השתמש ב-Preview לבדיקות:
+
+```bash
+firebase hosting:channel:deploy preview-name
+```
+
+זה יוצר URL זמני לבדיקה.
+
+טיפ 3: Environment Variables
+=============================
+
+השתמש ב-.env files:
+
+```bash
+# .env.production
+REACT_APP_API_URL=https://api.production.com
+```
+
+```bash
+# .env.development
+REACT_APP_API_URL=http://localhost:3000
+```
+
+טיפ 4: Optimize Build
+======================
+
+1. Minify:
+---------
+
+Vite עושה זאת אוטומטית.
+
+2. Code Splitting:
+------------------
+
+```javascript
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+```
+
+3. Image Optimization:
+----------------------
+
+השתמש ב-formats מודרניים (WebP).
+
+טיפ 5: Caching
+===============
+
+firebase.json:
+
+```json
+{
+  "hosting": {
+    "headers": [
+      {
+        "source": "/static/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+טיפ 6: Error Pages
+===================
+
+firebase.json:
+
+```json
+{
+  "hosting": {
+    "public": "dist",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "errorDocument": "index.html"
+  }
+}
+```
+
+טיפ 7: Monitoring
+=================
+
+השתמש ב-Firebase Console:
+• Analytics
+• Performance
+• Errors
+
+טיפ 8: Rollback
+================
+
+לחזור לגרסה קודמת:
+
+```bash
+firebase hosting:clone SOURCE_SITE_ID TARGET_SITE_ID
+```
+
+טיפ 9: CI/CD
+=============
+
+GitHub Actions:
+
+```yaml
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: npm install
+      - run: npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: your-project-id
+```
+
+טיפ 10: Security
+=================
+
+1. אל תדרוס API Keys בקוד
+2. השתמש ב-Environment Variables
+3. הגדר Security Rules
+4. השתמש ב-HTTPS תמיד
+
+סיכום
+======
+
+טיפים חשובים:
+✓ בדוק build מקומי
+✓ השתמש ב-Preview
+✓ Optimize את הקוד
+✓ הגדר Caching
+✓ Monitor את האפליקציה
+
+בשיעור הבא נלמד:
+→ טיפול בשגיאות
+→ Error Handling
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+טיפים לפריסה
+גרסה 1.0

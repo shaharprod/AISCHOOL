@@ -1,0 +1,484 @@
+דוגמאות קוד לעבודה עם תמונות
+===============================
+
+אוסף דוגמאות מעשיות
+=====================
+
+דוגמה 1: מערכת זיהוי מוצרים
+==============================
+
+```python
+import google.generativeai as genai
+import PIL.Image
+import json
+
+genai.configure(api_key="YOUR_API_KEY")
+
+def identify_product(image_path):
+    """זהה מוצר בתמונה"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "product_name": {"type": "string"},
+                    "category": {"type": "string"},
+                    "brand": {"type": "string"},
+                    "features": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "estimated_price": {"type": "string"}
+                },
+                "required": ["product_name", "category"]
+            }
+        }
+    )
+    
+    prompt = """זהה את המוצר בתמונה.
+כלול שם, קטגוריה, מותג, תכונות ומחיר משוער."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+product = identify_product("product.jpg")
+print(f"מוצר: {product['product_name']}")
+print(f"קטגוריה: {product['category']}")
+```
+
+דוגמה 2: מערכת OCR מתקדמת
+============================
+
+```python
+def extract_text_advanced(image_path):
+    """חלץ טקסט מתמונה עם מבנה"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "full_text": {"type": "string"},
+                    "sections": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": {"type": "string"},
+                                "content": {"type": "string"}
+                            }
+                        }
+                    },
+                    "key_info": {
+                        "type": "object",
+                        "properties": {
+                            "dates": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            },
+                            "numbers": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            },
+                            "emails": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            }
+                        }
+                    }
+                },
+                "required": ["full_text"]
+            }
+        }
+    )
+    
+    prompt = """חלץ את כל הטקסט מהתמונה.
+ארגן לפי סעיפים וחלץ מידע מפתח."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+text_data = extract_text_advanced("document.jpg")
+print(text_data["full_text"])
+for section in text_data["sections"]:
+    print(f"{section['title']}: {section['content']}")
+```
+
+דוגמה 3: ניתוח תמונות מזון
+==============================
+
+```python
+def analyze_food(image_path):
+    """נתח תמונת מזון"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "dish_name": {"type": "string"},
+                    "ingredients": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "cuisine_type": {"type": "string"},
+                    "estimated_calories": {"type": "number"},
+                    "dietary_info": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": ["vegetarian", "vegan", "gluten-free", "dairy-free"]
+                        }
+                    }
+                },
+                "required": ["dish_name", "ingredients"]
+            }
+        }
+    )
+    
+    prompt = """נתח את המזון בתמונה.
+זהה את המנה, מרכיבים, סוג מטבח, קלוריות משוערות ומידע תזונתי."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+food = analyze_food("food.jpg")
+print(f"מנה: {food['dish_name']}")
+print(f"מרכיבים: {', '.join(food['ingredients'])}")
+```
+
+דוגמה 4: זיהוי רגשות בתמונות
+================================
+
+```python
+def detect_emotions(image_path):
+    """זהה רגשות של אנשים בתמונה"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "people": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "person_number": {"type": "number"},
+                                "emotion": {
+                                    "type": "string",
+                                    "enum": ["happy", "sad", "angry", "surprised", "neutral"]
+                                },
+                                "confidence": {"type": "number"},
+                                "description": {"type": "string"}
+                            }
+                        }
+                    },
+                    "overall_mood": {"type": "string"}
+                },
+                "required": ["people", "overall_mood"]
+            }
+        }
+    )
+    
+    prompt = """זהה את הרגשות של כל אדם בתמונה.
+תאר את הרגש הכללי של התמונה."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+emotions = detect_emotions("people.jpg")
+for person in emotions["people"]:
+    print(f"אדם {person['person_number']}: {person['emotion']}")
+print(f"מצב רוח כללי: {emotions['overall_mood']}")
+```
+
+דוגמה 5: ניתוח תמונות נדל"ן
+==============================
+
+```python
+def analyze_property(image_path):
+    """נתח תמונת נדל"ן"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "property_type": {"type": "string"},
+                    "condition": {
+                        "type": "string",
+                        "enum": ["excellent", "good", "fair", "poor"]
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "estimated_size": {"type": "string"},
+                    "style": {"type": "string"},
+                    "issues": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    }
+                },
+                "required": ["property_type", "condition"]
+            }
+        }
+    )
+    
+    prompt = """נתח את הנכס בתמונה.
+כלול סוג נכס, מצב, תכונות, גודל משוער, סגנון ובעיות."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+property_info = analyze_property("house.jpg")
+print(f"סוג נכס: {property_info['property_type']}")
+print(f"מצב: {property_info['condition']}")
+```
+
+דוגמה 6: זיהוי תמונות רפואיות בסיסי
+=======================================
+
+```python
+def analyze_medical_image(image_path):
+    """נתח תמונה רפואית (למטרות חינוכיות בלבד)"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    
+    prompt = """נתח את התמונה הרפואית.
+זהה אלמנטים בסיסיים.
+הערה: זה לא תחליף לייעוץ רפואי מקצועי."""
+    
+    response = model.generate_content([prompt, img])
+    return response.text
+
+# שימוש
+# שים לב: זה למטרות חינוכיות בלבד!
+analysis = analyze_medical_image("xray.jpg")
+print(analysis)
+```
+
+דוגמה 7: ניתוח תמונות אופנה
+===============================
+
+```python
+def analyze_fashion(image_path):
+    """נתח תמונת אופנה"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "outfit_description": {"type": "string"},
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "item": {"type": "string"},
+                                "color": {"type": "string"},
+                                "style": {"type": "string"}
+                            }
+                        }
+                    },
+                    "occasion": {"type": "string"},
+                    "style_tags": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    }
+                },
+                "required": ["outfit_description", "items"]
+            }
+        }
+    )
+    
+    prompt = """נתח את תמונת האופנה.
+תאר את התלבושת, פריטים, צבעים, סגנון ואירוע מתאים."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+fashion = analyze_fashion("outfit.jpg")
+print(fashion["outfit_description"])
+```
+
+דוגמה 8: זיהוי תמונות טבע
+============================
+
+```python
+def identify_nature(image_path):
+    """זהה אלמנטים בטבע"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "scene_type": {"type": "string"},
+                    "plants": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "animals": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "weather": {"type": "string"},
+                    "time_of_day": {"type": "string"},
+                    "location_hints": {"type": "string"}
+                },
+                "required": ["scene_type"]
+            }
+        }
+    )
+    
+    prompt = """זהה את כל האלמנטים בטבע בתמונה."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+nature = identify_nature("nature.jpg")
+print(f"סוג סצנה: {nature['scene_type']}")
+```
+
+דוגמה 9: ניתוח תמונות אמנות
+==============================
+
+```python
+def analyze_art(image_path):
+    """נתח יצירת אמנות"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "art_type": {"type": "string"},
+                    "style": {"type": "string"},
+                    "period": {"type": "string"},
+                    "techniques": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "colors": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "interpretation": {"type": "string"}
+                },
+                "required": ["art_type", "style"]
+            }
+        }
+    )
+    
+    prompt = """נתח את יצירת האמנות.
+כלול סוג, סגנון, תקופה, טכניקות, צבעים ופרשנות."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+art = analyze_art("artwork.jpg")
+print(f"סוג אמנות: {art['art_type']}")
+print(f"סגנון: {art['style']}")
+```
+
+דוגמה 10: מערכת בדיקת איכות תמונה
+====================================
+
+```python
+def check_image_quality(image_path):
+    """בדוק איכות תמונה"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "quality_score": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10
+                    },
+                    "sharpness": {"type": "string"},
+                    "brightness": {"type": "string"},
+                    "contrast": {"type": "string"},
+                    "issues": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    },
+                    "recommendations": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    }
+                },
+                "required": ["quality_score"]
+            }
+        }
+    )
+    
+    prompt = """בדוק את איכות התמונה.
+כלול ציון, חדות, בהירות, ניגודיות, בעיות והמלצות לשיפור."""
+    
+    response = model.generate_content([prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+quality = check_image_quality("photo.jpg")
+print(f"ציון איכות: {quality['quality_score']}/10")
+if quality['issues']:
+    print(f"בעיות: {', '.join(quality['issues'])}")
+```
+
+סיכום
+======
+
+דוגמאות מעשיות:
+✓ זיהוי מוצרים
+✓ OCR מתקדם
+✓ ניתוח מזון
+✓ זיהוי רגשות
+✓ ניתוח נדל"ן
+✓ תמונות רפואיות (חינוכי)
+✓ ניתוח אופנה
+✓ זיהוי טבע
+✓ ניתוח אמנות
+✓ בדיקת איכות
+
+כל הדוגמאות כוללות:
+• קוד מלא
+• טיפול בשגיאות
+• פורמט JSON מובנה
+• שימוש מעשי
+
+---
+© 2026 Google AI Academy
+דוגמאות קוד לעבודה עם תמונות

@@ -1,0 +1,431 @@
+דוגמאות JavaScript ל-Gemini API
+==================================
+
+אוסף דוגמאות מעשיות
+=====================
+
+דוגמה 1: צ'אטבוט בסיסי
+========================
+
+```javascript
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI("YOUR_API_KEY");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+async function createChatbot() {
+    const chat = model.startChat({ history: [] });
+    return chat;
+}
+
+async function chat(chatSession, message) {
+    const result = await chatSession.sendMessage(message);
+    return result.response.text();
+}
+
+// שימוש
+async function main() {
+    const chatbot = await createChatbot();
+    
+    // דוגמה לשיחה
+    const response1 = await chat(chatbot, "מה זה AI?");
+    console.log("בוט:", response1);
+    
+    const response2 = await chat(chatbot, "תן לי דוגמה");
+    console.log("בוט:", response2);
+}
+
+main();
+```
+
+דוגמה 2: מערכת סיכום טקסט
+=============================
+
+```javascript
+async function summarizeText(text, maxLength = 200) {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: maxLength
+        }
+    });
+    
+    const prompt = `סכם את הטקסט הבא בקצרה:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+const longText = "טקסט ארוך מאוד...";
+summarizeText(longText).then(summary => {
+    console.log(summary);
+});
+```
+
+דוגמה 3: מתרגם
+================
+
+```javascript
+async function translateText(text, targetLanguage = "English") {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 2000
+        },
+        systemInstruction: "אתה מתרגם מקצועי. תרגם בצורה מדויקת תוך שמירה על טון ומשמעות."
+    });
+    
+    const prompt = `תרגם את הטקסט הבא ל-${targetLanguage}:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+const hebrewText = "שלום עולם";
+translateText(hebrewText, "English").then(englishText => {
+    console.log(englishText);
+});
+```
+
+דוגמה 4: ניתוח סנטימנט
+=========================
+
+```javascript
+async function analyzeSentiment(text) {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: "object",
+                properties: {
+                    sentiment: {
+                        type: "string",
+                        enum: ["positive", "negative", "neutral"]
+                    },
+                    confidence: {
+                        type: "number",
+                        minimum: 0,
+                        maximum: 1
+                    },
+                    keyPhrases: {
+                        type: "array",
+                        items: { type: "string" }
+                    }
+                },
+                required: ["sentiment", "confidence"]
+            }
+        }
+    });
+    
+    const prompt = `נתח את הסנטימנט של הטקסט הבא:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return JSON.parse(result.response.text());
+}
+
+// שימוש
+const text = "המוצר הזה מעולה! אני מאוד מרוצה.";
+analyzeSentiment(text).then(sentiment => {
+    console.log(`סנטימנט: ${sentiment.sentiment}`);
+    console.log(`ביטחון: ${sentiment.confidence}`);
+});
+```
+
+דוגמה 5: מחולל קוד
+====================
+
+```javascript
+async function generateCode(language, description) {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 4000
+        },
+        systemInstruction: `אתה מפתח ${language} מנוסה. כתוב קוד נקי ומתועד.`
+    });
+    
+    const prompt = `כתוב קוד ${language} ש-${description}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+generateCode("Python", "מחשב ממוצע של רשימת מספרים").then(code => {
+    console.log(code);
+});
+```
+
+דוגמה 6: ניתוח תמונה
+=======================
+
+```javascript
+const fs = require("fs");
+
+async function analyzeImage(imagePath, question = "תאר את התמונה") {
+    const imageData = fs.readFileSync(imagePath);
+    const imagePart = {
+        inlineData: {
+            data: imageData.toString("base64"),
+            mimeType: "image/jpeg"
+        }
+    };
+    
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-vision" });
+    const result = await model.generateContent([question, imagePart]);
+    return result.response.text();
+}
+
+// שימוש
+analyzeImage("photo.jpg", "מה יש בתמונה?").then(description => {
+    console.log(description);
+});
+```
+
+דוגמה 7: מערכת Q&A
+=====================
+
+```javascript
+function createQASystem(context) {
+    return genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: `אתה עוזר AI שמשיב על שאלות בהתבסס על הקשר הבא:
+${context}
+
+תמיד תן תשובות מדויקות ומבוססות על הקשר.`
+    });
+}
+
+async function askQuestion(model, question) {
+    const result = await model.generateContent(question);
+    return result.response.text();
+}
+
+// שימוש
+const context = "Python היא שפת תכנות פופולרית...";
+const qaModel = createQASystem(context);
+askQuestion(qaModel, "מה זה Python?").then(answer => {
+    console.log(answer);
+});
+```
+
+דוגמה 8: מחולל תוכן
+=====================
+
+```javascript
+async function generateContent(contentType, topic, style = "professional") {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: style === "creative" ? 0.8 : 0.6,
+            maxOutputTokens: 2000
+        },
+        systemInstruction: `אתה כותב תוכן מקצועי. כתוב בסגנון ${style}.`
+    });
+    
+    const prompt = `צור ${contentType} על הנושא: ${topic}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+generateContent("פוסט בלוג", "AI", "creative").then(blogPost => {
+    console.log(blogPost);
+});
+```
+
+דוגמה 9: מערכת עם Retry
+==========================
+
+```javascript
+async function generateWithRetry(model, prompt, maxRetries = 3) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            const result = await model.generateContent(prompt);
+            return { success: true, text: result.response.text() };
+        } catch (error) {
+            if (attempt < maxRetries - 1) {
+                const waitTime = Math.pow(2, attempt); // Exponential backoff
+                console.log(`נכשל, מנסה שוב בעוד ${waitTime} שניות...`);
+                await new Promise(resolve => setTimeout(resolve, waitTime * 1000));
+                continue;
+            }
+            return { success: false, error: error.message };
+        }
+    }
+    return { success: false, error: "נכשל אחרי כל הניסיונות" };
+}
+
+// שימוש
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+generateWithRetry(model, "טקסט לבקשה").then(result => {
+    if (result.success) {
+        console.log(result.text);
+    } else {
+        console.log(`שגיאה: ${result.error}`);
+    }
+});
+```
+
+דוגמה 10: מערכת Batch Processing
+===================================
+
+```javascript
+async function processBatch(prompts, model) {
+    const results = [];
+    
+    for (const prompt of prompts) {
+        try {
+            const result = await model.generateContent(prompt);
+            results.push({
+                prompt: prompt,
+                result: result.response.text(),
+                success: true
+            });
+        } catch (error) {
+            results.push({
+                prompt: prompt,
+                error: error.message,
+                success: false
+            });
+        }
+    }
+    
+    return results;
+}
+
+// שימוש
+const prompts = [
+    "מה זה Python?",
+    "מה זה JavaScript?",
+    "מה זה AI?"
+];
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+processBatch(prompts, model).then(results => {
+    results.forEach(result => {
+        if (result.success) {
+            console.log(`${result.prompt}: ${result.result}`);
+        } else {
+            console.log(`שגיאה ב-${result.prompt}: ${result.error}`);
+        }
+    });
+});
+```
+
+דוגמה 11: מערכת עם Caching
+=============================
+
+```javascript
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
+
+const CACHE_DIR = "api_cache";
+
+function getCacheKey(prompt) {
+    return crypto.createHash("md5").update(prompt).digest("hex");
+}
+
+function getCached(prompt) {
+    if (!fs.existsSync(CACHE_DIR)) {
+        return null;
+    }
+    
+    const cacheKey = getCacheKey(prompt);
+    const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
+    
+    if (fs.existsSync(cachePath)) {
+        const data = fs.readFileSync(cachePath, "utf8");
+        return JSON.parse(data);
+    }
+    return null;
+}
+
+function cacheResult(prompt, result) {
+    if (!fs.existsSync(CACHE_DIR)) {
+        fs.mkdirSync(CACHE_DIR);
+    }
+    
+    const cacheKey = getCacheKey(prompt);
+    const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
+    
+    fs.writeFileSync(cachePath, JSON.stringify({
+        prompt: prompt,
+        result: result
+    }, null, 2), "utf8");
+}
+
+async function generateWithCache(model, prompt) {
+    const cached = getCached(prompt);
+    if (cached) {
+        return cached.result;
+    }
+    
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+    cacheResult(prompt, text);
+    return text;
+}
+
+// שימוש
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+generateWithCache(model, "מה זה AI?").then(result => {
+    console.log(result);
+});
+```
+
+דוגמה 12: Express.js API
+==========================
+
+```javascript
+const express = require("express");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const app = express();
+app.use(express.json());
+
+const genAI = new GoogleGenerativeAI("YOUR_API_KEY");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+app.post("/api/chat", async (req, res) => {
+    try {
+        const { message } = req.body;
+        const result = await model.generateContent(message);
+        res.json({ response: result.response.text() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.listen(3000, () => {
+    console.log("שרת פועל על פורט 3000");
+});
+```
+
+סיכום
+======
+
+דוגמאות מעשיות:
+✓ צ'אטבוט בסיסי
+✓ סיכום טקסט
+✓ תרגום
+✓ ניתוח סנטימנט
+✓ מחולל קוד
+✓ ניתוח תמונה
+✓ מערכת Q&A
+✓ מחולל תוכן
+✓ Retry logic
+✓ Batch processing
+✓ Caching
+✓ Express.js API
+
+כל הדוגמאות כוללות:
+• קוד מלא
+• הסברים
+• שימוש מעשי
+
+---
+© 2026 Google AI Academy
+דוגמאות JavaScript ל-Gemini API

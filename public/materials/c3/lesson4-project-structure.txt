@@ -1,0 +1,381 @@
+מבנה פרויקט React - מדריך מקיף
+==================================
+
+שיעור 4: מבנה פרויקט
+=====================
+
+מבוא
+====
+
+מבנה פרויקט טוב = קוד נקי ו-maintainable.
+בשיעור זה נלמד איך לארגן פרויקט React.
+
+מבנה בסיסי
+===========
+
+```
+my-react-app/
+├── public/
+│   ├── favicon.ico
+│   └── index.html
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── hooks/
+│   ├── utils/
+│   ├── styles/
+│   ├── assets/
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+הסבר תיקיות
+============
+
+1. public/
+----------
+
+קבצים סטטיים:
+• index.html
+• favicon.ico
+• images
+• fonts
+
+לא עוברים עיבוד!
+
+2. src/components/
+-----------------
+
+קומפוננטות לשימוש חוזר:
+
+```
+components/
+├── Button/
+│   ├── Button.jsx
+│   ├── Button.module.css
+│   └── Button.test.jsx
+├── Card/
+│   ├── Card.jsx
+│   └── Card.module.css
+└── Header/
+    ├── Header.jsx
+    └── Header.module.css
+```
+
+דוגמה:
+
+```jsx
+// components/Button/Button.jsx
+import styles from './Button.module.css';
+
+function Button({ children, onClick }) {
+  return (
+    <button className={styles.button} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
+export default Button;
+```
+
+3. src/pages/
+------------
+
+דפים/עמודים:
+
+```
+pages/
+├── Home/
+│   ├── Home.jsx
+│   └── Home.module.css
+├── About/
+│   ├── About.jsx
+│   └── About.module.css
+└── Contact/
+    ├── Contact.jsx
+    └── Contact.module.css
+```
+
+דוגמה:
+
+```jsx
+// pages/Home/Home.jsx
+import Header from '../../components/Header/Header';
+import Button from '../../components/Button/Button';
+
+function Home() {
+  return (
+    <div>
+      <Header />
+      <h1>Welcome Home</h1>
+      <Button onClick={() => alert('Clicked!')}>
+        Click Me
+      </Button>
+    </div>
+  );
+}
+
+export default Home;
+```
+
+4. src/hooks/
+------------
+
+Custom Hooks:
+
+```
+hooks/
+├── useAuth.js
+├── useLocalStorage.js
+├── useFetch.js
+└── useDebounce.js
+```
+
+דוגמה:
+
+```jsx
+// hooks/useLocalStorage.js
+import { useState, useEffect } from 'react';
+
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : initialValue;
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+}
+
+export default useLocalStorage;
+```
+
+5. src/utils/
+------------
+
+פונקציות עזר:
+
+```
+utils/
+├── formatDate.js
+├── validateEmail.js
+├── api.js
+└── constants.js
+```
+
+דוגמה:
+
+```jsx
+// utils/formatDate.js
+export function formatDate(date) {
+  return new Date(date).toLocaleDateString('he-IL');
+}
+
+// utils/validateEmail.js
+export function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+```
+
+6. src/styles/
+--------------
+
+סגנונות גלובליים:
+
+```
+styles/
+├── variables.css
+├── reset.css
+├── global.css
+└── themes.css
+```
+
+דוגמה:
+
+```css
+/* styles/variables.css */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --font-size-base: 16px;
+}
+
+/* styles/global.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+```
+
+7. src/assets/
+--------------
+
+תמונות, אייקונים, וכו':
+
+```
+assets/
+├── images/
+│   ├── logo.png
+│   └── hero.jpg
+├── icons/
+│   └── arrow.svg
+└── fonts/
+    └── custom-font.woff2
+```
+
+מבנה מתקדם
+===========
+
+עם State Management:
+
+```
+src/
+├── store/
+│   ├── slices/
+│   │   ├── userSlice.js
+│   │   └── productSlice.js
+│   └── store.js
+├── services/
+│   ├── api.js
+│   └── auth.js
+└── types/
+    └── index.ts
+```
+
+עם Routing:
+
+```
+src/
+├── routes/
+│   ├── index.jsx
+│   └── PrivateRoute.jsx
+└── pages/
+    ├── Home/
+    ├── About/
+    └── Dashboard/
+```
+
+עם Testing:
+
+```
+src/
+├── components/
+│   └── Button/
+│       ├── Button.jsx
+│       ├── Button.test.jsx
+│       └── Button.module.css
+└── __tests__/
+    └── utils.test.js
+```
+
+Naming Conventions
+==================
+
+קבצים:
+------
+
+• Components: PascalCase (UserCard.jsx)
+• Hooks: camelCase עם use (useAuth.js)
+• Utils: camelCase (formatDate.js)
+• Constants: UPPER_SNAKE_CASE (API_URL.js)
+
+תיקיות:
+-------
+
+• kebab-case (user-card/)
+• או PascalCase (UserCard/)
+
+דוגמאות:
+
+```
+components/
+├── user-card/          ✅
+├── UserCard/           ✅
+├── userCard/           ❌
+└── user_card/          ❌
+```
+
+ארגון Imports
+==============
+
+סדר מומלץ:
+
+```jsx
+// 1. External libraries
+import React from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+
+// 2. Internal components
+import Header from '../components/Header/Header';
+import Button from '../components/Button/Button';
+
+// 3. Hooks
+import useAuth from '../hooks/useAuth';
+
+// 4. Utils
+import { formatDate } from '../utils/formatDate';
+
+// 5. Styles
+import styles from './Home.module.css';
+```
+
+טיפים לארגון
+=============
+
+💡 שמור על מבנה עקבי
+💡 קובץ אחד = קומפוננטה אחת
+💡 קובץ CSS לכל קומפוננטה
+💡 ארגן לפי features
+💡 השתמש ב-index.js ל-exports
+
+דוגמה ל-index.js:
+
+```jsx
+// components/index.js
+export { default as Button } from './Button/Button';
+export { default as Card } from './Card/Card';
+export { default as Header } from './Header/Header';
+
+// שימוש:
+import { Button, Card, Header } from '../components';
+```
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך לארגן פרויקט React
+✓ מבנה תיקיות מומלץ
+✓ Naming conventions
+✓ ארגון imports
+
+זכור:
+• מבנה טוב = קוד נקי
+• עקבי = maintainable
+• פשוט = טוב
+
+בשיעור הבא נלמד:
+→ בניית API
+→ עבודה עם Backend
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+מבנה פרויקט React
+גרסה 1.0

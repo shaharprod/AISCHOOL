@@ -1,0 +1,100 @@
+שיטות אימות ב-Firebase
+========================
+
+שיעור 8: שיטות אימות
+=====================
+
+מבוא
+====
+
+Firebase תומך במגוון שיטות אימות.
+
+Email/Password
+==============
+
+```jsx
+import { 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword 
+} from 'firebase/auth';
+
+// הרשמה
+const signUp = async (email, password) => {
+  await createUserWithEmailAndPassword(auth, email, password);
+};
+
+// התחברות
+const signIn = async (email, password) => {
+  await signInWithEmailAndPassword(auth, email, password);
+};
+```
+
+Google
+======
+
+```jsx
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
+const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth, provider);
+};
+```
+
+Facebook
+========
+
+```jsx
+import { FacebookAuthProvider, signInWithPopup } from 'firebase/auth';
+
+const signInWithFacebook = async () => {
+  const provider = new FacebookAuthProvider();
+  await signInWithPopup(auth, provider);
+};
+```
+
+GitHub
+======
+
+```jsx
+import { GithubAuthProvider, signInWithPopup } from 'firebase/auth';
+
+const signInWithGitHub = async () => {
+  const provider = new GithubAuthProvider();
+  await signInWithPopup(auth, provider);
+};
+```
+
+Anonymous
+=========
+
+```jsx
+import { signInAnonymously } from 'firebase/auth';
+
+const signInAnonymously = async () => {
+  await signInAnonymously(auth);
+};
+```
+
+סיכום
+======
+
+שיטות אימות:
+✓ Email/Password
+✓ Google
+✓ Facebook
+✓ GitHub
+✓ Anonymous
+
+בחר את השיטה המתאימה לך!
+
+בשיעור הבא נלמד:
+→ Firestore Database
+→ עבודה עם Database
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+שיטות אימות
+גרסה 1.0

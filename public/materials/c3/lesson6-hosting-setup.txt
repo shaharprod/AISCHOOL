@@ -1,0 +1,165 @@
+הגדרת Firebase Hosting - מדריך צעד אחר צעד
+=============================================
+
+שיעור 6: הגדרת Hosting
+========================
+
+מבוא
+====
+
+מדריך מפורט להגדרת Firebase Hosting
+לאפליקציית React.
+
+צעד 1: יצירת פרויקט Firebase
+=============================
+
+1. היכנס ל: console.firebase.google.com
+2. לחץ "Add project"
+3. תן שם לפרויקט
+4. בחר/השבת Google Analytics
+5. לחץ "Create project"
+
+צעד 2: התקנת Firebase CLI
+===========================
+
+```bash
+npm install -g firebase-tools
+```
+
+אימות התקנה:
+
+```bash
+firebase --version
+```
+
+צעד 3: התחברות
+===============
+
+```bash
+firebase login
+```
+
+פתח דפדפן והתחבר עם Google.
+
+צעד 4: אתחול פרויקט
+====================
+
+```bash
+firebase init
+```
+
+בחר:
+1. Hosting: Configure files for Firebase Hosting
+2. Use an existing project
+3. בחר את הפרויקט שיצרת
+4. Public directory: dist (או build)
+5. Single-page app: Yes
+6. Set up automatic builds: No
+
+צעד 5: Build הפרויקט
+=====================
+
+```bash
+npm run build
+```
+
+זה יוצר תיקייה dist/ עם הקבצים המוכנים.
+
+צעד 6: פריסה
+=============
+
+```bash
+firebase deploy
+```
+
+אחרי הפריסה תקבל URL:
+https://your-project-id.web.app
+
+הגדרות מתקדמות
+===============
+
+1. Custom Domain:
+-----------------
+
+```bash
+firebase hosting:channel:deploy preview
+```
+
+2. Environment Variables:
+-------------------------
+
+צור .env.production:
+
+```
+REACT_APP_API_URL=https://api.example.com
+```
+
+3. Redirects:
+-------------
+
+firebase.json:
+
+```json
+{
+  "hosting": {
+    "redirects": [
+      {
+        "source": "/old",
+        "destination": "/new",
+        "type": 301
+      }
+    ]
+  }
+}
+```
+
+4. Headers:
+-----------
+
+firebase.json:
+
+```json
+{
+  "hosting": {
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+טיפים
+======
+
+💡 בדוק build מקומי לפני פריסה
+💡 השתמש ב-preview channels לבדיקות
+💡 הגדר custom domain ל-production
+💡 השתמש ב-CDN caching
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך ליצור פרויקט Firebase
+✓ איך להתקין Firebase CLI
+✓ איך לאתחל פרויקט
+✓ איך לפרוס אפליקציה
+
+בשיעור הבא נלמד:
+→ טיפול בשגיאות
+→ Error Handling
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+הגדרת Firebase Hosting
+גרסה 1.0

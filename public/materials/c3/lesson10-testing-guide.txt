@@ -1,0 +1,103 @@
+מדריך Testing ב-Project IDX
+============================
+
+שיעור 10: Testing ב-IDX
+=========================
+
+מבוא
+====
+
+בשיעור זה נלמד כיצד לכתוב בדיקות
+ב-Project IDX עם Vitest ו-React Testing Library.
+
+התקנה
+======
+
+```bash
+npm install -D vitest @testing-library/react @testing-library/jest-dom
+```
+
+הגדרה
+======
+
+vite.config.js:
+
+```javascript
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,
+    environment: 'jsdom'
+  }
+});
+```
+
+setupTests.js:
+
+```javascript
+import '@testing-library/jest-dom';
+```
+
+Unit Tests
+==========
+
+דוגמה:
+
+```jsx
+// utils/formatDate.test.js
+import { describe, test, expect } from 'vitest';
+import { formatDate } from './formatDate';
+
+describe('formatDate', () => {
+  test('formats date correctly', () => {
+    const date = new Date('2024-01-01');
+    expect(formatDate(date)).toBe('01/01/2024');
+  });
+});
+```
+
+Component Tests
+===============
+
+```jsx
+// Button.test.jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect } from 'vitest';
+import Button from './Button';
+
+describe('Button', () => {
+  test('renders button', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+
+  test('calls onClick when clicked', () => {
+    const handleClick = vi.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+    fireEvent.click(screen.getByText('Click me'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך להגדיר Testing
+✓ איך לכתוב Unit Tests
+✓ איך לכתוב Component Tests
+
+בשיעור הבא נלמד:
+→ CI/CD
+→ אוטומציה
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+מדריך Testing
+גרסה 1.0

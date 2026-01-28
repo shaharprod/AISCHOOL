@@ -1,0 +1,160 @@
+מדריך התחלה מהירה: Project IDX
+==================================
+
+שיעור 1: התחלה מהירה
+=====================
+
+מבוא
+====
+
+ברוכים הבאים ל-Project IDX!
+מדריך זה יעזור לך להתחיל תוך 5 דקות.
+
+צעד 1: כניסה ל-IDX
+===================
+
+1. פתח דפדפן (Chrome מומלץ)
+2. היכנס ל: idx.google.com
+3. לחץ על "Sign in with Google"
+4. בחר את חשבון Google שלך
+
+טיפ: אם אין לך חשבון Google, צור אחד בחינם.
+
+צעד 2: יצירת פרויקט ראשון
+===========================
+
+אחרי הכניסה תראה מסך הבית:
+
+א) יצירת פרויקט חדש:
+• לחץ על "New Project"
+• בחר Template (מומלץ: React)
+• תן שם לפרויקט
+• לחץ "Create"
+
+ב) פתיחת פרויקט קיים:
+• לחץ על "Import from GitHub"
+• הזן URL של Repository
+• לחץ "Import"
+
+צעד 3: הכרת הממשק
+==================
+
+לאחר יצירת הפרויקט תראה:
+
+1. Sidebar שמאלי:
+   • Explorer - קבצים
+   • Search - חיפוש
+   • Source Control - Git
+   • Extensions - תוספים
+
+2. Editor מרכזי:
+   • עורך הקוד
+   • תמיכה בכל השפות
+   • הדגשת תחביר
+
+3. Terminal תחתון:
+   • פקודות bash/zsh
+   • הרצת סקריפטים
+   • התקנת חבילות
+
+4. Preview ימני:
+   • תצוגה מקדימה
+   • Hot Reload
+   • DevTools
+
+צעד 4: הרצת פרויקט ראשון
+==========================
+
+לפרויקט React:
+
+1. פתח Terminal (Ctrl + `)
+2. הרץ: npm install
+3. אחר כך: npm run dev
+4. לחץ על Preview
+
+לפרויקט Python:
+
+1. פתח Terminal
+2. הרץ: pip install -r requirements.txt
+3. הרץ: python app.py
+4. פתח Preview
+
+קיצורי מקלדת בסיסיים
+======================
+
+עריכה:
+• Ctrl + S - שמור
+• Ctrl + Z - בטל
+• Ctrl + Y - חזור
+• Ctrl + F - חפש
+• Ctrl + H - החלף
+
+ניווט:
+• Ctrl + P - פתח קובץ
+• Ctrl + B - הצג/הסתר Sidebar
+• Ctrl + ` - פתח/סגור Terminal
+• Ctrl + / - הערה/ביטול הערה
+
+Gemini Code Assist:
+• Ctrl + Space - השלמה אוטומטית
+• Ctrl + K - בקש הצעה
+• Ctrl + L - פתח צ'אט
+
+טיפים להתחלה
+=============
+
+💡 התחל עם Template פשוט
+💡 נסה את Gemini Code Assist
+💡 תתרגל עם Terminal
+💡 שמור עבודות ב-Git
+💡 השתמש ב-Preview
+💡 חקור Extensions
+
+שגיאות נפוצות
+==============
+
+1. "Project not found"
+   → בדוק את שם הפרויקט
+   → ודא שיש לך הרשאות
+
+2. "Terminal not responding"
+   → רענן את הדף
+   → בדוק חיבור לאינטרנט
+
+3. "Preview not loading"
+   → בדוק שהשרת רץ
+   → פתח Console ב-DevTools
+
+4. "Git not working"
+   → ודא חיבור ל-GitHub
+   → בדוק הגדרות Git
+
+מקורות עזרה
+============
+
+📚 תיעוד: idx.dev/docs
+💬 קהילה: Discord IDX
+🎥 YouTube: Project IDX Tutorials
+🐛 Issues: GitHub Issues
+📧 תמיכה: support@idx.dev
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך להיכנס ל-IDX
+✓ איך ליצור פרויקט
+✓ איך להריץ קוד
+✓ קיצורי מקלדת בסיסיים
+
+בשיעור הבא נלמד:
+→ הגדרת סביבת העבודה
+→ חיבור ל-GitHub
+→ הגדרות מתקדמות
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+מדריך התחלה מהירה
+גרסה 1.0
