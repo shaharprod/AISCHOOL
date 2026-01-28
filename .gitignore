@@ -5,3 +5,12 @@ dist
 *.log
 .vscode
 .idea
+
+# System files
+.bash_history
+.boto
+.claudejson*
+.claude*
+*.backup
+*.swp
+*~
