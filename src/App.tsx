@@ -27,8 +27,10 @@ interface Lesson {
 
 interface CourseMaterial {
   title: string;
-  type: 'pdf' | 'pptx' | 'zip' | 'link' | 'xlsx';
+  type: 'pdf' | 'pptx' | 'zip' | 'link' | 'xlsx' | 'txt';
   url: string;
+  size?: string;
+  description?: string;
 }
 
 interface Course {
