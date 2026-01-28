@@ -59,14 +59,14 @@ interface WorkshopMaterial {
 const COURSES: Course[] = [
   {
     id: 'c1',
-    title: 'שליטה ב-Google Gemini ובינה מלאכותית אישית',
-    description: 'המדריך המלא לשימוש במודל Gemini Advanced ובכלי ה-AI המשולבים ב-Google Workspace לייעול העבודה היומיומית.',
+    title: 'שליטה ב-Google Gemini 2.0 ובינה מלאכותית אישית',
+    description: 'המדריך המלא לשימוש במודל Gemini 2.0 Flash החדש, Gemini Advanced, Canvas (כלי עריכה אינטראקטיבי) ושילוב עם Google Workspace לייעול העבודה היומיומית.',
     level: 'מתחילים',
     category: 'מבוא ופרודוקטיביות',
-    duration: '4.5 שעות',
-    lessonsCount: 9,
+    duration: '5.5 שעות',
+    lessonsCount: 11,
     icon: <BrainCircuit className="w-6 h-6" />,
-    price: 250,
+    price: 280,
     materials: [
       { title: 'מדריך מקוצר: Gemini vs ChatGPT', type: 'txt', url: '/materials/c1/course-guide.txt', size: '1.2 MB', description: 'השוואה מקיפה' },
       { title: 'רשימת פרומפטים מוכנים ל-Gmail', type: 'txt', url: '/materials/c1/course-prompts.txt', size: '0.8 MB', description: '50+ פרומפטים מוכנים' },
@@ -75,10 +75,10 @@ const COURSES: Course[] = [
     lessons: [
       { 
         id: 'l1-1', 
-        title: 'מהפכת ה-Gemini: מודלים מולטי-מודאליים', 
-        duration: '15:00', 
+        title: 'מהפכת ה-Gemini 2.0: המודל החדש והמהיר', 
+        duration: '20:00', 
         isFree: true,
-        description: 'הכרות ראשונית עם מהפכת Gemini ומודלים מולטי-מודאליים',
+        description: 'היכרות עם Gemini 2.0 Flash - המודל החדש והמהיר ביותר של Google, יכולות מולטי-מודאליות משופרות',
         materials: [
           { title: 'מצגת שיעור 1 - מבוא ל-Gemini', type: 'txt', url: '/materials/c1/lesson1-intro.txt', size: '2.3 MB', description: 'מדריך מלא על Gemini' },
           { title: 'השוואת מודלים: Gemini vs GPT', type: 'txt', url: '/materials/c1/lesson1-comparison.txt', size: '1.8 MB', description: 'השוואה מפורטת בין מודלי AI' },
@@ -159,12 +159,33 @@ const COURSES: Course[] = [
       },
       { 
         id: 'l1-9', 
-        title: 'סיכום: העתיד של Google Assistant', 
-        duration: '10:00',
-        description: 'מבט לעתיד של Gemini ו-AI',
+        title: 'Canvas: עריכה אינטראקטיבית עם Gemini', 
+        duration: '35:00',
+        description: 'כלי החדש לעריכה משותפת - Canvas מאפשר לכתוב ולערוך מסמכים בצורה אינטראקטיבית עם Gemini',
         materials: [
-          { title: 'סיכום הקורס', type: 'txt', url: '/materials/c1/lesson9-summary.txt', size: '1.9 MB', description: 'סיכום מקיף' },
-          { title: 'מפת דרכים 2025-2026', type: 'txt', url: '/materials/c1/lesson9-roadmap.txt', size: '1.4 MB', description: 'העתיד של Gemini' },
+          { title: 'מדריך Canvas המלא', type: 'txt', url: '/materials/c1/lesson9-canvas-guide.txt', size: '3.2 MB', description: 'מדריך מקיף ל-Canvas' },
+          { title: 'דוגמאות עריכה', type: 'txt', url: '/materials/c1/lesson9-canvas-examples.txt', size: '2.1 MB', description: '30 דוגמאות לעריכה' },
+          { title: 'טיפים לשימוש יעיל', type: 'txt', url: '/materials/c1/lesson9-canvas-tips.txt', size: '1.6 MB', description: 'טיפים וטריקים' },
+        ]
+      },
+      { 
+        id: 'l1-10', 
+        title: 'Gemini Live: שיחות קוליות עם AI', 
+        duration: '25:00',
+        description: 'שיחות קוליות טבעיות עם Gemini בזמן אמת',
+        materials: [
+          { title: 'מדריך Gemini Live', type: 'txt', url: '/materials/c1/lesson10-live-guide.txt', size: '2.4 MB', description: 'מדריך לשיחות קוליות' },
+          { title: 'תרחישי שימוש', type: 'txt', url: '/materials/c1/lesson10-live-scenarios.txt', size: '1.8 MB', description: 'דוגמאות מעשיות' },
+        ]
+      },
+      { 
+        id: 'l1-11', 
+        title: 'סיכום: העתיד של Google Assistant', 
+        duration: '15:00',
+        description: 'מבט לעתיד של Gemini ו-AI, Gemini 2.5 Pro והמשך',
+        materials: [
+          { title: 'סיכום הקורס', type: 'txt', url: '/materials/c1/lesson11-summary.txt', size: '2.2 MB', description: 'סיכום מקיף' },
+          { title: 'מפת דרכים 2026-2027', type: 'txt', url: '/materials/c1/lesson11-roadmap.txt', size: '1.7 MB', description: 'העתיד של Gemini' },
           { title: 'משאבים נוספים ללמידה', type: 'link', url: 'https://ai.google.dev', size: '-' },
         ]
       },
@@ -173,10 +194,10 @@ const COURSES: Course[] = [
   {
     id: 'c2',
     title: 'יצירת מצגות ותוכן ויזואלי עם Google AI',
-    description: 'סדנה ליצירת נכסים ויזואליים מרהיבים באמצעות ImageFX, Gemini ו-Google Slides עם הרחבות AI.',
+    description: 'סדנה ליצירת נכסים ויזואליים מרהיבים באמצעות ImageFX עם Imagen 3, Gemini 2.0, Canvas ו-Google Slides עם הרחבות AI החדשות ביותר.',
     level: 'מתחילים',
     category: 'עיצוב ויצירה',
-    duration: '3.5 שעות',
+    duration: '4 שעות',
     lessonsCount: 7,
     icon: <Presentation className="w-6 h-6" />,
     price: 300,
@@ -272,10 +293,10 @@ const COURSES: Course[] = [
   {
     id: 'c3',
     title: 'פיתוח אפליקציות עם Project IDX',
-    description: 'קורס מעשי למפתחים מתחילים: בניית אתרים ואפליקציות בסביבת הפיתוח החדשה של גוגל בענן.',
+    description: 'קורס מעשי למפתחים: בניית אתרים ואפליקציות בסביבת הפיתוח בענן של Google עם Gemini 2.0 Code Assist - עוזר הקוד החכם ביותר.',
     level: 'מתקדמים',
     category: 'פיתוח תוכנה',
-    duration: '7 שעות',
+    duration: '7.5 שעות',
     lessonsCount: 12,
     icon: <Code className="w-6 h-6" />,
     price: 450,
@@ -424,10 +445,10 @@ const COURSES: Course[] = [
   {
     id: 'c4',
     title: 'מומחה Google AI Studio ו-Vertex AI',
-    description: 'לצלול לעומק המנוע: עבודה עם ה-API של Gemini, הנדסת פרומפטים מתקדמת (System Instructions).',
+    description: 'לצלול לעומק המנוע: עבודה עם ה-API של Gemini 2.0 Flash & Pro, הנדסת פרומפטים מתקדמת, System Instructions, JSON Mode ועוד.',
     level: 'מומחים',
     category: 'פיתוח מתקדם',
-    duration: '6 שעות',
+    duration: '6.5 שעות',
     lessonsCount: 10,
     icon: <MessageSquare className="w-6 h-6" />,
     price: 500,
@@ -550,29 +571,169 @@ const COURSES: Course[] = [
         ]
       },
     ]
+  },
+  {
+    id: 'c5',
+    title: 'מומחה Google NotebookLM - מחקר ולמידה מתקדמים',
+    description: 'הכלי המהפכני של Google למחקר, לימוד ויצירת תוכן. ליצור פודקאסטים אוטומטיים, לנתח מסמכים ארוכים ולהפוך מידע למובן.',
+    level: 'מתחילים',
+    category: 'מחקר ולמידה',
+    duration: '4 שעות',
+    lessonsCount: 10,
+    icon: <BookOpen className="w-6 h-6" />,
+    price: 350,
+    materials: [
+      { title: 'מדריך NotebookLM המלא', type: 'txt', url: '/materials/c5/course-notebook-guide.txt', size: '3.5 MB', description: 'מדריך מקיף' },
+      { title: 'תבניות Notebooks מוכנות', type: 'txt', url: '/materials/c5/course-templates.txt', size: '2.1 MB', description: 'תבניות לשימוש מידי' },
+      { title: 'מדריך Audio Overviews', type: 'txt', url: '/materials/c5/course-audio-guide.txt', size: '1.8 MB', description: 'יצירת פודקאסטים' }
+    ],
+    lessons: [
+      { 
+        id: 'l5-1', 
+        title: 'מבוא ל-NotebookLM - AI למחקר ולמידה', 
+        duration: '20:00', 
+        isFree: true,
+        description: 'היכרות עם NotebookLM - הכלי המהפכני של Google למחקר ולמידה עם חלון הקשר של 2M tokens',
+        materials: [
+          { title: 'מבוא ל-NotebookLM', type: 'txt', url: '/materials/c5/lesson1-intro.txt', size: '2.8 MB', description: 'מדריך מקיף למתחילים' },
+          { title: 'יתרונות NotebookLM', type: 'txt', url: '/materials/c5/lesson1-benefits.txt', size: '1.6 MB', description: 'למה NotebookLM?' },
+          { title: 'השוואה לכלים אחרים', type: 'txt', url: '/materials/c5/lesson1-comparison.txt', size: '1.9 MB', description: 'NotebookLM vs ChatGPT' },
+        ]
+      },
+      { 
+        id: 'l5-2', 
+        title: 'יצירת Notebook ראשון', 
+        duration: '25:00',
+        description: 'בניית Notebook ראשון והעלאת מקורות',
+        materials: [
+          { title: 'מדריך יצירת Notebook', type: 'txt', url: '/materials/c5/lesson2-create-notebook.txt', size: '3.2 MB', description: 'צעד אחר צעד' },
+          { title: 'סוגי מקורות נתמכים', type: 'txt', url: '/materials/c5/lesson2-source-types.txt', size: '2.1 MB', description: 'PDF, Docs, קישורים ועוד' },
+          { title: 'טיפים לארגון', type: 'txt', url: '/materials/c5/lesson2-organization-tips.txt', size: '1.4 MB', description: 'ארגון יעיל' },
+        ]
+      },
+      { 
+        id: 'l5-3', 
+        title: 'Audio Overview - יצירת פודקאסטים אוטומטית', 
+        duration: '30:00',
+        description: 'התכונה המהפכנית: הפיכת טקסטים למסמכים לפודקאסטים מקצועיים',
+        materials: [
+          { title: 'מדריך Audio Overview', type: 'txt', url: '/materials/c5/lesson3-audio-overview.txt', size: '3.8 MB', description: 'מדריך מקיף ליצירת פודקאסטים' },
+          { title: 'דוגמאות פודקאסטים', type: 'txt', url: '/materials/c5/lesson3-podcast-examples.txt', size: '2.4 MB', description: '10 דוגמאות להאזנה' },
+          { title: 'טיפים לפודקאסט מושלם', type: 'txt', url: '/materials/c5/lesson3-podcast-tips.txt', size: '1.7 MB', description: 'שיפור איכות הפודקאסט' },
+        ]
+      },
+      { 
+        id: 'l5-4', 
+        title: 'העלאת מסמכים וקבצים', 
+        duration: '25:00',
+        description: 'העלאה וניהול של PDF, Google Docs, קישורים ועוד',
+        materials: [
+          { title: 'מדריך העלאת מקורות', type: 'txt', url: '/materials/c5/lesson4-upload-sources.txt', size: '3.1 MB', description: 'כל סוגי המקורות' },
+          { title: 'הגבלות וטיפים', type: 'txt', url: '/materials/c5/lesson4-limitations-tips.txt', size: '1.9 MB', description: 'מה עובד ומה לא' },
+          { title: 'ארגון מקורות', type: 'txt', url: '/materials/c5/lesson4-source-management.txt', size: '1.5 MB', description: 'ניהול מקורות יעיל' },
+        ]
+      },
+      { 
+        id: 'l5-5', 
+        title: 'שאלות מתקדמות וניתוח מסמכים', 
+        duration: '30:00',
+        description: 'אמנות שאילת השאלות הנכונות וניתוח עמוק',
+        materials: [
+          { title: 'מדריך שאלות מתקדמות', type: 'txt', url: '/materials/c5/lesson5-advanced-questions.txt', size: '3.6 MB', description: 'שאלות יעילות' },
+          { title: '100 שאלות לדוגמה', type: 'txt', url: '/materials/c5/lesson5-question-examples.txt', size: '2.8 MB', description: 'בנק שאלות' },
+          { title: 'ניתוח משתנים', type: 'txt', url: '/materials/c5/lesson5-analysis-techniques.txt', size: '2.1 MB', description: 'טכניקות ניתוח' },
+        ]
+      },
+      { 
+        id: 'l5-6', 
+        title: 'ציטוטים והפניות למקורות', 
+        duration: '20:00',
+        description: 'עבודה עם ציטוטים ומעקב אחרי מקורות המידע',
+        materials: [
+          { title: 'מדריך ציטוטים', type: 'txt', url: '/materials/c5/lesson6-citations.txt', size: '2.4 MB', description: 'עבודה עם ציטוטים' },
+          { title: 'אימות עובדות', type: 'txt', url: '/materials/c5/lesson6-fact-checking.txt', size: '1.8 MB', description: 'בדיקת מהימנות' },
+        ]
+      },
+      { 
+        id: 'l5-7', 
+        title: 'שימוש במחקר אקדמי ועבודות סמסטר', 
+        duration: '30:00',
+        description: 'NotebookLM למחקר אקדמי ולכתיבת עבודות',
+        materials: [
+          { title: 'מדריך למחקר אקדמי', type: 'txt', url: '/materials/c5/lesson7-academic-research.txt', size: '3.8 MB', description: 'מחקר מקצועי' },
+          { title: 'תבניות לעבודות', type: 'txt', url: '/materials/c5/lesson7-paper-templates.txt', size: '2.3 MB', description: 'תבניות מוכנות' },
+          { title: 'טיפים לכתיבה', type: 'txt', url: '/materials/c5/lesson7-writing-tips.txt', size: '1.9 MB', description: 'כתיבה אקדמית' },
+        ]
+      },
+      { 
+        id: 'l5-8', 
+        title: 'יצירת מדריכי לימוד וחומרי הוראה', 
+        duration: '25:00',
+        description: 'למורים: יצירת חומרי לימוד מקצועיים',
+        materials: [
+          { title: 'מדריך למורים', type: 'txt', url: '/materials/c5/lesson8-teachers-guide.txt', size: '3.4 MB', description: 'NotebookLM לחינוך' },
+          { title: 'דוגמאות מערכי שיעור', type: 'txt', url: '/materials/c5/lesson8-lesson-plans.txt', size: '2.7 MB', description: '15 מערכי שיעור' },
+          { title: 'יצירת מבחנים', type: 'txt', url: '/materials/c5/lesson8-quiz-creation.txt', size: '2.1 MB', description: 'הכנת מבחנים' },
+        ]
+      },
+      { 
+        id: 'l5-9', 
+        title: 'שיתוף Notebooks ועבודה משותפת', 
+        duration: '20:00',
+        description: 'עבודה בצוות ושיתוף Notebooks',
+        materials: [
+          { title: 'מדריך שיתוף', type: 'txt', url: '/materials/c5/lesson9-sharing.txt', size: '2.6 MB', description: 'שיתוף ועבודה משותפת' },
+          { title: 'הרשאות וניהול גישה', type: 'txt', url: '/materials/c5/lesson9-permissions.txt', size: '1.8 MB', description: 'ניהול הרשאות' },
+        ]
+      },
+      { 
+        id: 'l5-10', 
+        title: 'פרויקט גמר: מחקר מקצועי מלא', 
+        duration: '40:00',
+        description: 'פרויקט גמר - מחקר מלא עם NotebookLM מ-A עד Z',
+        materials: [
+          { title: 'הנחיות פרויקט גמר', type: 'txt', url: '/materials/c5/lesson10-final-project.txt', size: '3.2 MB', description: 'הנחיות מפורטות' },
+          { title: 'רשימת בדיקה', type: 'txt', url: '/materials/c5/lesson10-checklist.txt', size: '1.4 MB', description: 'Checklist מלא' },
+          { title: 'דוגמאות פרויקטים', type: 'txt', url: '/materials/c5/lesson10-project-examples.txt', size: '2.9 MB', description: '5 דוגמאות מצוינות' },
+        ]
+      },
+    ]
   }
 ];
 
 const WORKSHOP_MATERIALS: WorkshopMaterial[] = [
   {
     id: 'w1',
-    title: 'השתלמות מורים: NotebookLM וכלי מחקר',
-    date: '15.01.2025',
+    title: 'השתלמות מורים: NotebookLM ו-Audio Overviews',
+    date: '15.02.2026',
     type: 'פרונטלי',
     materials: [
-      { name: 'מדריך למורה: NotebookLM', type: 'pdf', url: '#' },
+      { name: 'מדריך למורה: NotebookLM המלא', type: 'pdf', url: '#' },
+      { name: 'יצירת פודקאסטים לימודיים עם Audio Overview', type: 'pdf', url: '#' },
       { name: 'דוגמאות למערכי שיעור מבוססי AI', type: 'pdf', url: '#' },
-      { name: 'מצגת ההשתלמות - חינוך בעידן גוגל', type: 'pptx', url: '#' }
+      { name: 'מצגת ההשתלמות - חינוך בעידן Gemini 2.0', type: 'pptx', url: '#' }
     ]
   },
   {
     id: 'w2',
-    title: 'וובינר: אוטומציה עסקית עם Google Apps Script',
-    date: '02.02.2025',
+    title: 'סדנה: Canvas ב-Gemini - עריכה אינטראקטיבית',
+    date: '22.02.2026',
     type: 'מקוון',
     materials: [
-      { name: 'סקריפט אוטומטי למיון מיילים', type: 'link', url: '#' },
-      { name: 'מצגת: חיבור Google Forms ל-Gemini', type: 'pdf', url: '#' }
+      { name: 'מדריך Canvas המלא', type: 'pdf', url: '#' },
+      { name: 'דוגמאות עריכה ושיתוף פעולה', type: 'pdf', url: '#' },
+      { name: 'וידאו הדרכה: Canvas למתחילים', type: 'link', url: '#' }
+    ]
+  },
+  {
+    id: 'w3',
+    title: 'וובינר: אוטומציה עסקית עם Gemini 2.0 ו-Apps Script',
+    date: '05.03.2026',
+    type: 'מקוון',
+    materials: [
+      { name: 'סקריפט אוטומטי למיון מיילים עם Gemini', type: 'link', url: '#' },
+      { name: 'חיבור Google Forms ל-Gemini 2.0 API', type: 'pdf', url: '#' },
+      { name: 'מצגת: אוטומציה חכמה 2026', type: 'pptx', url: '#' }
     ]
   }
 ];
@@ -630,7 +791,7 @@ const Hero = ({ onCtaClick }: { onCtaClick: () => void }) => (
     <div className="absolute inset-0 bg-slate-900 opacity-50"></div>
     <div className="container mx-auto relative z-10 max-w-4xl">
       <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">ללמוד בינה מלאכותית <span className="text-blue-400">עם הכלים של Google</span></h1>
-      <p className="text-xl md:text-2xl text-gray-300 mb-8">מבית הספר המוביל ללימודי Gemini, Project IDX ו-Vertex AI.</p>
+      <p className="text-xl md:text-2xl text-gray-300 mb-8">מבית הספר המוביל ללימודי Gemini 2.0, NotebookLM, Canvas, Project IDX ו-Vertex AI - עם הטכנולוגיות החדשות ביותר לשנת 2026!</p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button onClick={onCtaClick} className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-bold shadow-lg transition-all">צפה בקורסים</button>
       </div>
