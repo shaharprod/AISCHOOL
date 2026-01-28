@@ -1,0 +1,197 @@
+טיפול בשגיאות ב-React ו-API
+=============================
+
+שיעור 7: טיפול בשגיאות
+=======================
+
+מבוא
+====
+
+בשיעור זה נלמד כיצד לטפל בשגיאות
+ב-React וב-API.
+
+Error Handling ב-React
+=======================
+
+1. Try-Catch:
+-------------
+
+```jsx
+function Component() {
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/data');
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const data = await response.json();
+      // ...
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return <div>...</div>;
+}
+```
+
+2. Error Boundary:
+------------------
+
+```jsx
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+
+// שימוש:
+<ErrorBoundary>
+  <App />
+</ErrorBoundary>
+```
+
+3. Custom Hook:
+---------------
+
+```jsx
+function useErrorHandler() {
+  const [error, setError] = useState(null);
+
+  const handleError = (err) => {
+    setError(err);
+    console.error('Error:', err);
+  };
+
+  const resetError = () => setError(null);
+
+  return { error, handleError, resetError };
+}
+
+// שימוש:
+function Component() {
+  const { error, handleError, resetError } = useErrorHandler();
+
+  const fetchData = async () => {
+    try {
+      // ...
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+        <button onClick={resetError}>Try Again</button>
+      </div>
+    );
+  }
+
+  return <div>...</div>;
+}
+```
+
+Error Handling ב-API
+====================
+
+1. Try-Catch:
+-------------
+
+```javascript
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+2. Error Middleware:
+--------------------
+
+```javascript
+const errorHandler = (err, req, res, next) => {
+  console.error(err.stack);
+  
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message });
+  }
+  
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  
+  res.status(500).json({ error: 'Internal Server Error' });
+};
+
+app.use(errorHandler);
+```
+
+3. Custom Error Class:
+---------------------
+
+```javascript
+class AppError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+    this.isOperational = true;
+  }
+}
+
+// שימוש:
+app.get('/api/users/:id', async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new AppError('User not found', 404));
+  }
+  res.json(user);
+});
+```
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך לטפל בשגיאות ב-React
+✓ איך להשתמש ב-Error Boundary
+✓ איך לטפל בשגיאות ב-API
+✓ איך ליצור Custom Errors
+
+בשיעור הבא נלמד:
+→ עבודה עם Firebase Auth
+→ Authentication
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+טיפול בשגיאות
+גרסה 1.0

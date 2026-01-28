@@ -1,0 +1,413 @@
+מדריך בניית API עם Node.js ו-Express
+======================================
+
+שיעור 5: בניית API
+===================
+
+מבוא
+====
+
+בשיעור זה נלמד כיצד לבנות API backend
+עם Node.js ו-Express ב-Project IDX.
+
+הקמת פרויקט
+============
+
+1. צור פרויקט חדש
+2. פתח Terminal
+3. הרץ:
+
+```bash
+npm init -y
+npm install express
+npm install -D nodemon
+```
+
+4. צור server.js:
+
+```javascript
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello World' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
+
+5. הוסף ל-package.json:
+
+```json
+{
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  }
+}
+```
+
+6. הרץ:
+
+```bash
+npm run dev
+```
+
+Routes בסיסיים
+===============
+
+GET Request:
+------------
+
+```javascript
+app.get('/api/users', (req, res) => {
+  res.json([
+    { id: 1, name: 'John' },
+    { id: 2, name: 'Jane' }
+  ]);
+});
+```
+
+POST Request:
+-------------
+
+```javascript
+app.post('/api/users', (req, res) => {
+  const { name, email } = req.body;
+  
+  // כאן תוסיף לוגיקה לשמירה
+  
+  res.status(201).json({
+    id: Date.now(),
+    name,
+    email
+  });
+});
+```
+
+PUT Request:
+------------
+
+```javascript
+app.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
+  
+  // כאן תוסיף לוגיקה לעדכון
+  
+  res.json({
+    id,
+    name,
+    email
+  });
+});
+```
+
+DELETE Request:
+---------------
+
+```javascript
+app.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  
+  // כאן תוסיף לוגיקה למחיקה
+  
+  res.status(204).send();
+});
+```
+
+Middleware
+==========
+
+1. Body Parser:
+--------------
+
+```javascript
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+```
+
+2. CORS:
+--------
+
+```bash
+npm install cors
+```
+
+```javascript
+const cors = require('cors');
+app.use(cors());
+```
+
+3. Custom Middleware:
+--------------------
+
+```javascript
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+};
+
+app.use(logger);
+```
+
+4. Error Handling:
+-----------------
+
+```javascript
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+```
+
+Routes מותאמים
+==============
+
+יצירת Router:
+
+```javascript
+// routes/users.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+  res.json({ message: 'Get all users' });
+});
+
+router.get('/:id', (req, res) => {
+  res.json({ message: `Get user ${req.params.id}` });
+});
+
+module.exports = router;
+
+// server.js
+const usersRouter = require('./routes/users');
+app.use('/api/users', usersRouter);
+```
+
+עבודה עם Database
+==================
+
+עם JSON File:
+-------------
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+const dataPath = path.join(__dirname, 'data.json');
+
+function readData() {
+  const data = fs.readFileSync(dataPath, 'utf8');
+  return JSON.parse(data);
+}
+
+function writeData(data) {
+  fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
+}
+
+// שימוש:
+app.get('/api/users', (req, res) => {
+  const data = readData();
+  res.json(data.users);
+});
+```
+
+עם MongoDB:
+-----------
+
+```bash
+npm install mongoose
+```
+
+```javascript
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/myapp');
+
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String
+});
+
+const User = mongoose.model('User', UserSchema);
+
+app.get('/api/users', async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+});
+```
+
+עם Firebase:
+------------
+
+```bash
+npm install firebase-admin
+```
+
+```javascript
+const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccountKey.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+
+app.get('/api/users', async (req, res) => {
+  const snapshot = await db.collection('users').get();
+  const users = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+  res.json(users);
+});
+```
+
+Authentication
+==============
+
+עם JWT:
+-------
+
+```bash
+npm install jsonwebtoken bcrypt
+```
+
+```javascript
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const SECRET = 'your-secret-key';
+
+// Register
+app.post('/api/register', async (req, res) => {
+  const { email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  // שמור משתמש ב-DB
+  
+  const token = jwt.sign({ email }, SECRET);
+  res.json({ token });
+});
+
+// Login
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  // בדוק משתמש ב-DB
+  // const user = await findUser(email);
+  // const valid = await bcrypt.compare(password, user.password);
+  
+  if (valid) {
+    const token = jwt.sign({ email }, SECRET);
+    res.json({ token });
+  } else {
+    res.status(401).json({ error: 'Invalid credentials' });
+  }
+});
+
+// Middleware
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No token' });
+  }
+  
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};
+
+// Protected Route
+app.get('/api/profile', authenticate, (req, res) => {
+  res.json({ user: req.user });
+});
+```
+
+Validation
+==========
+
+עם Joi:
+--------
+
+```bash
+npm install joi
+```
+
+```javascript
+const Joi = require('joi');
+
+const userSchema = Joi.object({
+  name: Joi.string().min(3).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required()
+});
+
+app.post('/api/users', (req, res) => {
+  const { error, value } = userSchema.validate(req.body);
+  
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+  
+  // המשך עם value המאומת
+});
+```
+
+Testing
+=======
+
+עם Jest:
+--------
+
+```bash
+npm install -D jest supertest
+```
+
+```javascript
+// __tests__/api.test.js
+const request = require('supertest');
+const app = require('../server');
+
+describe('GET /api/users', () => {
+  test('should return users', async () => {
+    const response = await request(app).get('/api/users');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+  });
+});
+```
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך להקים API
+✓ איך ליצור Routes
+✓ איך להשתמש ב-Middleware
+✓ איך לעבוד עם Database
+✓ איך להוסיף Authentication
+
+בשיעור הבא נלמד:
+→ פריסה ל-Firebase
+→ Firebase Hosting
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+מדריך בניית API
+גרסה 1.0

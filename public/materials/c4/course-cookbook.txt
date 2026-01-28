@@ -1,0 +1,643 @@
+Google AI Studio Cookbook
+===========================
+
+מתכונים ודוגמאות מעשיות
+=========================
+
+👨‍🍳 מבוא
+===========
+
+ה-Cookbook הזה מכיל מתכונים מוכנים לשימוש עם Gemini API.
+כל "מתכון" כולל: בעיה, פתרון, קוד מלא.
+
+מה תמצא כאן:
+------------
+✓ 25+ דוגמאות מעשיות
+✓ קוד מלא ועובד
+✓ הסברים מפורטים
+✓ Tips & Tricks
+✓ Best Practices
+
+מתי להשתמש?
+------------
+• לומדים API חדש
+• צריכים השראה
+• רוצים התחלה מהירה
+• בונים POC
+
+מבנה מתכון
+===========
+
+כל מתכון כולל:
+
+1. **שם המתכון** 🍕
+2. **מה זה פותר** (Use Case)
+3. **דרישות** (Requirements)
+4. **קוד מלא** (Full Code)
+5. **הסבר** (Explanation)
+6. **טיפים** (Tips)
+7. **וריאציות** (Variations)
+
+קטגוריות
+==========
+
+1. Basic Usage
+2. Content Generation
+3. Analysis
+4. Multimodal
+5. Advanced
+6. Integration
+7. Production
+
+מתכון 1: "Hello Gemini" 👋
+===========================
+
+Use Case:
+---------
+הבנייה ראשונה של API - שליחת פרומפט פשוט
+
+Requirements:
+-------------
+```
+pip install google-generativeai
+```
+
+Code:
+-----
+```python
+import google.generativeai as genai
+
+# הגדרת API Key
+genai.configure(api_key="YOUR_API_KEY")
+
+# יצירת מודל
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+# שליחת פרומפט
+response = model.generate_content("Write a hello world in Python")
+
+# הדפסת תשובה
+print(response.text)
+```
+
+הסבר:
+------
+1. ייבוא הספרייה
+2. הגדרת מפתח
+3. בחירת מודל
+4. שליחת בקשה
+5. קבלת תשובה
+
+Tips:
+-----
+💡 שמור API Key ב-.env
+💡 השתמש ב-flash למהירות
+💡 Pro למורכבות
+
+מתכון 2: "Smart Chatbot" 💬
+============================
+
+Use Case:
+---------
+צ'אטבוט עם זיכרון שיחה
+
+Code:
+-----
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+
+# מודל עם היסטוריה
+model = genai.GenerativeModel('gemini-1.5-flash')
+chat = model.start_chat(history=[])
+
+# פונקציה לשיחה
+def chat_with_bot(message):
+    response = chat.send_message(message)
+    return response.text
+
+# דוגמת שימוש
+print(chat_with_bot("Hi! My name is John"))
+print(chat_with_bot("What's my name?"))  # יזכור!
+```
+
+הסבר:
+------
+• `start_chat()` - מתחיל שיחה עם זיכרון
+• `history=[]` - היסטוריה ריקה
+• כל `send_message` נשמר בהיסטוריה
+
+Tips:
+-----
+💡 שמור היסטוריה לפי משתמש
+💡 מחק היסטוריה כל X הודעות
+💡 השתמש ב-System Instructions
+
+מתכון 3: "Content Generator" ✍️
+=================================
+
+Use Case:
+---------
+יצירת תוכן מגוון (פוסטים, מיילים, וכו')
+
+Code:
+-----
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel('gemini-1.5-pro')
+
+def generate_content(type, topic, tone="professional"):
+    prompts = {
+        "blog": f"Write a blog post about {topic} in {tone} tone",
+        "email": f"Write a professional email about {topic}",
+        "social": f"Write a social media post about {topic}, max 280 chars",
+        "ad": f"Write an ad copy for {topic}, persuasive and short"
+    }
+    
+    prompt = prompts.get(type, f"Write about {topic}")
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+blog = generate_content("blog", "AI in healthcare", "friendly")
+email = generate_content("email", "product launch")
+tweet = generate_content("social", "new AI tool")
+
+print(blog)
+```
+
+Tips:
+-----
+💡 הוסף templates נוספים
+💡 שמור תוצאות טובות
+💡 שלב generation config
+
+מתכון 4: "Image Analyzer" 📷
+==============================
+
+Use Case:
+---------
+ניתוח תמונות עם שאלות
+
+Code:
+-----
+```python
+import google.generativeai as genai
+from PIL import Image
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+def analyze_image(image_path, question="What's in this image?"):
+    img = Image.open(image_path)
+    response = model.generate_content([question, img])
+    return response.text
+
+# שימוש
+result = analyze_image("product.jpg", "Describe this product")
+print(result)
+
+result2 = analyze_image("chart.png", "Explain this chart in simple terms")
+print(result2)
+```
+
+Variations:
+-----------
+```python
+# מספר תמונות
+images = [Image.open(f"img{i}.jpg") for i in range(1,4)]
+response = model.generate_content(["Compare these images"] + images)
+
+# תמונה + הקשר
+response = model.generate_content([
+    "This is our product design. Suggest improvements:",
+    img,
+    "Focus on: UX, colors, and accessibility"
+])
+```
+
+מתכון 5: "PDF Summarizer" 📄
+==============================
+
+Use Case:
+---------
+סיכום מסמכי PDF ארוכים
+
+Code:
+-----
+```python
+import google.generativeai as genai
+import PyPDF2
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel('gemini-1.5-pro')
+
+def summarize_pdf(pdf_path, summary_length="medium"):
+    # קריאת PDF
+    with open(pdf_path, 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text()
+    
+    # סיכום
+    lengths = {
+        "short": "in 3 bullet points",
+        "medium": "in 1 paragraph",
+        "long": "in detail with key points"
+    }
+    
+    prompt = f"Summarize this document {lengths[summary_length]}:\n\n{text}"
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+summary = summarize_pdf("report.pdf", "medium")
+print(summary)
+```
+
+Tips:
+-----
+💡 חלק מסמכים ארוכים (>1M טוקנים)
+💡 שמור סיכום לקובץ
+💡 הוסף extraction של נקודות מפתח
+
+מתכון 6: "JSON Extractor" 🔍
+==============================
+
+Use Case:
+---------
+חילוץ מידע מובנה מטקסט
+
+Code:
+-----
+```python
+import google.generativeai as genai
+import json
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel(
+    'gemini-1.5-flash',
+    generation_config={"response_mime_type": "application/json"}
+)
+
+def extract_structured_data(text, schema):
+    prompt = f"""
+    Extract information from this text and return JSON following this schema:
+    {schema}
+    
+    Text: {text}
+    """
+    
+    response = model.generate_content(prompt)
+    return json.loads(response.text)
+
+# דוגמה
+text = "John Doe, 35 years old, lives in New York, works as engineer at Google"
+schema = {
+    "name": "string",
+    "age": "number",
+    "city": "string",
+    "occupation": "string",
+    "company": "string"
+}
+
+data = extract_structured_data(text, schema)
+print(json.dumps(data, indent=2))
+```
+
+Output:
+-------
+```json
+{
+  "name": "John Doe",
+  "age": 35,
+  "city": "New York",
+  "occupation": "engineer",
+  "company": "Google"
+}
+```
+
+מתכון 7: "Code Reviewer" 👨‍💻
+===============================
+
+Use Case:
+---------
+ביקורת קוד אוטומטית
+
+Code:
+-----
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+
+model = genai.GenerativeModel(
+    'gemini-1.5-pro',
+    system_instruction="""
+    You are a senior code reviewer.
+    Review code for:
+    - Bugs and errors
+    - Best practices
+    - Performance issues
+    - Security vulnerabilities
+    - Code readability
+    
+    Provide specific, actionable feedback.
+    """
+)
+
+def review_code(code, language="python"):
+    prompt = f"Review this {language} code:\n\n```{language}\n{code}\n```"
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+code = '''
+def calculate(x, y):
+    return x/y
+'''
+
+review = review_code(code)
+print(review)
+```
+
+מתכון 8: "Multi-Language Translator" 🌍
+=========================================
+
+Use Case:
+---------
+תרגום לשפות מרובות בבת אחת
+
+Code:
+-----
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+def translate_multi(text, target_languages):
+    langs = ", ".join(target_languages)
+    prompt = f"""
+    Translate this text to {langs}.
+    Return as JSON: {{"language": "translated_text"}}
+    
+    Text: {text}
+    """
+    
+    response = model.generate_content(
+        prompt,
+        generation_config={"response_mime_type": "application/json"}
+    )
+    
+    return json.loads(response.text)
+
+# שימוש
+translations = translate_multi(
+    "Hello, how are you?",
+    ["Spanish", "French", "Hebrew", "Japanese"]
+)
+
+for lang, text in translations.items():
+    print(f"{lang}: {text}")
+```
+
+מתכון 9: "Sentiment Analyzer" 😊😐😢
+======================================
+
+Use Case:
+---------
+ניתוח סנטימנט של טקסט/ביקורות
+
+Code:
+-----
+```python
+import google.generativeai as genai
+import json
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+def analyze_sentiment(text):
+    prompt = f"""
+    Analyze the sentiment of this text.
+    Return JSON with:
+    - sentiment: "positive", "negative", or "neutral"
+    - confidence: 0-100
+    - emotions: list of detected emotions
+    - summary: brief explanation
+    
+    Text: {text}
+    """
+    
+    response = model.generate_content(
+        prompt,
+        generation_config={"response_mime_type": "application/json"}
+    )
+    
+    return json.loads(response.text)
+
+# שימוש
+reviews = [
+    "This product is amazing! Best purchase ever!",
+    "Terrible quality. Waste of money.",
+    "It's okay, nothing special."
+]
+
+for review in reviews:
+    result = analyze_sentiment(review)
+    print(f"Text: {review}")
+    print(f"Sentiment: {result['sentiment']} ({result['confidence']}%)")
+    print(f"Emotions: {', '.join(result['emotions'])}")
+    print()
+```
+
+מתכון 10: "RAG System" 📚
+===========================
+
+Use Case:
+---------
+Retrieval-Augmented Generation - שאלות על מסמכים
+
+Code:
+-----
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+model = genai.GenerativeModel('gemini-1.5-pro')
+
+class RAGSystem:
+    def __init__(self, documents):
+        self.documents = documents
+        self.model = model
+    
+    def query(self, question):
+        # בניית הקשר
+        context = "\n\n".join([
+            f"Document {i+1}:\n{doc}"
+            for i, doc in enumerate(self.documents)
+        ])
+        
+        prompt = f"""
+        Answer the question based ONLY on the provided documents.
+        If the answer is not in the documents, say "I don't know".
+        
+        Documents:
+        {context}
+        
+        Question: {question}
+        """
+        
+        response = self.model.generate_content(prompt)
+        return response.text
+
+# שימוש
+docs = [
+    "Our company was founded in 2010 in San Francisco.",
+    "We have 500 employees across 10 countries.",
+    "Our main product is an AI platform for businesses."
+]
+
+rag = RAGSystem(docs)
+answer = rag.query("When was the company founded?")
+print(answer)  # "2010"
+```
+
+טיפים מתקדמים
+==============
+
+1. Generation Config
+--------------------
+
+```python
+config = {
+    "temperature": 0.7,  # 0-2, גבוה=יצירתי
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_output_tokens": 2048,
+    "response_mime_type": "application/json"
+}
+
+model = genai.GenerativeModel(
+    'gemini-1.5-flash',
+    generation_config=config
+)
+```
+
+2. Safety Settings
+------------------
+
+```python
+safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    }
+]
+
+model = genai.GenerativeModel(
+    'gemini-1.5-flash',
+    safety_settings=safety_settings
+)
+```
+
+3. Error Handling
+-----------------
+
+```python
+from google.api_core import exceptions
+
+try:
+    response = model.generate_content(prompt)
+    return response.text
+except exceptions.ResourceExhausted:
+    print("Quota exceeded")
+except exceptions.InvalidArgument:
+    print("Invalid input")
+except Exception as e:
+    print(f"Error: {e}")
+```
+
+4. Caching
+----------
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=100)
+def cached_generate(prompt):
+    response = model.generate_content(prompt)
+    return response.text
+```
+
+5. Streaming
+------------
+
+```python
+def stream_response(prompt):
+    response = model.generate_content(
+        prompt,
+        stream=True
+    )
+    
+    for chunk in response:
+        print(chunk.text, end='', flush=True)
+```
+
+Best Practices
+==============
+
+1. API Key
+----------
+✓ השתמש ב-.env
+✓ אל תשתף בקוד
+✓ רוטציה תקופתית
+
+2. Prompts
+----------
+✓ ברורים וספציפיים
+✓ דוגמאות כשאפשר
+✓ הקשר מלא
+
+3. Performance
+--------------
+✓ Flash לפשוט
+✓ Pro למורכב
+✓ Batch requests
+
+4. Cost
+-------
+✓ נטר שימוש
+✓ Cache תוצאות
+✓ בחר מודל נכון
+
+5. Testing
+----------
+✓ בדוק Edge cases
+✓ Test בייצור
+✓ Monitor errors
+
+סיכום
+=====
+
+✓ 10 מתכונים מוכנים
+✓ קוד מלא ועובד
+✓ דוגמאות מעשיות
+✓ Tips & Best Practices
+✓ Production-ready
+
+התחל לבשל! 👨‍🍳
+
+---
+© 2026 Google AI Academy
+AI Studio Cookbook
+גרסה 5.0

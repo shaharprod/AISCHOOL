@@ -1,0 +1,169 @@
+שגיאות נפוצות ופתרונות
+========================
+
+שיעור 7: שגיאות נפוצות
+=======================
+
+מבוא
+====
+
+רשימת שגיאות נפוצות ופתרונותיהן.
+
+שגיאות React
+=============
+
+1. "Cannot read property of undefined"
+--------------------------------------
+
+בעיה:
+```jsx
+const user = null;
+<div>{user.name}</div>
+```
+
+פתרון:
+```jsx
+<div>{user?.name}</div>
+// או
+{user && <div>{user.name}</div>}
+```
+
+2. "Warning: Each child should have a unique key"
+------------------------------------------------
+
+בעיה:
+```jsx
+{items.map(item => <div>{item.name}</div>)}
+```
+
+פתרון:
+```jsx
+{items.map(item => <div key={item.id}>{item.name}</div>)}
+```
+
+3. "Cannot update during render"
+--------------------------------
+
+בעיה:
+```jsx
+function Component() {
+  const [count, setCount] = useState(0);
+  setCount(count + 1); // בתוך render
+  return <div>{count}</div>;
+}
+```
+
+פתרון:
+```jsx
+function Component() {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    setCount(count + 1);
+  }, []);
+  
+  return <div>{count}</div>;
+}
+```
+
+4. "Maximum update depth exceeded"
+----------------------------------
+
+בעיה:
+```jsx
+useEffect(() => {
+  setState(state + 1);
+}, [state]);
+```
+
+פתרון:
+```jsx
+useEffect(() => {
+  setState(prev => prev + 1);
+}, []);
+```
+
+שגיאות API
+===========
+
+1. "CORS error"
+---------------
+
+בעיה:
+Access to fetch blocked by CORS policy
+
+פתרון:
+```javascript
+const cors = require('cors');
+app.use(cors());
+```
+
+2. "Cannot POST /api/users"
+---------------------------
+
+בעיה:
+Route לא מוגדר
+
+פתרון:
+```javascript
+app.post('/api/users', (req, res) => {
+  // ...
+});
+```
+
+3. "req.body is undefined"
+--------------------------
+
+בעיה:
+לא הוגדר body parser
+
+פתרון:
+```javascript
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+```
+
+שגיאות Firebase
+================
+
+1. "Firebase: Error (auth/user-not-found)"
+------------------------------------------
+
+פתרון:
+בדוק שהמשתמש קיים לפני ניסיון התחברות.
+
+2. "Firebase: Error (auth/wrong-password)"
+------------------------------------------
+
+פתרון:
+בדוק שהסיסמה נכונה.
+
+3. "Firebase: Error (permission-denied)"
+----------------------------------------
+
+פתרון:
+בדוק את Security Rules.
+
+סיכום
+======
+
+שגיאות נפוצות:
+✓ React errors
+✓ API errors
+✓ Firebase errors
+
+פתרונות:
+✓ בדוק את הקוד
+✓ קרא את ה-error message
+✓ השתמש ב-Debugger
+
+בשיעור הבא נלמד:
+→ עבודה עם Firebase Auth
+→ Authentication
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+שגיאות נפוצות
+גרסה 1.0

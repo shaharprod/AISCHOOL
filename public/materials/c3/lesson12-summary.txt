@@ -1,0 +1,102 @@
+סיכום הקורס: Project IDX
+==========================
+
+שיעור 12: סיכום
+================
+
+מבוא
+====
+
+סיכום מקיף של כל מה שלמדנו בקורס.
+
+מה למדנו
+=========
+
+1. מבוא ל-Project IDX
+   ✓ מה זה IDX
+   ✓ יתרונות וחסרונות
+   ✓ השוואה למתחרים
+
+2. הגדרת סביבת העבודה
+   ✓ הגדרות בסיסיות
+   ✓ חיבור ל-GitHub
+   ✓ קיצורי מקלדת
+
+3. עבודה עם Gemini Code Assist
+   ✓ השלמה אוטומטית
+   ✓ צ'אט לקוד
+   ✓ תיקון שגיאות
+
+4. הקמת פרויקט React
+   ✓ יצירת פרויקט
+   ✓ מבנה פרויקט
+   ✓ ארגון קבצים
+
+5. בניית API
+   ✓ Express.js
+   ✓ Routes
+   ✓ Middleware
+
+6. פריסה ל-Firebase
+   ✓ Firebase Hosting
+   ✓ הגדרת פרויקט
+   ✓ פריסה
+
+7. טיפול בשגיאות
+   ✓ Error Handling
+   ✓ שגיאות נפוצות
+   ✓ דיבוג
+
+8. Firebase Authentication
+   ✓ הרשמה והתחברות
+   ✓ שיטות אימות
+   ✓ Protected Routes
+
+9. Firestore Database
+   ✓ CRUD Operations
+   ✓ Real-time Updates
+   ✓ Queries
+
+10. Testing
+    ✓ Unit Tests
+    ✓ Component Tests
+    ✓ Jest
+
+11. CI/CD
+    ✓ GitHub Actions
+    ✓ אוטומציה
+    ✓ Deploy
+
+המשך הלמידה
+============
+
+משאבים נוספים:
+• תיעוד רשמי: idx.dev
+• Firebase Docs: firebase.google.com/docs
+• React Docs: react.dev
+• GitHub Actions: docs.github.com/actions
+
+טיפים להמשך
+============
+
+💡 תרגל באופן קבוע
+💡 בנה פרויקטים משלך
+💡 הצטרף לקהילה
+💡 שאל שאלות
+💡 שתף את הידע שלך
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך לעבוד עם Project IDX
+✓ איך לבנות אפליקציות React
+✓ איך לעבוד עם Firebase
+✓ איך לפרוס אפליקציות
+
+המשך להצליח! 🚀
+
+---
+© 2026 Google AI Academy
+סיכום הקורס
+גרסה 1.0

@@ -1,0 +1,289 @@
+חיבור GitHub ל-Project IDX - מדריך צעד אחר צעד
+===============================================
+
+שיעור 2: חיבור GitHub
+======================
+
+מבוא
+====
+
+GitHub הוא פלטפורמה לניהול קוד.
+בשיעור זה נלמד לחבר את IDX ל-GitHub.
+
+למה GitHub?
+===========
+
+✓ שמירת קוד בענן
+✓ גיבוי אוטומטי
+✓ עבודה צוותית
+✓ היסטוריית שינויים
+✓ Pull Requests
+✓ Issues
+
+צעד 1: יצירת חשבון GitHub
+===========================
+
+אם אין לך חשבון:
+
+1. היכנס ל: github.com
+2. לחץ "Sign up"
+3. מלא פרטים
+4. אימות אימייל
+5. בחר תוכנית (Free מומלץ)
+
+צעד 2: חיבור GitHub ל-IDX
+==========================
+
+א) דרך IDX:
+
+1. פתח IDX
+2. לחץ על אייקון Git (Sidebar)
+3. לחץ "Sign in with GitHub"
+4. אשר הרשאות
+5. מוכן!
+
+ב) דרך Settings:
+
+1. Ctrl + ,
+2. חפש "Git"
+3. לחץ "Sign in with GitHub"
+4. אשר הרשאות
+
+צעד 3: יצירת Repository
+========================
+
+א) דרך GitHub:
+
+1. היכנס ל-github.com
+2. לחץ "+" → "New repository"
+3. תן שם (לדוגמה: my-first-project)
+4. בחר Public או Private
+5. אל תסמן "Initialize with README"
+6. לחץ "Create repository"
+
+ב) דרך IDX:
+
+1. לחץ על אייקון Git
+2. לחץ "Initialize Repository"
+3. תן שם לפרויקט
+4. בחר Public/Private
+
+צעד 4: חיבור Repository קיים
+==============================
+
+1. פתח Terminal (Ctrl + `)
+2. הרץ:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git push -u origin main
+```
+
+החלף:
+• YOUR_USERNAME - שם המשתמש שלך
+• YOUR_REPO - שם ה-Repository
+
+צעד 5: Clone Repository
+========================
+
+1. ב-IDX לחץ "Import from GitHub"
+2. הזן URL של Repository
+3. לחץ "Import"
+4. המתן לסיום
+
+או דרך Terminal:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
+```
+
+עבודה עם Git ב-IDX
+==================
+
+1. Commit שינויים
+-----------------
+
+א) דרך UI:
+
+1. לחץ על אייקון Git
+2. ראה שינויים
+3. לחץ "+" ליד קבצים
+4. כתוב הודעה
+5. לחץ "Commit"
+6. לחץ "Sync Changes"
+
+ב) דרך Terminal:
+
+```bash
+git add .
+git commit -m "הודעה"
+git push
+```
+
+2. Pull שינויים
+---------------
+
+```bash
+git pull
+```
+
+או דרך UI:
+• לחץ על חץ למטה
+• לחץ "Pull"
+
+3. Push שינויים
+---------------
+
+```bash
+git push
+```
+
+או דרך UI:
+• לחץ על חץ למעלה
+• לחץ "Push"
+
+4. Branch Management
+--------------------
+
+יצירת Branch:
+
+```bash
+git checkout -b feature/new-feature
+```
+
+מעבר בין Branches:
+
+```bash
+git checkout main
+git checkout feature/new-feature
+```
+
+מיזוג Branches:
+
+```bash
+git merge feature/new-feature
+```
+
+5. Pull Requests
+----------------
+
+א) דרך GitHub:
+
+1. היכנס ל-Repository
+2. לחץ "Pull requests"
+3. לחץ "New pull request"
+4. בחר Branch
+5. כתוב תיאור
+6. לחץ "Create pull request"
+
+ב) דרך IDX:
+
+1. לחץ על אייקון Git
+2. לחץ "Create Pull Request"
+3. מלא פרטים
+4. שלח
+
+פקודות Git חיוניות
+===================
+
+בסיסיות:
+---------
+
+```bash
+git status          # מצב Repository
+git add .           # הוסף כל הקבצים
+git commit -m "msg" # Commit עם הודעה
+git push            # העלה ל-GitHub
+git pull            # הורד מ-GitHub
+git log             # היסטוריית Commits
+```
+
+Branches:
+---------
+
+```bash
+git branch                  # רשימת Branches
+git branch new-branch       # יצירת Branch
+git checkout branch-name    # מעבר ל-Branch
+git merge branch-name       # מיזוג Branch
+git branch -d branch-name   # מחיקת Branch
+```
+
+Remote:
+-------
+
+```bash
+git remote -v                # רשימת Remotes
+git remote add origin URL    # הוספת Remote
+git remote remove origin     # הסרת Remote
+git fetch                    # הורדת שינויים
+```
+
+Undo:
+-----
+
+```bash
+git reset HEAD~1            # בטל Commit אחרון
+git checkout -- file.txt     # בטל שינויים בקובץ
+git revert HEAD              # בטל Commit עם Commit חדש
+```
+
+טיפים לעבודה עם Git
+====================
+
+💡 Commit לעיתים קרובות
+💡 כתוב הודעות ברורות
+💡 השתמש ב-Branches
+💡 Pull לפני Push
+💡 בדוק Status לפני Commit
+💡 השתמש ב-.gitignore
+💡 כתוב README טוב
+
+פתרון בעיות
+===========
+
+1. "Permission denied"
+   → בדוק הרשאות GitHub
+   → ודא חיבור ל-GitHub
+   → נסה להתחבר מחדש
+
+2. "Repository not found"
+   → בדוק שם Repository
+   → ודא שיש לך גישה
+   → בדוק URL
+
+3. "Merge conflicts"
+   → פתח קובץ עם Conflict
+   → פתור ידנית
+   → Commit שוב
+
+4. "Push rejected"
+   → Pull קודם
+   → פתור Conflicts
+   → Push שוב
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך לחבר GitHub ל-IDX
+✓ איך ליצור Repository
+✓ איך לעבוד עם Git
+✓ פקודות Git בסיסיות
+
+בשיעור הבא נלמד:
+→ שימוש ב-Gemini Code Assist
+→ כתיבת קוד עם AI
+→ תיקון באגים
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+מדריך חיבור GitHub
+גרסה 1.0

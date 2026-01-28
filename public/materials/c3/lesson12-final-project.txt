@@ -1,0 +1,112 @@
+הנחיות פרויקט גמר
+==================
+
+שיעור 12: פרויקט גמר
+=====================
+
+מבוא
+====
+
+הנחיות מפורטות לפרויקט הגמר.
+
+דרישות הפרויקט
+===============
+
+1. אפליקציית React מלאה
+2. חיבור ל-Firebase (Auth + Firestore)
+3. API Backend (אופציונלי)
+4. פריסה ל-Firebase Hosting
+5. Testing (לפחות 5 בדיקות)
+6. CI/CD עם GitHub Actions
+
+רעיונות לפרויקטים
+===================
+
+1. Todo App מתקדם
+   • CRUD מלא
+   • Authentication
+   • Real-time Updates
+   • Categories & Tags
+
+2. Blog Platform
+   • יצירת פוסטים
+   • Comments
+   • User Profiles
+   • Search
+
+3. Chat App
+   • Real-time Messaging
+   • Multiple Rooms
+   • User Authentication
+   • Message History
+
+4. E-commerce
+   • Product Catalog
+   • Shopping Cart
+   • Checkout
+   • Order Management
+
+5. Social Media App
+   • Posts & Comments
+   • Likes & Shares
+   • User Profiles
+   • Follow System
+
+ציון הפרויקט
+=============
+
+100 נקודות:
+
+• פונקציונליות (40 נקודות)
+  - כל התכונות עובדות
+  - אין באגים קריטיים
+  - UX טוב
+
+• קוד (30 נקודות)
+  - קוד נקי ומסודר
+  - Best Practices
+  - Comments & Documentation
+
+• Testing (15 נקודות)
+  - לפחות 5 בדיקות
+  - כיסוי טוב
+  - בדיקות משמעותיות
+
+• פריסה (15 נקודות)
+  - פריסה מוצלחת
+  - CI/CD עובד
+  - README טוב
+
+הגשה
+=====
+
+1. Push ל-GitHub
+2. פריסה ל-Firebase
+3. שליחת קישורים:
+   • GitHub Repository
+   • Live App URL
+   • README עם הסבר
+
+טיפים להצלחה
+=============
+
+💡 התחל מוקדם
+💡 תכנן לפני שתכתוב קוד
+💡 בדוק באופן קבוע
+💡 בקש עזרה כצריך
+💡 תתעד את התהליך
+
+סיכום
+======
+
+עכשיו אתה מוכן:
+✓ לבנות פרויקט מלא
+✓ להציג את הידע שלך
+✓ להמשיך ללמוד
+
+בהצלחה! 🚀
+
+---
+© 2026 Google AI Academy
+הנחיות פרויקט גמר
+גרסה 1.0

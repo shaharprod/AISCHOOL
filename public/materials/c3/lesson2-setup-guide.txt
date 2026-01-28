@@ -1,0 +1,322 @@
+מדריך הגדרה מלא: Project IDX
+================================
+
+שיעור 2: הגדרת סביבת העבודה
+=============================
+
+מבוא
+====
+
+בשיעור זה נלמד כיצד להגדיר את Project IDX
+לעבודה מיטבית ונוחה.
+
+הגדרות בסיסיות
+===============
+
+1. הגדרות עורך
+---------------
+
+פתח Settings:
+• Ctrl + , (Windows/Linux)
+• Cmd + , (Mac)
+
+הגדרות מומלצות:
+
+{
+  "editor.fontSize": 14,
+  "editor.fontFamily": "Consolas, 'Courier New', monospace",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": true,
+  "editor.suggestSelection": "first",
+  "editor.acceptSuggestionOnCommitCharacter": true
+}
+
+הסבר:
+• fontSize - גודל הפונט (14-16 מומלץ)
+• tabSize - רווחי טאב (2 מומלץ)
+• wordWrap - גלישת שורות
+• formatOnSave - עיצוב אוטומטי בשמירה
+
+2. הגדרות Terminal
+------------------
+
+{
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.fontFamily": "Consolas",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.shell.windows": "PowerShell",
+  "terminal.integrated.shell.linux": "/bin/bash",
+  "terminal.integrated.shell.osx": "/bin/zsh"
+}
+
+טיפ: השתמש ב-PowerShell ב-Windows.
+
+3. הגדרות Git
+-------------
+
+{
+  "git.enabled": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.suggestSmartCommit": true
+}
+
+הגדרות מתקדמות
+===============
+
+1. Extensions מומלצות
+---------------------
+
+א) Gemini Code Assist (חובה!)
+• עוזר קוד AI מובנה
+• השלמות חכמות
+• תיקון באגים
+
+ב) GitLens
+• היסטוריית Git
+• Blame annotations
+• Commit history
+
+ג) Prettier
+• עיצוב קוד אוטומטי
+• תמיכה בכל השפות
+• קונפיגורציה גמישה
+
+ד) ESLint
+• בדיקת שגיאות
+• Best practices
+• איכות קוד
+
+ה) Auto Rename Tag
+• שינוי תגים אוטומטי
+• HTML/JSX
+• חיסכון זמן
+
+ו) Bracket Pair Colorizer
+• צביעת סוגריים
+• קריאות קוד
+• זיהוי שגיאות
+
+2. Themes
+---------
+
+התקנת Theme:
+
+1. לחץ על Extensions
+2. חפש "Theme"
+3. בחר Theme מועדף
+4. לחץ Install
+
+Themes מומלצים:
+• Dark+ (ברירת מחדל)
+• Monokai
+• One Dark Pro
+• Dracula
+• Material Theme
+
+3. Keybindings מותאמים
+---------------------
+
+יצירת קיצור מקלדת:
+
+1. Ctrl + K, Ctrl + S
+2. לחץ על "Open Keyboard Shortcuts"
+3. חפש פקודה
+4. לחץ על + ליד הפקודה
+5. לחץ על הקיצור הרצוי
+
+קיצורים מומלצים:
+
+• Format Document: Shift + Alt + F
+• Toggle Terminal: Ctrl + `
+• Toggle Sidebar: Ctrl + B
+• Quick Open: Ctrl + P
+• Command Palette: Ctrl + Shift + P
+
+4. Workspace Settings
+---------------------
+
+יצירת קובץ .vscode/settings.json:
+
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000
+}
+
+הגדרת Gemini Code Assist
+=========================
+
+1. הפעלת Code Assist
+--------------------
+
+• Code Assist מופעל אוטומטית
+• אם לא עובד, בדוק:
+  - חיבור לאינטרנט
+  - חשבון Google מחובר
+  - Extensions מותקן
+
+2. הגדרות Code Assist
+---------------------
+
+{
+  "gemini.enabled": true,
+  "gemini.autoComplete": true,
+  "gemini.contextAware": true,
+  "gemini.maxSuggestions": 3,
+  "gemini.suggestionDelay": 100
+}
+
+3. שימוש ב-Code Assist
+----------------------
+
+א) השלמה אוטומטית:
+• הקלד קוד
+• לחץ Tab לקבלת הצעה
+• לחץ Esc לביטול
+
+ב) צ'אט לקוד:
+• בחר קוד
+• לחץ Ctrl + L
+• שאל שאלה
+
+ג) תיקון שגיאות:
+• שגיאה תודגש
+• לחץ על נורה
+• בחר תיקון
+
+ד) הסבר קוד:
+• בחר קוד
+• לחץ Ctrl + Shift + L
+• קבל הסבר
+
+ארגון פרויקט
+=============
+
+1. מבנה תיקיות מומלץ
+---------------------
+
+my-project/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── utils/
+│   └── styles/
+├── public/
+├── tests/
+├── .vscode/
+│   └── settings.json
+├── .gitignore
+├── package.json
+└── README.md
+
+2. קובץ .gitignore
+------------------
+
+יצירת .gitignore:
+
+node_modules/
+.env
+.DS_Store
+dist/
+build/
+*.log
+.vscode/
+.idea/
+
+3. README.md
+------------
+
+תבנית README:
+
+# שם הפרויקט
+
+תיאור קצר של הפרויקט.
+
+## התקנה
+
+```bash
+npm install
+```
+
+## הרצה
+
+```bash
+npm run dev
+```
+
+## טכנולוגיות
+
+- React
+- TypeScript
+- Firebase
+
+טיפים לפרודוקטיביות
+====================
+
+💡 השתמש ב-Snippets
+💡 הגדר Templates
+💡 שמור Workspace Settings
+💡 השתמש ב-Multi-cursor (Alt + Click)
+💡 השתמש ב-Find & Replace (Ctrl + H)
+💡 השתמש ב-Go to Definition (F12)
+💡 השתמש ב-Find All References (Shift + F12)
+
+פתרון בעיות
+===========
+
+1. Extensions לא נטענות
+   → רענן את הדף
+   → בדוק חיבור לאינטרנט
+   → נסה להתקין מחדש
+
+2. Terminal לא עובד
+   → בדוק הגדרות Terminal
+   → נסה Terminal אחר
+   → רענן את הדף
+
+3. Code Assist לא עובד
+   → בדוק חיבור לאינטרנט
+   → ודא Extensions מותקן
+   → בדוק הגדרות Gemini
+
+4. Preview לא נטען
+   → בדוק שהשרת רץ
+   → פתח Console
+   → בדוק שגיאות
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך להגדיר את העורך
+✓ איך להתקין Extensions
+✓ איך להגדיר Code Assist
+✓ איך לארגן פרויקט
+
+בשיעור הבא נלמד:
+→ חיבור ל-GitHub
+→ עבודה עם Git
+→ שיתוף פרויקטים
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+מדריך הגדרה מלא
+גרסה 2.0

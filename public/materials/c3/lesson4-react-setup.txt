@@ -1,0 +1,340 @@
+הקמת פרויקט React ב-Project IDX
+==================================
+
+שיעור 4: הקמת פרויקט React
+============================
+
+מבוא
+====
+
+בשיעור זה נלמד כיצד להקים פרויקט React חדש
+ב-Project IDX מהתחלה ועד הסוף.
+
+שיטה 1: Template מוכן
+=======================
+
+הדרך הקלה ביותר:
+
+1. ב-IDX לחץ "New Project"
+2. בחר "React" Template
+3. תן שם לפרויקט
+4. לחץ "Create"
+5. מוכן!
+
+מה כלול?
+• React 18
+• Vite
+• TypeScript (אופציונלי)
+• ESLint
+• Prettier
+
+שיטה 2: יצירה ידנית
+====================
+
+אם אתה רוצה שליטה מלאה:
+
+1. צור פרויקט חדש
+2. פתח Terminal
+3. הרץ:
+
+```bash
+npm create vite@latest my-react-app -- --template react
+cd my-react-app
+npm install
+```
+
+4. הרץ:
+
+```bash
+npm run dev
+```
+
+5. פתח Preview
+
+מבנה הפרויקט
+=============
+
+לאחר יצירת הפרויקט:
+
+```
+my-react-app/
+├── public/
+│   └── vite.svg
+├── src/
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── index.html
+├── package.json
+├── vite.config.js
+└── .gitignore
+```
+
+הסבר קבצים:
+-----------
+
+• src/App.jsx - הקומפוננטה הראשית
+• src/main.jsx - נקודת הכניסה
+• index.html - קובץ HTML ראשי
+• package.json - תלויות הפרויקט
+• vite.config.js - הגדרות Vite
+
+הקמת פרויקט עם TypeScript
+===========================
+
+1. בחר "React + TypeScript" Template
+2. או הרץ:
+
+```bash
+npm create vite@latest my-app -- --template react-ts
+```
+
+מה משתנה?
+• קבצים עם סיומת .tsx
+• TypeScript types
+• tsconfig.json
+
+דוגמה:
+
+```tsx
+// App.tsx
+import { useState } from 'react';
+
+function App() {
+  const [count, setCount] = useState<number>(0);
+
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+הקמת פרויקט עם Router
+=======================
+
+1. התקן React Router:
+
+```bash
+npm install react-router-dom
+```
+
+2. הוסף Router:
+
+```jsx
+// main.jsx
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+```
+
+3. הוסף Routes:
+
+```jsx
+// App.jsx
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+  );
+}
+```
+
+הקמת פרויקט עם State Management
+==================================
+
+עם Redux:
+
+```bash
+npm install @reduxjs/toolkit react-redux
+```
+
+עם Zustand:
+
+```bash
+npm install zustand
+```
+
+עם Context API:
+• מובנה ב-React
+• אין צורך בהתקנה
+
+הקמת פרויקט עם Styling
+========================
+
+1. CSS Modules:
+
+```jsx
+// Button.module.css
+.button {
+  padding: 10px 20px;
+  background: blue;
+  color: white;
+}
+
+// Button.jsx
+import styles from './Button.module.css';
+
+function Button() {
+  return <button className={styles.button}>Click</button>;
+}
+```
+
+2. Styled Components:
+
+```bash
+npm install styled-components
+```
+
+```jsx
+import styled from 'styled-components';
+
+const Button = styled.button`
+  padding: 10px 20px;
+  background: blue;
+  color: white;
+`;
+```
+
+3. Tailwind CSS:
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+הקמת פרויקט עם Testing
+========================
+
+1. התקן Vitest:
+
+```bash
+npm install -D vitest @testing-library/react
+```
+
+2. צור test:
+
+```jsx
+// App.test.jsx
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders app', () => {
+  render(<App />);
+  expect(screen.getByText(/hello/i)).toBeInTheDocument();
+});
+```
+
+הקמת פרויקט עם ESLint
+======================
+
+1. Template כולל ESLint
+2. או התקן:
+
+```bash
+npm install -D eslint
+npx eslint --init
+```
+
+3. הוסף ל-package.json:
+
+```json
+{
+  "scripts": {
+    "lint": "eslint src"
+  }
+}
+```
+
+הקמת פרויקט עם Prettier
+=========================
+
+1. התקן:
+
+```bash
+npm install -D prettier
+```
+
+2. צור .prettierrc:
+
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2
+}
+```
+
+3. הוסף ל-package.json:
+
+```json
+{
+  "scripts": {
+    "format": "prettier --write src"
+  }
+}
+```
+
+טיפים להקמה
+============
+
+💡 התחל עם Template פשוט
+💡 הוסף features בהדרגה
+💡 שמור על מבנה נקי
+💡 השתמש ב-Git
+💡 כתוב README
+
+פתרון בעיות
+============
+
+1. "npm install לא עובד"
+   → בדוק חיבור לאינטרנט
+   → נסה: npm cache clean --force
+   → נסה: rm -rf node_modules && npm install
+
+2. "Preview לא נטען"
+   → בדוק שהשרת רץ
+   → פתח Console
+   → בדוק שגיאות
+
+3. "Module not found"
+   → התקן את החבילה
+   → בדוק import path
+   → רענן את הדף
+
+סיכום
+======
+
+עכשיו אתה יודע:
+✓ איך להקים פרויקט React
+✓ איך להוסיף Router
+✓ איך להוסיף Styling
+✓ איך להוסיף Testing
+
+בשיעור הבא נלמד:
+→ מבנה פרויקט React
+→ עבודה עם Components
+→ State Management
+
+מוכנים להמשיך? 🚀
+
+---
+© 2026 Google AI Academy
+הקמת פרויקט React
+גרסה 1.0
