@@ -12,6 +12,45 @@
 דוגמה 1: REST API בסיסי
 ========================
 
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור REST API מלא עם Express.js - כל פעולות CRUD (Create, Read, Update, Delete) עם in-memory database.
+
+איך זה עובד?
+------------
+1. **Express Setup**: יוצר שרת Express עם JSON middleware
+2. **In-Memory Database**: משתמש במערך JavaScript לאחסון נתונים (זמני)
+3. **REST Routes**: מגדיר routes לכל פעולת CRUD
+4. **HTTP Methods**: משתמש ב-GET, POST, PUT, DELETE
+
+מה כל חלק בקוד?
+----------------
+- `express.json()`: middleware שמאפשר קריאת JSON מה-request body
+- `app.get('/api/users')`: GET route - קורא את כל המשתמשים
+- `app.get('/api/users/:id')`: GET route עם parameter - קורא משתמש ספציפי
+- `req.params.id`: מקבל את ה-ID מה-URL
+- `app.post('/api/users')`: POST route - יוצר משתמש חדש
+- `req.body`: הנתונים שנשלחו ב-request body
+- `app.put('/api/users/:id')`: PUT route - מעדכן משתמש קיים
+- `app.delete('/api/users/:id')`: DELETE route - מוחק משתמש
+- `res.status(404)`: מחזיר סטטוס HTTP 404 (Not Found)
+- `res.status(201)`: מחזיר סטטוס HTTP 201 (Created)
+
+מתי להשתמש?
+------------
+✓ בניית REST API בסיסי
+✓ פרויקטים קטנים או prototypes
+✓ למידה של Express.js
+✓ APIs פשוטים שלא דורשים database
+
+טיפים:
+------
+💡 In-memory database נמחק כשהשרת מתאתחל - לא מתאים לייצור
+💡 תמיד בדוק שהנתונים קיימים לפני עדכון/מחיקה
+💡 השתמש ב-status codes נכונים (200, 201, 404, 400)
+💡 תמיד validate את הקלט לפני עיבוד
+💡 לייצור, השתמש ב-database אמיתי (MongoDB, PostgreSQL, וכו')
+
 ```javascript
 // server.js
 const express = require('express');
@@ -87,6 +126,46 @@ app.listen(PORT, () => {
 
 דוגמה 2: API עם MongoDB
 ========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור REST API עם MongoDB ו-Mongoose - database אמיתי עם validation ו-error handling.
+
+איך זה עובד?
+------------
+1. **Mongoose Connection**: מתחבר ל-MongoDB database
+2. **Schema Definition**: מגדיר את מבנה הנתונים עם validation
+3. **Model Creation**: יוצר מודל לעבודה עם המסמכים
+4. **Async Operations**: כל פעולה היא async עם try/catch
+
+מה כל חלק בקוד?
+----------------
+- `mongoose.connect()`: מתחבר ל-MongoDB database
+- `mongoose.Schema`: מגדיר את מבנה המסמך
+- `required: true`: שדה חובה
+- `unique: true`: שדה ייחודי (לא יכול להיות כפילות)
+- `mongoose.model()`: יוצר מודל לעבודה עם collection
+- `User.find()`: קורא את כל המשתמשים
+- `User.findById()`: קורא משתמש לפי ID
+- `user.save()`: שומר מסמך חדש
+- `findByIdAndUpdate()`: מוצא ומעדכן בפעולה אחת
+- `findByIdAndDelete()`: מוצא ומוחק בפעולה אחת
+- `{ new: true }`: מחזיר את המסמך המעודכן (לא הישן)
+
+מתי להשתמש?
+------------
+✓ APIs שצריכים database אמיתי
+✓ אפליקציות ייצור
+✓ נתונים שצריכים להישמר לצמיתות
+✓ פרויקטים שדורשים validation ו-relationships
+
+טיפים:
+------
+💡 תמיד השתמש ב-try/catch עם async operations
+💡 `required: true` מבטיח שדות חובה
+💡 `unique: true` מונע כפילות (למשל email)
+💡 `findByIdAndUpdate` עם `new: true` מחזיר את המסמך המעודכן
+💡 `runValidators: true` מריץ validation גם בעדכון
 
 ```javascript
 // server.js
@@ -178,6 +257,43 @@ app.listen(PORT, () => {
 
 דוגמה 3: API עם Authentication
 ================================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך להוסיף authentication ל-API עם JWT tokens ו-bcrypt להצפנת סיסמאות.
+
+איך זה עובד?
+------------
+1. **Registration**: יוצר משתמש חדש עם סיסמה מוצפנת
+2. **Login**: מאמת משתמש ומחזיר JWT token
+3. **Password Hashing**: משתמש ב-bcrypt להצפנת סיסמאות
+4. **JWT Tokens**: יוצר token מאומת לזיהוי משתמש
+5. **Middleware**: בודק tokens ב-protected routes
+
+מה כל חלק בקוד?
+----------------
+- `bcrypt.hash()`: מצפין סיסמה לפני שמירה
+- `bcrypt.compare()`: משווה סיסמה מוצפנת לסיסמה שהתקבלה
+- `jwt.sign()`: יוצר JWT token עם נתוני משתמש
+- `jwt.verify()`: מאמת token ומחזיר את הנתונים
+- `authenticate` middleware: בודק token לפני גישה ל-route
+- `req.headers.authorization`: מקבל את ה-token מה-headers
+- `Bearer token`: פורמט נפוץ - "Bearer <token>"
+
+מתי להשתמש?
+------------
+✓ APIs שדורשים authentication
+✓ מערכות משתמשים
+✓ APIs עם נתונים פרטיים
+✓ אפליקציות שצריכות זיהוי משתמשים
+
+טיפים:
+------
+💡 לעולם אל תשמור סיסמאות בטקסט פשוט - תמיד הצפן עם bcrypt
+💡 JWT tokens לא מוצפנים - אל תשים מידע רגיש בהם
+💡 שמור את ה-SECRET ב-environment variables
+💡 אפשר להוסיף expiration ל-tokens: `{ expiresIn: '24h' }`
+💡 השתמש ב-Bearer token format: `Authorization: Bearer <token>`
 
 ```javascript
 // server.js
@@ -279,6 +395,42 @@ app.listen(PORT, () => {
 דוגמה 4: API עם Validation
 ============================
 
+מה זה עושה?
+-----------
+דוגמה זו מראה איך להוסיף validation ל-API עם Joi - בדיקת נתונים לפני עיבוד.
+
+איך זה עובד?
+------------
+1. **Joi Schema**: מגדיר את הכללים לנתונים תקינים
+2. **Validation Middleware**: בודק את הנתונים לפני הגעה ל-route handler
+3. **Error Messages**: מחזיר הודעות שגיאה ברורות אם הנתונים לא תקינים
+4. **Sanitization**: מנקה ומתקן את הנתונים לפני עיבוד
+
+מה כל חלק בקוד?
+----------------
+- `Joi.object()`: מגדיר schema לאובייקט
+- `Joi.string().min(3).max(30)`: מחרוזת באורך 3-30 תווים
+- `Joi.string().email()`: מחרוזת בפורמט email תקין
+- `Joi.number().integer().min(18).max(120)`: מספר שלם בין 18 ל-120
+- `required()`: שדה חובה
+- `schema.validate()`: בודק את הנתונים לפי ה-schema
+- `error.details[0].message`: הודעת השגיאה הראשונה
+
+מתי להשתמש?
+------------
+✓ APIs שצריכים validation חזק
+✓ מניעת נתונים לא תקינים
+✓ שיפור אבטחה
+✓ APIs עם נתונים מורכבים
+
+טיפים:
+------
+💡 Validation חשוב מאוד לאבטחה - מונע נתונים לא תקינים
+💡 Joi מספק הודעות שגיאה ברורות למשתמש
+💡 אפשר להגדיר validation מורכב: arrays, nested objects, וכו'
+💡 השתמש ב-validation גם ב-client וגם ב-server
+💡 אפשר להוסיף custom validation rules
+
 ```javascript
 // server.js
 const express = require('express');
@@ -338,6 +490,42 @@ app.listen(PORT, () => {
 
 דוגמה 5: API עם Error Handling
 ================================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת error handling מקצועית עם custom error class ו-middleware מרכזי.
+
+איך זה עובד?
+------------
+1. **Custom Error Class**: יוצר מחלקת שגיאה מותאמת עם status code
+2. **Error Middleware**: מטפל בכל השגיאות בצורה מרכזית
+3. **next()**: מעביר שגיאות ל-middleware
+4. **Development Mode**: מציג stack trace רק ב-development
+
+מה כל חלק בקוד?
+----------------
+- `AppError`: מחלקת שגיאה מותאמת עם status code
+- `statusCode`: סטטוס HTTP המתאים לשגיאה
+- `isOperational`: מסמן שזו שגיאה צפויה (לא bug)
+- `Error.captureStackTrace()`: שומר את ה-stack trace
+- `errorHandler` middleware: מטפל בכל השגיאות
+- `next(new AppError())`: מעביר שגיאה ל-middleware
+- `process.env.NODE_ENV`: בודק את סביבת ההרצה
+
+מתי להשתמש?
+------------
+✓ APIs מקצועיים שצריכים error handling טוב
+✓ מערכות ייצור
+✓ APIs שצריכים הודעות שגיאה עקביות
+✓ פרויקטים גדולים
+
+טיפים:
+------
+💡 Error handling מרכזי עוזר לשמור על עקביות
+💡 Custom error classes עוזרים לזהות סוגי שגיאות
+💡 אל תציג stack trace בייצור - רק ב-development
+💡 תמיד החזר הודעות שגיאה ברורות למשתמש
+💡 אפשר להוסיף logging לשגיאות
 
 ```javascript
 // server.js

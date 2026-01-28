@@ -12,6 +12,44 @@
 דוגמה 1: בדיקת Component
 ==========================
 
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לכתוב בדיקות ל-React component בסיסי - בדיקת רינדור ובדיקת אינטראקציה.
+
+איך זה עובד?
+------------
+1. **render**: מרנדר את ה-component ב-DOM וירטואלי
+2. **screen.getByText**: מוצא אלמנט לפי טקסט
+3. **expect().toBeInTheDocument()**: בודק שהאלמנט קיים ב-DOM
+4. **vi.fn()**: יוצר mock function לבדיקת קריאות
+5. **fireEvent.click**: מדמה לחיצה על כפתור
+
+מה כל חלק בקוד?
+----------------
+- `@testing-library/react`: ספרייה לבדיקת React components
+- `render()`: מרנדר component ב-DOM וירטואלי לבדיקה
+- `screen`: אובייקט לגישה לאלמנטים ב-DOM
+- `getByText()`: מוצא אלמנט לפי הטקסט שלו
+- `expect()`: assertion - בודק תנאי
+- `toBeInTheDocument()`: בודק שהאלמנט קיים ב-DOM
+- `vi.fn()`: יוצר mock function (Vitest) - עוקב אחרי קריאות
+- `fireEvent.click()`: מדמה אירוע לחיצה
+- `toHaveBeenCalledTimes()`: בודק כמה פעמים הפונקציה נקראה
+
+מתי להשתמש?
+------------
+✓ בדיקת components בסיסיים
+✓ בדיקת רינדור נכון
+✓ בדיקת אינטראקציות משתמש
+✓ בדיקת event handlers
+
+טיפים:
+------
+💡 תמיד בדוק שהאלמנטים מופיעים לפני בדיקת אינטראקציות
+💡 השתמש ב-`getByText`, `getByRole`, `getByLabelText` לפי הצורך
+💡 Mock functions עוזרים לבדוק קריאות לפונקציות
+💡 בדוק גם edge cases: מה קורה אם אין onClick? מה אם הטקסט שונה?
+
 ```jsx
 // Button.test.jsx
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -34,6 +72,39 @@ describe('Button', () => {
 
 דוגמה 2: בדיקת Form
 ====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לבדוק form submission - מילוי שדות, לחיצה על submit, ובדיקת הנתונים שנשלחו.
+
+איך זה עובד?
+------------
+1. **render Form**: מרנדר את ה-form
+2. **fireEvent.change**: מדמה שינוי בשדה input
+3. **fireEvent.click**: מדמה לחיצה על כפתור Submit
+4. **expect().toHaveBeenCalledWith()**: בודק שהפונקציה נקראה עם הנתונים הנכונים
+
+מה כל חלק בקוד?
+----------------
+- `getByLabelText()`: מוצא input לפי ה-label שלו (נגיש יותר)
+- `fireEvent.change()`: מדמה שינוי בשדה input
+- `target: { value: 'John' }`: מגדיר את הערך החדש
+- `getByText('Submit')`: מוצא את כפתור ה-Submit
+- `toHaveBeenCalledWith()`: בודק שהפונקציה נקראה עם פרמטרים ספציפיים
+
+מתי להשתמש?
+------------
+✓ בדיקת forms
+✓ בדיקת validation
+✓ בדיקת submission
+✓ בדיקת אינטראקציות מורכבות
+
+טיפים:
+------
+💡 `getByLabelText` עדיף על `getByText` ל-inputs - נגיש יותר
+💡 תמיד בדוק שהנתונים נשלחים נכון
+💡 אפשר לבדוק validation: מה קורה עם נתונים לא תקינים?
+💡 אפשר לבדוק loading states: מה קורה בזמן submission?
 
 ```jsx
 // Form.test.jsx
