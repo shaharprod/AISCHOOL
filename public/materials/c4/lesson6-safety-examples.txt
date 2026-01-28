@@ -1,0 +1,468 @@
+דוגמאות הגדרות Safety Settings
+=================================
+
+אוסף קונפיגורציות מוכנות
+===========================
+
+דוגמה 1: אפליקציה כללית
+==========================
+
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+
+# הגדרות מאוזנות - מתאימות לרוב השימושים
+general_safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    }
+]
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=general_safety_settings
+)
+```
+
+דוגמה 2: אפליקציה לילדים
+==========================
+
+```python
+# הגדרות מחמירות - מתאימות לילדים
+child_safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_ONLY_HIGH"
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_ONLY_HIGH"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_ONLY_HIGH"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_ONLY_HIGH"
+    }
+]
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=child_safety_settings
+)
+```
+
+דוגמה 3: אפליקציה טכנית/מקצועית
+==================================
+
+```python
+# הגדרות מקילות - מתאימות לתוכן טכני
+technical_safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE"  # Allow technical discussions
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    }
+]
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=technical_safety_settings
+)
+```
+
+דוגמה 4: מערכת חינוכית
+========================
+
+```python
+# הגדרות מאוזנות עם דגש על בטיחות
+educational_safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_ONLY_HIGH"  # Stricter for education
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    }
+]
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=educational_safety_settings
+)
+```
+
+דוגמה 5: מערכת תוכן יצירתי
+=============================
+
+```python
+# הגדרות מקילות יותר ליצירתיות
+creative_safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_ONLY_HIGH"  # Allow some creative content
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    }
+]
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=creative_safety_settings
+)
+```
+
+דוגמה 6: מערכת בדיקות/פיתוח
+==============================
+
+```python
+# הגדרות מקילות לבדיקות
+testing_safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE"  # Allow for testing
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_NONE"
+    }
+]
+
+# שים לב: השתמש רק בסביבת בדיקות!
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=testing_safety_settings
+)
+```
+
+דוגמה 7: מערכת עם טיפול ב-Blocks
+===================================
+
+```python
+def create_safe_model_with_handling():
+    safety_settings = [
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        }
+    ]
+    
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        safety_settings=safety_settings
+    )
+    
+    return model
+
+def safe_generate(model, prompt):
+    """יצירת תוכן עם טיפול ב-safety blocks"""
+    try:
+        response = model.generate_content(prompt)
+        
+        # בדוק אם נחסם
+        if response.candidates and response.candidates[0].finish_reason == "SAFETY":
+            return {
+                "success": False,
+                "blocked": True,
+                "message": "הבקשה נחסמה על ידי Safety Settings",
+                "safety_ratings": response.candidates[0].safety_ratings
+            }
+        
+        return {
+            "success": True,
+            "blocked": False,
+            "text": response.text
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "blocked": False,
+            "error": str(e)
+        }
+
+# שימוש
+model = create_safe_model_with_handling()
+result = safe_generate(model, "טקסט לבקשה")
+
+if result["success"]:
+    print(result["text"])
+elif result["blocked"]:
+    print("תוכן נחסם")
+    print(result["message"])
+else:
+    print(f"שגיאה: {result['error']}")
+```
+
+דוגמה 8: מערכת עם לוגים
+==========================
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def create_logged_safe_model():
+    safety_settings = [
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        }
+    ]
+    
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        safety_settings=safety_settings
+    )
+    
+    return model
+
+def generate_with_logging(model, prompt):
+    """יצירת תוכן עם לוגים"""
+    logger.info(f"מבקש תוכן: {prompt[:50]}...")
+    
+    try:
+        response = model.generate_content(prompt)
+        
+        if response.candidates and response.candidates[0].finish_reason == "SAFETY":
+            logger.warning("תוכן נחסם על ידי Safety Settings")
+            if response.candidates[0].safety_ratings:
+                for rating in response.candidates[0].safety_ratings:
+                    logger.warning(f"  {rating.category.name}: {rating.probability.name}")
+            return None
+        
+        logger.info("תוכן נוצר בהצלחה")
+        return response.text
+        
+    except Exception as e:
+        logger.error(f"שגיאה: {e}")
+        return None
+
+# שימוש
+model = create_logged_safe_model()
+result = generate_with_logging(model, "טקסט לבקשה")
+if result:
+    print(result)
+```
+
+דוגמה 9: מערכת עם Fallback
+=============================
+
+```python
+def create_model_with_fallback():
+    # מודל ראשי עם הגדרות מחמירות
+    primary_model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        safety_settings=[
+            {
+                "category": "HARM_CATEGORY_HATE_SPEECH",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_HARASSMENT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            }
+        ]
+    )
+    
+    # מודל fallback עם הגדרות מקילות יותר
+    fallback_model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        safety_settings=[
+            {
+                "category": "HARM_CATEGORY_HATE_SPEECH",
+                "threshold": "BLOCK_ONLY_HIGH"
+            },
+            {
+                "category": "HARM_CATEGORY_HARASSMENT",
+                "threshold": "BLOCK_ONLY_HIGH"
+            },
+            {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_ONLY_HIGH"
+            },
+            {
+                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                "threshold": "BLOCK_ONLY_HIGH"
+            }
+        ]
+    )
+    
+    return primary_model, fallback_model
+
+def generate_with_fallback(primary_model, fallback_model, prompt):
+    """יצירת תוכן עם fallback"""
+    # נסה עם מודל ראשי
+    response = primary_model.generate_content(prompt)
+    
+    if response.candidates and response.candidates[0].finish_reason == "SAFETY":
+        # אם נחסם, נסה עם fallback
+        print("נחסם במודל ראשי, מנסה fallback...")
+        response = fallback_model.generate_content(prompt)
+    
+    return response.text
+
+# שימוש
+primary, fallback = create_model_with_fallback()
+result = generate_with_fallback(primary, fallback, "טקסט לבקשה")
+print(result)
+```
+
+דוגמה 10: מערכת דינמית
+=========================
+
+```python
+def create_dynamic_safety_settings(user_age=None, content_type="general"):
+    """צור הגדרות safety דינמיות לפי הקשר"""
+    base_threshold = "BLOCK_MEDIUM_AND_ABOVE"
+    
+    # התאם לפי גיל
+    if user_age and user_age < 13:
+        threshold = "BLOCK_ONLY_HIGH"  # מחמיר יותר לילדים
+    elif user_age and user_age < 18:
+        threshold = "BLOCK_MEDIUM_AND_ABOVE"
+    else:
+        threshold = base_threshold
+    
+    # התאם לפי סוג תוכן
+    if content_type == "technical":
+        hate_speech_threshold = "BLOCK_NONE"
+    else:
+        hate_speech_threshold = threshold
+    
+    return [
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": hate_speech_threshold
+        },
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": threshold
+        },
+        {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "threshold": threshold
+        },
+        {
+            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+            "threshold": threshold
+        }
+    ]
+
+# שימוש
+settings = create_dynamic_safety_settings(user_age=25, content_type="technical")
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    safety_settings=settings
+)
+```
+
+סיכום
+======
+
+דוגמאות עיקריות:
+✓ אפליקציה כללית - מאוזן
+✓ אפליקציה לילדים - מחמיר
+✓ אפליקציה טכנית - מקיל
+✓ מערכת חינוכית - מאוזן-מחמיר
+✓ תוכן יצירתי - מאוזן-מקיל
+✓ בדיקות - ללא חסימה
+✓ טיפול ב-blocks
+✓ לוגים
+✓ Fallback
+✓ הגדרות דינמיות
+
+כל הדוגמאות כוללות:
+• קוד מלא
+• הסברים
+• שימוש מעשי
+
+---
+© 2026 Google AI Academy
+דוגמאות הגדרות Safety Settings

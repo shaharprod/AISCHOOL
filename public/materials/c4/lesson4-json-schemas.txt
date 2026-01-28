@@ -1,0 +1,368 @@
+דוגמאות JSON Schema מוכנות
+=============================
+
+אוסף Schema מוכנים לשימוש
+===========================
+
+1. Schema לניתוח סנטימנט
+==========================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "sentiment": {
+      "type": "string",
+      "enum": ["positive", "negative", "neutral"]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "key_phrases": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "emotions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["joy", "sadness", "anger", "fear", "surprise"]
+      }
+    }
+  },
+  "required": ["sentiment", "confidence"]
+}
+```
+
+שימוש:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "response_mime_type": "application/json",
+        "response_schema": sentiment_schema
+    }
+)
+```
+
+2. Schema לחילוץ מידע אישי
+============================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {"type": "string"},
+    "email": {"type": "string"},
+    "phone": {"type": "string"},
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {"type": "string"},
+        "city": {"type": "string"},
+        "zip": {"type": "string"}
+      }
+    },
+    "birth_date": {"type": "string"}
+  },
+  "required": ["name", "email"]
+}
+```
+
+3. Schema למוצר
+=================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "price": {"type": "number"},
+    "currency": {
+      "type": "string",
+      "enum": ["USD", "EUR", "ILS", "GBP"]
+    },
+    "features": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "specifications": {
+      "type": "object",
+      "properties": {
+        "weight": {"type": "string"},
+        "dimensions": {"type": "string"},
+        "color": {"type": "string"}
+      }
+    },
+    "availability": {
+      "type": "string",
+      "enum": ["in_stock", "out_of_stock", "pre_order"]
+    }
+  },
+  "required": ["name", "price"]
+}
+```
+
+4. Schema למשימות (Todo)
+==========================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "todos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "number"},
+          "task": {"type": "string"},
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "due_date": {"type": "string"},
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "completed"]
+          },
+          "tags": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "required": ["task", "priority"]
+      }
+    }
+  },
+  "required": ["todos"]
+}
+```
+
+5. Schema למאמר/בלוג
+======================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "content": {"type": "string"},
+    "author": {"type": "string"},
+    "publish_date": {"type": "string"},
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "category": {"type": "string"},
+    "reading_time": {"type": "number"},
+    "summary": {"type": "string"}
+  },
+  "required": ["title", "content"]
+}
+```
+
+6. Schema לניתוח טקסט
+========================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "summary": {"type": "string"},
+    "key_points": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "topics": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "word_count": {"type": "number"},
+    "language": {"type": "string"},
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "type": {
+            "type": "string",
+            "enum": ["person", "location", "organization", "other"]
+          }
+        }
+      }
+    }
+  },
+  "required": ["summary", "key_points"]
+}
+```
+
+7. Schema לאירוע
+==================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "description": {"type": "string"},
+    "date": {"type": "string"},
+    "time": {"type": "string"},
+    "location": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "address": {"type": "string"},
+        "city": {"type": "string"}
+      }
+    },
+    "organizer": {"type": "string"},
+    "attendees": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "status": {
+      "type": "string",
+      "enum": ["scheduled", "cancelled", "completed"]
+    }
+  },
+  "required": ["title", "date"]
+}
+```
+
+8. Schema לסקירה/ביקורת
+==========================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "title": {"type": "string"},
+    "review_text": {"type": "string"},
+    "pros": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "cons": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "recommend": {"type": "boolean"},
+    "reviewer": {"type": "string"}
+  },
+  "required": ["rating", "review_text"]
+}
+```
+
+9. Schema לשאלות נפוצות (FAQ)
+================================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "faqs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {"type": "string"},
+          "answer": {"type": "string"},
+          "category": {"type": "string"},
+          "tags": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "required": ["question", "answer"]
+      }
+    }
+  },
+  "required": ["faqs"]
+}
+```
+
+10. Schema לנתוני מזג אוויר
+==============================
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "location": {"type": "string"},
+    "temperature": {"type": "number"},
+    "condition": {
+      "type": "string",
+      "enum": ["sunny", "cloudy", "rainy", "snowy", "windy"]
+    },
+    "humidity": {"type": "number"},
+    "wind_speed": {"type": "number"},
+    "forecast": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {"type": "string"},
+          "high": {"type": "number"},
+          "low": {"type": "number"},
+          "condition": {"type": "string"}
+        }
+      }
+    }
+  },
+  "required": ["location", "temperature"]
+}
+```
+
+שימוש כללי
+===========
+
+דוגמת קוד לשימוש:
+```python
+import google.generativeai as genai
+import json
+
+genai.configure(api_key="YOUR_API_KEY")
+
+# בחר Schema
+schema = {...}  # אחד מה-Schemas למעלה
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "response_mime_type": "application/json",
+        "response_schema": schema
+    }
+)
+
+# יצירת תוכן
+response = model.generate_content("השאלה או הבקשה שלך")
+
+# פרסור התוצאה
+data = json.loads(response.text)
+
+# שימוש בנתונים
+print(data)
+```
+
+טיפים
+======
+
+1. התאם Schema לצרכים שלך
+2. הוסף/הסר שדות לפי צורך
+3. השתמש ב-enums לערכים קבועים
+4. הגדר required fields נכון
+5. בדוק את ה-JSON לפני שימוש
+
+---
+© 2026 Google AI Academy
+דוגמאות JSON Schema מוכנות

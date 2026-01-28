@@ -1,0 +1,356 @@
+Best Practices ל-Safety Settings
+=================================
+
+שיטות עבודה מומלצות
+====================
+
+1. בחירת רמת הגנה נכונה
+=========================
+
+לפי Use Case:
+-------------
+• אפליקציה כללית: BLOCK_MEDIUM_AND_ABOVE
+• אפליקציה לילדים: BLOCK_ONLY_HIGH
+• אפליקציה טכנית: BLOCK_NONE/BLOCK_MEDIUM_AND_ABOVE
+• מערכת חינוכית: BLOCK_MEDIUM_AND_ABOVE/BLOCK_ONLY_HIGH
+
+לפי קהל יעד:
+------------
+• ילדים (<13): BLOCK_ONLY_HIGH
+• נוער (13-18): BLOCK_MEDIUM_AND_ABOVE
+• מבוגרים (18+): BLOCK_MEDIUM_AND_ABOVE
+• מקצועי/טכני: BLOCK_NONE/BLOCK_MEDIUM_AND_ABOVE
+
+2. טיפול ב-Safety Blocks
+=========================
+
+תמיד בדוק blocks:
+------------------
+```python
+def check_safety_block(response):
+    """בדוק אם תגובה נחסמה"""
+    if not response.candidates:
+        return False, "אין מועמדים בתגובה"
+    
+    candidate = response.candidates[0]
+    if candidate.finish_reason == "SAFETY":
+        return True, "תוכן נחסם"
+    
+    return False, None
+
+# שימוש
+response = model.generate_content("טקסט")
+is_blocked, reason = check_safety_block(response)
+if is_blocked:
+    print(f"חסום: {reason}")
+```
+
+לוג Safety Blocks:
+-------------------
+```python
+import logging
+
+logger = logging.getLogger(__name__)
+
+def log_safety_block(response, prompt):
+    """לוג safety blocks"""
+    if response.candidates and response.candidates[0].finish_reason == "SAFETY":
+        logger.warning(f"Safety block: {prompt[:50]}")
+        if response.candidates[0].safety_ratings:
+            for rating in response.candidates[0].safety_ratings:
+                logger.warning(f"  {rating.category.name}: {rating.probability.name}")
+```
+
+3. הודעות למשתמשים
+====================
+
+כשתגובה נחסמת:
+---------------
+```python
+def get_user_friendly_message(response):
+    """קבל הודעה ידידותית למשתמש"""
+    if not response.candidates:
+        return "שגיאה בעיבוד הבקשה"
+    
+    candidate = response.candidates[0]
+    if candidate.finish_reason == "SAFETY":
+        return "הבקשה שלך נחסמה בגלל תוכן לא הולם. אנא נסה שוב עם בקשה אחרת."
+    
+    return None
+
+# שימוש
+response = model.generate_content("טקסט")
+message = get_user_friendly_message(response)
+if message:
+    print(message)
+```
+
+4. Fallback Strategies
+=======================
+
+מודל Fallback:
+--------------
+```python
+def create_fallback_chain():
+    """צור שרשרת fallback"""
+    models = [
+        # מודל ראשי - מחמיר
+        genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            safety_settings=[...]  # מחמיר
+        ),
+        # מודל fallback - מקיל יותר
+        genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            safety_settings=[...]  # מקיל
+        )
+    ]
+    return models
+
+def generate_with_fallback(models, prompt):
+    """יצירת תוכן עם fallback"""
+    for i, model in enumerate(models):
+        response = model.generate_content(prompt)
+        if response.candidates and response.candidates[0].finish_reason != "SAFETY":
+            return response.text
+        if i < len(models) - 1:
+            print(f"נחסם במודל {i+1}, מנסה fallback...")
+    return "לא ניתן ליצור תוכן"
+```
+
+5. Monitoring ו-Alerting
+==========================
+
+מדידת Safety Blocks:
+---------------------
+```python
+class SafetyMonitor:
+    def __init__(self):
+        self.block_count = 0
+        self.total_requests = 0
+        self.blocked_categories = {}
+    
+    def record_request(self, response):
+        """רשום בקשה"""
+        self.total_requests += 1
+        
+        if response.candidates and response.candidates[0].finish_reason == "SAFETY":
+            self.block_count += 1
+            
+            # רשום קטגוריות
+            if response.candidates[0].safety_ratings:
+                for rating in response.candidates[0].safety_ratings:
+                    category = rating.category.name
+                    if category not in self.blocked_categories:
+                        self.blocked_categories[category] = 0
+                    self.blocked_categories[category] += 1
+    
+    def get_stats(self):
+        """קבל סטטיסטיקות"""
+        return {
+            "total_requests": self.total_requests,
+            "blocked": self.block_count,
+            "block_rate": self.block_count / self.total_requests if self.total_requests > 0 else 0,
+            "blocked_categories": self.blocked_categories
+        }
+
+# שימוש
+monitor = SafetyMonitor()
+response = model.generate_content("טקסט")
+monitor.record_request(response)
+stats = monitor.get_stats()
+print(f"שיעור חסימות: {stats['block_rate']:.2%}")
+```
+
+6. Testing Safety Settings
+===========================
+
+בדיקת הגדרות:
+--------------
+```python
+def test_safety_settings(model, test_cases):
+    """בדוק safety settings עם test cases"""
+    results = []
+    
+    for test_case in test_cases:
+        prompt = test_case["prompt"]
+        expected_blocked = test_case.get("should_block", False)
+        
+        response = model.generate_content(prompt)
+        is_blocked = (
+            response.candidates and 
+            response.candidates[0].finish_reason == "SAFETY"
+        )
+        
+        results.append({
+            "prompt": prompt,
+            "expected_blocked": expected_blocked,
+            "actually_blocked": is_blocked,
+            "match": expected_blocked == is_blocked
+        })
+    
+    return results
+
+# שימוש
+test_cases = [
+    {"prompt": "טקסט רגיל", "should_block": False},
+    {"prompt": "טקסט פוגעני", "should_block": True},
+]
+
+results = test_safety_settings(model, test_cases)
+for result in results:
+    status = "✓" if result["match"] else "✗"
+    print(f"{status} {result['prompt']}")
+```
+
+7. עדכון דינמי
+================
+
+עדכון לפי feedback:
+--------------------
+```python
+class AdaptiveSafetySettings:
+    def __init__(self, initial_settings):
+        self.settings = initial_settings
+        self.block_history = []
+    
+    def record_block(self, category, probability):
+        """רשום block"""
+        self.block_history.append({
+            "category": category,
+            "probability": probability,
+            "timestamp": time.time()
+        })
+    
+    def adjust_settings(self):
+        """התאם הגדרות לפי היסטוריה"""
+        # ניתוח היסטוריה
+        recent_blocks = [
+            b for b in self.block_history 
+            if time.time() - b["timestamp"] < 3600  # שעה אחרונה
+        ]
+        
+        # אם יותר מדי blocks, הקל
+        if len(recent_blocks) > 10:
+            for setting in self.settings:
+                if setting["threshold"] == "BLOCK_MEDIUM_AND_ABOVE":
+                    setting["threshold"] = "BLOCK_ONLY_HIGH"
+        
+        return self.settings
+```
+
+8. תיעוד והסבר
+================
+
+תיעוד הגדרות:
+--------------
+```python
+def document_safety_settings(settings):
+    """תעד safety settings"""
+    doc = {
+        "settings": settings,
+        "description": "הגדרות Safety Settings",
+        "last_updated": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "rationale": "הגדרות אלה נבחרו כדי להגן על משתמשים..."
+    }
+    return doc
+
+# שמור ב-JSON
+import json
+doc = document_safety_settings(safety_settings)
+with open("safety_settings.json", "w", encoding="utf-8") as f:
+    json.dump(doc, f, ensure_ascii=False, indent=2)
+```
+
+9. Compliance
+==============
+
+עמידה בתקנים:
+-------------
+```python
+def check_compliance(settings, requirements):
+    """בדוק עמידה בדרישות"""
+    compliance = {}
+    
+    for req in requirements:
+        category = req["category"]
+        min_threshold = req["min_threshold"]
+        
+        # מצא הגדרה מתאימה
+        setting = next(
+            (s for s in settings if s["category"] == category),
+            None
+        )
+        
+        if setting:
+            # בדוק אם עומד בדרישה
+            threshold_levels = {
+                "BLOCK_NONE": 0,
+                "BLOCK_ONLY_HIGH": 1,
+                "BLOCK_MEDIUM_AND_ABOVE": 2,
+                "BLOCK_LOW_AND_ABOVE": 3
+            }
+            
+            current_level = threshold_levels.get(setting["threshold"], 0)
+            required_level = threshold_levels.get(min_threshold, 0)
+            
+            compliance[category] = current_level >= required_level
+    
+    return compliance
+
+# שימוש
+requirements = [
+    {"category": "HARM_CATEGORY_HATE_SPEECH", "min_threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+    {"category": "HARM_CATEGORY_HARASSMENT", "min_threshold": "BLOCK_MEDIUM_AND_ABOVE"}
+]
+
+compliance = check_compliance(safety_settings, requirements)
+print(compliance)
+```
+
+10. Best Practices סיכום
+==========================
+
+עשה:
+----
+✓ בחר רמת הגנה לפי use case
+✓ בדוק תמיד safety blocks
+✓ לוג blocks לניתוח
+✓ תן הודעות ברורות למשתמשים
+✓ השתמש ב-fallback strategies
+✓ Monitor blocks
+✓ Test הגדרות
+✓ תיעד הכל
+✓ עדכן לפי feedback
+
+אל תעשה:
+---------
+✗ אל תשתמש ב-BLOCK_NONE בפרודקשן
+✗ אל תתעלם מ-safety blocks
+✗ אל תשתמש באותן הגדרות לכל use case
+✗ אל תשכח לוגים
+✗ אל תשאיר משתמשים ללא feedback
+
+סיכום
+======
+
+Best Practices עיקריים:
+✓ בחירת רמה נכונה
+✓ טיפול ב-blocks
+✓ הודעות למשתמשים
+✓ Fallback strategies
+✓ Monitoring
+✓ Testing
+✓ עדכון דינמי
+✓ תיעוד
+✓ Compliance
+
+זכור:
+• התאם לפי use case
+• בדוק תמיד
+• לוג הכל
+• שפר בהדרגה
+
+---
+© 2026 Google AI Academy
+Best Practices ל-Safety Settings

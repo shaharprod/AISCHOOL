@@ -1,0 +1,201 @@
+מדריך בניית צ'אטבוט מלא
+=========================
+
+שיעור 10: בניית צ'אטבוט מקצה לקצה
+====================================
+
+מבנה צ'אטבוט בסיסי
+====================
+
+1. הגדרת מודל
+--------------
+
+```python
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    system_instruction="""אתה עוזר AI ידידותי ומקצועי.
+תמיד תן תשובות מפורטות ומועילות.
+היה מנומס וסבלני."""
+)
+```
+
+2. צ'אט בסיסי
+--------------
+
+```python
+def create_chatbot():
+    """צור צ'אטבוט"""
+    chat = model.start_chat(history=[])
+    return chat
+
+def send_message(chat, message):
+    """שלח הודעה"""
+    response = chat.send_message(message)
+    return response.text
+```
+
+3. לולאת שיחה
+--------------
+
+```python
+def run_chatbot():
+    """הרץ צ'אטבוט"""
+    chat = create_chatbot()
+    
+    print("צ'אטבוט: שלום! איך אני יכול לעזור?")
+    
+    while True:
+        user_input = input("אתה: ")
+        if user_input.lower() in ["exit", "quit", "יציאה"]:
+            print("צ'אטבוט: להתראות!")
+            break
+        
+        response = send_message(chat, user_input)
+        print(f"צ'אטבוט: {response}")
+```
+
+צ'אטבוט מתקדם
+===============
+
+1. עם Error Handling
+---------------------
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def safe_send_message(chat, message):
+    """שלח הודעה עם טיפול בשגיאות"""
+    try:
+        response = chat.send_message(message)
+        logger.info(f"Message sent successfully: {message[:50]}...")
+        return {"success": True, "text": response.text}
+    except Exception as e:
+        logger.error(f"Error sending message: {e}")
+        return {
+            "success": False,
+            "error": "מצטער, הייתה שגיאה. אנא נסה שוב."
+        }
+```
+
+2. עם Configuration
+--------------------
+
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 40,
+        "max_output_tokens": 2000
+    },
+    safety_settings=[
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        # ... הגדרות נוספות
+    ],
+    system_instruction="אתה עוזר AI מקצועי."
+)
+```
+
+3. עם Logging
+--------------
+
+```python
+class ChatbotLogger:
+    def __init__(self):
+        self.conversations = []
+    
+    def log_message(self, user_message, bot_response):
+        """לוג הודעה"""
+        self.conversations.append({
+            "user": user_message,
+            "bot": bot_response,
+            "timestamp": time.time()
+        })
+    
+    def save_logs(self, filename="chatbot_logs.json"):
+        """שמור לוגים"""
+        import json
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(self.conversations, f, ensure_ascii=False, indent=2)
+
+logger = ChatbotLogger()
+
+def send_message_with_logging(chat, message):
+    """שלח הודעה עם לוגים"""
+    response = chat.send_message(message)
+    logger.log_message(message, response.text)
+    return response.text
+```
+
+4. עם UI (Flask)
+----------------
+
+```python
+from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__)
+chat = model.start_chat(history=[])
+
+@app.route("/")
+def index():
+    return render_template("chat.html")
+
+@app.route("/api/chat", methods=["POST"])
+def chat_api():
+    message = request.json.get("message", "")
+    response = chat.send_message(message)
+    return jsonify({"response": response.text})
+```
+
+Best Practices
+==============
+
+1. אבטחה
+---------
+• אל תחשוף API Keys
+• Validate input
+• Rate limiting
+
+2. ביצועים
+-----------
+• Caching
+• Async processing
+• Optimize requests
+
+3. UX
+------
+• הודעות ברורות
+• Loading indicators
+• Error messages ידידותיים
+
+סיכום
+======
+
+צ'אטבוט מלא כולל:
+✓ הגדרת מודל
+✓ System Instructions
+✓ Configuration
+✓ Error handling
+✓ Logging
+✓ UI (אופציונלי)
+
+Best Practices:
+• אבטחה
+• ביצועים
+• UX
+
+---
+© 2026 Google AI Academy
+מדריך בניית צ'אטבוט מלא

@@ -1,0 +1,777 @@
+דוגמאות Python ל-Gemini API
+=============================
+
+אוסף דוגמאות מעשיות
+=====================
+
+דוגמה 1: צ'אטבוט בסיסי
+========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור צ'אטבוט אינטראקטיבי עם Gemini API שמאפשר שיחה רציפה עם זיכרון הקשר.
+
+איך זה עובד?
+------------
+1. **ייבוא הספרייה**: `import google.generativeai as genai` - מייבא את הספרייה של Google Generative AI
+2. **הגדרת API Key**: `genai.configure(api_key="YOUR_API_KEY")` - מגדיר את מפתח ה-API שלך (חשוב: החלף ב-API Key האמיתי שלך)
+3. **יצירת מודל**: `GenerativeModel("gemini-1.5-flash")` - יוצר מודל Gemini מהיר וחסכוני
+4. **התחלת שיחה**: `start_chat(history=[])` - מתחיל שיחה חדשה עם היסטוריה ריקה
+5. **שליחת הודעות**: `send_message()` - שולח הודעה ומקבל תשובה תוך שמירה על הקשר השיחה
+
+מה כל חלק בקוד?
+----------------
+- `create_chatbot()`: פונקציה שיוצרת מופע חדש של צ'אטבוט
+- `chat()`: פונקציה ששולחת הודעה ומחזירה תשובה
+- הלולאה `while True`: מאפשרת שיחה רציפה עד שהמשתמש כותב "exit"
+
+מתי להשתמש?
+------------
+✓ כשצריך שיחה אינטראקטיבית עם AI
+✓ כשצריך שמירה על הקשר השיחה
+✓ לבניית בוטים, עוזרים וירטואליים, או ממשקי שיחה
+
+טיפים:
+------
+💡 השתמש ב-`gemini-1.5-flash` למהירות, או `gemini-1.5-pro` לאיכות גבוהה יותר
+💡 היסטוריית השיחה נשמרת אוטומטית - אין צורך לנהל אותה ידנית
+💡 כדי לנקות את ההיסטוריה, צור צ'אט חדש עם `start_chat(history=[])`
+💡 שמור את ה-API Key בקובץ `.env` ולא בקוד ישירות
+
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+
+def create_chatbot():
+    """צור צ'אטבוט בסיסי"""
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    chat = model.start_chat(history=[])
+    return chat
+
+def chat(chat_session, message):
+    """שלח הודעה לצ'אטבוט"""
+    response = chat_session.send_message(message)
+    return response.text
+
+# שימוש
+chatbot = create_chatbot()
+while True:
+    user_input = input("אתה: ")
+    if user_input.lower() == "exit":
+        break
+    response = chat(chatbot, user_input)
+    print(f"בוט: {response}")
+```
+
+דוגמה 2: מערכת סיכום טקסט
+=============================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת סיכום טקסט אוטומטית שמקצרת טקסטים ארוכים לטקסט קצר וממוקד.
+
+איך זה עובד?
+------------
+1. **פונקציית סיכום**: `summarize_text()` מקבלת טקסט ואורך מקסימלי
+2. **הגדרת מודל**: יוצר מודל עם הגדרות מיוחדות לסיכום
+3. **Temperature נמוך**: `temperature: 0.2` - עוזר לקבל תשובות מדויקות וענייניות
+4. **הגבלת אורך**: `max_output_tokens` - מגביל את אורך התשובה
+5. **פרומפט מותאם**: מבקש מהמודל לסכם את הטקסט
+
+מה כל חלק בקוד?
+----------------
+- `temperature: 0.2`: ערך נמוך = תשובות מדויקות יותר, פחות יצירתיות
+- `max_output_tokens`: מגביל את מספר המילים בתשובה
+- הפרומפט: מנחה את המודל לסכם בצורה קצרה
+
+מתי להשתמש?
+------------
+✓ סיכום מאמרים ארוכים
+✓ יצירת תקצירים ממסמכים
+✓ עיבוד טקסטים ארוכים לפני ניתוח
+✓ יצירת תקצירי חדשות או דוחות
+
+טיפים:
+------
+💡 השתמש ב-temperature נמוך (0.1-0.3) לסיכומים מדויקים
+💡 הגדר `max_output_tokens` לפי הצורך - 200 טוקנים = כ-150 מילים
+💡 אפשר להוסיף הוראות ספציפיות בפרומפט: "סכם ב-3 נקודות עיקריות"
+💡 לטקסטים ארוכים מאוד, חלק אותם לחלקים וסכם כל חלק בנפרד
+
+```python
+def summarize_text(text, max_length=200):
+    """סכם טקסט"""
+    model = genai.GenerativeModel(
+        "gemini-1.5-flash",
+        generation_config={
+            "temperature": 0.2,
+            "max_output_tokens": max_length
+        }
+    )
+    
+    prompt = f"סכם את הטקסט הבא בקצרה:\n\n{text}"
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+long_text = "טקסט ארוך מאוד..."
+summary = summarize_text(long_text)
+print(summary)
+```
+
+דוגמה 3: מתרגם
+================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת תרגום מקצועית שמתרגמת טקסט בין שפות תוך שמירה על טון ומשמעות.
+
+איך זה עובד?
+------------
+1. **System Instruction**: מגדיר את המודל כמתרגם מקצועי
+2. **Temperature נמוך מאוד**: `0.1` - מבטיח תרגום מדויק ועקבי
+3. **פרומפט מותאם**: מבקש תרגום לשפה המבוקשת
+4. **שמירה על טון**: ה-System Instruction מבקש לשמור על טון ומשמעות
+
+מה כל חלק בקוד?
+----------------
+- `system_instruction`: הוראות כלליות למודל - כאן מגדירים אותו כמתרגם מקצועי
+- `temperature: 0.1`: ערך נמוך מאוד = תרגום מדויק, ללא יצירתיות מיותרת
+- `target_language`: פרמטר שמאפשר לבחור את שפת היעד
+
+מתי להשתמש?
+------------
+✓ תרגום מסמכים עסקיים
+✓ תרגום תוכן לאתרים
+✓ תרגום תקשורת בינלאומית
+✓ תרגום ספרותי או טכני
+
+טיפים:
+------
+💡 השתמש ב-temperature נמוך מאוד (0.1) לתרגום מדויק
+💡 System Instruction עוזר לקבל תרגום עקבי ואיכותי
+💡 לטקסטים טכניים, הוסף הוראות: "תרגם תוך שמירה על מונחים טכניים"
+💡 לטקסטים ארוכים, חלק אותם למשפטים או פסקאות קצרות
+
+```python
+def translate_text(text, target_language="English"):
+    """תרגם טקסט"""
+    model = genai.GenerativeModel(
+        "gemini-1.5-flash",
+        generation_config={
+            "temperature": 0.1,
+            "max_output_tokens": 2000
+        },
+        system_instruction="אתה מתרגם מקצועי. תרגם בצורה מדויקת תוך שמירה על טון ומשמעות."
+    )
+    
+    prompt = f"תרגם את הטקסט הבא ל-{target_language}:\n\n{text}"
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+hebrew_text = "שלום עולם"
+english_text = translate_text(hebrew_text, "English")
+print(english_text)
+```
+
+דוגמה 4: ניתוח סנטימנט
+=========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח את הסנטימנט (רגש) של טקסט ולקבל תוצאה מובנית ב-JSON עם מידע מפורט.
+
+איך זה עובד?
+------------
+1. **JSON Mode**: `response_mime_type: "application/json"` - מבקש תשובה בפורמט JSON
+2. **Schema מוגדר**: מגדיר בדיוק איך התשובה תיראה
+3. **ניתוח**: המודל מנתח את הטקסט ומחזיר סנטימנט, רמת ביטחון, וביטויים מפתח
+4. **Parsing**: `json.loads()` ממיר את התשובה לאובייקט Python
+
+מה כל חלק בקוד?
+----------------
+- `response_mime_type`: מגדיר שהתשובה תהיה JSON
+- `response_schema`: מגדיר את המבנה המדויק של התשובה:
+  - `sentiment`: חיובי/שלילי/ניטרלי (enum - רק אחד משלושה)
+  - `confidence`: רמת ביטחון בין 0 ל-1
+  - `key_phrases`: מערך של ביטויים מפתח (אופציונלי)
+- `required`: מגדיר שדות חובה
+
+מתי להשתמש?
+------------
+✓ ניתוח ביקורות לקוחות
+✓ ניתוח תגובות ברשתות חברתיות
+✓ מעקב אחרי דעת קהל
+✓ ניתוח משוב על מוצרים או שירותים
+
+טיפים:
+------
+💡 JSON Mode מבטיח תשובה מובנית שניתן לעבד בקלות
+💡 Schema מוגדר מראש עוזר לקבל תשובות עקביות
+💡 `confidence` עוזר להבין כמה בטוח המודל בניתוח
+💡 אפשר להוסיף שדות נוספים ל-schema לפי הצורך
+
+```python
+import json
+
+def analyze_sentiment(text):
+    """נתח סנטימנט של טקסט"""
+    model = genai.GenerativeModel(
+        "gemini-1.5-flash",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "sentiment": {
+                        "type": "string",
+                        "enum": ["positive", "negative", "neutral"]
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                    },
+                    "key_phrases": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    }
+                },
+                "required": ["sentiment", "confidence"]
+            }
+        }
+    )
+    
+    prompt = f"נתח את הסנטימנט של הטקסט הבא:\n\n{text}"
+    response = model.generate_content(prompt)
+    return json.loads(response.text)
+
+# שימוש
+text = "המוצר הזה מעולה! אני מאוד מרוצה."
+sentiment = analyze_sentiment(text)
+print(f"סנטימנט: {sentiment['sentiment']}")
+print(f"ביטחון: {sentiment['confidence']}")
+```
+
+דוגמה 5: מחולל קוד
+====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת שמגנרט קוד בשפות תכנות שונות לפי תיאור טקסטואלי.
+
+איך זה עובד?
+------------
+1. **System Instruction דינמי**: מגדיר את המודל כמפתח בשפה המבוקשת
+2. **Temperature בינוני**: `0.2` - איזון בין יצירתיות למדויקות
+3. **טוקנים רבים**: `4000` - מאפשר ליצור קוד ארוך
+4. **פרומפט מותאם**: מבקש קוד לפי תיאור
+
+מה כל חלק בקוד?
+----------------
+- `system_instruction`: מגדיר את המודל כמפתח מנוסה - עוזר לקבל קוד איכותי
+- `temperature: 0.2`: ערך נמוך-בינוני = קוד מדויק אבל לא נוקשה מדי
+- `max_output_tokens: 4000`: מאפשר ליצור פונקציות או קבצים ארוכים
+- הפרומפט: משלב את השפה והתיאור לבקשה ברורה
+
+מתי להשתמש?
+------------
+✓ יצירת פונקציות לפי תיאור
+✓ המרת קוד משפה אחת לאחרת
+✓ יצירת קוד לדוגמה או הדגמה
+✓ אוטומציה של כתיבת קוד חוזר
+
+טיפים:
+------
+💡 System Instruction עוזר לקבל קוד נקי ומתועד
+💡 אפשר להוסיף דרישות: "כתוב קוד עם error handling"
+💡 לבדיקות, בקש גם unit tests
+💡 תמיד בדוק את הקוד שנוצר לפני שימוש בייצור
+
+```python
+def generate_code(language, description):
+    """צור קוד לפי תיאור"""
+    model = genai.GenerativeModel(
+        "gemini-1.5-flash",
+        generation_config={
+            "temperature": 0.2,
+            "max_output_tokens": 4000
+        },
+        system_instruction=f"אתה מפתח {language} מנוסה. כתוב קוד נקי ומתועד."
+    )
+    
+    prompt = f"כתוב קוד {language} ש-{description}"
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+code = generate_code("Python", "מחשב ממוצע של רשימת מספרים")
+print(code)
+```
+
+דוגמה 6: ניתוח תמונה
+=======================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח תמונות עם Gemini - זיהוי אובייקטים, תיאור סצנות, וניתוח תוכן ויזואלי.
+
+איך זה עובד?
+------------
+1. **טעינת תמונה**: `PIL.Image.open()` טוען את התמונה מהקובץ
+2. **מודל Vision**: `gemini-1.5-pro-vision` - מודל מיוחד לעיבוד תמונות
+3. **קלט משולב**: מעביר גם שאלה וגם תמונה למודל
+4. **ניתוח**: המודל מנתח את התמונה ומחזיר תיאור
+
+מה כל חלק בקוד?
+----------------
+- `PIL.Image`: ספריית Pillow לטיפול בתמונות
+- `gemini-1.5-pro-vision`: מודל מיוחד עם יכולות ראייה
+- `[question, img]`: מעביר רשימה עם שאלה ותמונה - המודל מבין את הקשר
+- `question` פרמטר: מאפשר לשאול שאלות ספציפיות על התמונה
+
+מתי להשתמש?
+------------
+✓ ניתוח תמונות מוצרים
+✓ תיאור תמונות לאנשים עם לקות ראייה
+✓ זיהוי אובייקטים או טקסט בתמונות (OCR)
+✓ ניתוח תוכן ויזואלי למטרות שיווקיות
+
+טיפים:
+------
+💡 השתמש ב-`gemini-1.5-pro-vision` לניתוח תמונות (לא flash)
+💡 אפשר לשאול שאלות ספציפיות: "מה הצבעים העיקריים?" או "כמה אנשים יש?"
+💡 המודל תומך בפורמטים: JPEG, PNG, GIF, WebP
+💡 לטקסט בתמונות, בקש במפורש: "קרא את הטקסט בתמונה"
+
+```python
+import PIL.Image
+
+def analyze_image(image_path, question="תאר את התמונה"):
+    """נתח תמונה"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    response = model.generate_content([question, img])
+    return response.text
+
+# שימוש
+description = analyze_image("photo.jpg", "מה יש בתמונה?")
+print(description)
+```
+
+דוגמה 7: מערכת Q&A
+=====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת שאלות ותשובות שמשיבה על בסיס הקשר ספציפי שמוגדר מראש.
+
+איך זה עובד?
+------------
+1. **יצירת מערכת**: `create_qa_system()` יוצרת מודל עם הקשר מותאם
+2. **System Instruction**: מגדיר את ההקשר והתנהגות של המודל
+3. **שאלות**: `ask_question()` שואלת שאלות על ההקשר שהוגדר
+4. **תשובות מבוססות הקשר**: המודל משיב רק על בסיס ההקשר שסופק
+
+מה כל חלק בקוד?
+----------------
+- `context`: הטקסט או המידע שהמערכת צריכה להבין
+- `system_instruction`: הוראות למודל איך להתנהג - כאן מגדירים אותו כעוזר שמבוסס על הקשר
+- המודל נשמר: אפשר לשאול שאלות מרובות עם אותו מודל והקשר
+
+מתי להשתמש?
+------------
+✓ מערכת FAQ מבוססת מסמכים
+✓ עוזר וירטואלי עם ידע ספציפי
+✓ מערכת תמיכה ללקוחות
+✓ שאלות על מסמכים או מדריכים
+
+טיפים:
+------
+💡 הקשר יכול להיות מסמך, מדריך, או כל טקסט רלוונטי
+💡 System Instruction עוזר לקבל תשובות עקביות ומדויקות
+💡 אפשר לעדכן את ההקשר על ידי יצירת מודל חדש
+💡 לטקסטים ארוכים, השתמש ב-`gemini-1.5-pro` עם חלון הקשר גדול יותר
+
+```python
+def create_qa_system(context):
+    """צור מערכת שאלות ותשובות"""
+    model = genai.GenerativeModel(
+        "gemini-1.5-flash",
+        system_instruction=f"""אתה עוזר AI שמשיב על שאלות בהתבסס על הקשר הבא:
+{context}
+
+תמיד תן תשובות מדויקות ומבוססות על הקשר."""
+    )
+    return model
+
+def ask_question(model, question):
+    """שאל שאלה"""
+    response = model.generate_content(question)
+    return response.text
+
+# שימוש
+context = "Python היא שפת תכנות פופולרית..."
+qa_model = create_qa_system(context)
+answer = ask_question(qa_model, "מה זה Python?")
+print(answer)
+```
+
+דוגמה 8: מחולל תוכן
+=====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור תוכן מסוגים שונים (בלוגים, מאמרים, פוסטים) בסגנונות שונים.
+
+איך זה עובד?
+------------
+1. **Temperature דינמי**: משתנה לפי הסגנון - יצירתי = גבוה, מקצועי = בינוני
+2. **System Instruction**: מגדיר את המודל ככותב תוכן בסגנון מסוים
+3. **פרמטרים גמישים**: מאפשר לבחור סוג תוכן, נושא, וסגנון
+4. **יצירת תוכן**: המודל יוצר תוכן מותאם לפי הפרמטרים
+
+מה כל חלק בקוד?
+----------------
+- `content_type`: סוג התוכן (פוסט בלוג, מאמר, וכו')
+- `topic`: הנושא עליו לכתוב
+- `style`: הסגנון - משפיע על ה-temperature
+- `temperature` דינמי: יצירתי = 0.8 (יותר יצירתיות), מקצועי = 0.6 (יותר מדויק)
+
+מתי להשתמש?
+------------
+✓ יצירת תוכן לאתרים
+✓ כתיבת בלוגים או מאמרים
+✓ יצירת פוסטים לרשתות חברתיות
+✓ כתיבת תוכן שיווקי
+
+טיפים:
+------
+💡 Temperature גבוה (0.7-0.9) = תוכן יצירתי ומגוון יותר
+💡 Temperature נמוך (0.3-0.5) = תוכן מדויק ומקצועי יותר
+💡 אפשר להוסיף פרמטרים נוספים: אורך, קהל יעד, טון
+💡 תמיד ערוך את התוכן שנוצר לפני פרסום
+
+```python
+def generate_content(content_type, topic, style="professional"):
+    """צור תוכן לפי סוג ונושא"""
+    model = genai.GenerativeModel(
+        "gemini-1.5-flash",
+        generation_config={
+            "temperature": 0.8 if style == "creative" else 0.6,
+            "max_output_tokens": 2000
+        },
+        system_instruction=f"אתה כותב תוכן מקצועי. כתוב בסגנון {style}."
+    )
+    
+    prompt = f"צור {content_type} על הנושא: {topic}"
+    response = model.generate_content(prompt)
+    return response.text
+
+# שימוש
+blog_post = generate_content("פוסט בלוג", "AI", "creative")
+print(blog_post)
+```
+
+דוגמה 9: מערכת עם Retry
+==========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת חזקה שמתמודדת עם שגיאות רשת או שרת על ידי ניסיונות חוזרים.
+
+איך זה עובד?
+------------
+1. **ניסיונות חוזרים**: מנסה עד `max_retries` פעמים
+2. **Exponential Backoff**: מחכה זמן הולך וגדל בין ניסיונות (1s, 2s, 4s...)
+3. **Error Handling**: תופס שגיאות ומטפל בהן בצורה אלגנטית
+4. **תוצאה מובנית**: מחזיר dictionary עם סטטוס ותוצאה או שגיאה
+
+מה כל חלק בקוד?
+----------------
+- `try/except`: תופס שגיאות ומטפל בהן
+- `Exponential Backoff`: `2 ** attempt` - מחכה זמן הולך וגדל
+- `time.sleep()`: מחכה לפני ניסיון נוסף
+- תוצאה מובנית: מחזיר dict עם `success`, `text` או `error`
+
+מתי להשתמש?
+------------
+✓ יישומים שצריכים להיות אמינים
+✓ מערכות ייצור שצריכות להתמודד עם שגיאות רשת
+✓ עיבוד batch של בקשות רבות
+✓ מערכות קריטיות שלא יכולות להיכשל
+
+טיפים:
+------
+💡 Exponential Backoff עוזר לא להעמיס על השרת
+💡 הגדר `max_retries` לפי הצורך - 3 בדרך כלל מספיק
+💡 אפשר להוסיף לוגים לניטור בעיות
+💡 לבדיקות, אפשר להדפיס את השגיאה המדויקת
+
+```python
+import time
+
+def generate_with_retry(model, prompt, max_retries=3):
+    """יצירת תוכן עם retry logic"""
+    for attempt in range(max_retries):
+        try:
+            response = model.generate_content(prompt)
+            return {"success": True, "text": response.text}
+        except Exception as e:
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt  # Exponential backoff
+                print(f"נכשל, מנסה שוב בעוד {wait_time} שניות...")
+                time.sleep(wait_time)
+                continue
+            return {"success": False, "error": str(e)}
+    return {"success": False, "error": "נכשל אחרי כל הניסיונות"}
+
+# שימוש
+model = genai.GenerativeModel("gemini-1.5-flash")
+result = generate_with_retry(model, "טקסט לבקשה")
+if result["success"]:
+    print(result["text"])
+else:
+    print(f"שגיאה: {result['error']}")
+```
+
+דוגמה 10: מערכת Batch Processing
+===================================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לעבד מספר בקשות בבת אחת - שימושי לעיבוד כמות גדולה של פרומפטים.
+
+איך זה עובד?
+------------
+1. **לולאה על פרומפטים**: עובר על כל פרומפט ברשימה
+2. **עיבוד נפרד**: כל פרומפט מעובד בנפרד עם error handling
+3. **איסוף תוצאות**: כל תוצאה נשמרת עם הפרומפט המקורי
+4. **תוצאה מובנית**: מחזיר רשימה של תוצאות עם סטטוס
+
+מה כל חלק בקוד?
+----------------
+- `prompts`: רשימה של פרומפטים לעיבוד
+- `try/except`: כל פרומפט מעובד בנפרד - שגיאה באחד לא עוצרת את השאר
+- `results`: רשימה שמכילה את כל התוצאות
+- כל תוצאה כוללת: פרומפט, תוצאה/שגיאה, וסטטוס הצלחה
+
+מתי להשתמש?
+------------
+✓ עיבוד כמות גדולה של טקסטים
+✓ ניתוח מספר מסמכים
+✓ יצירת תוכן מרובה
+✓ עיבוד נתונים בכמות
+
+טיפים:
+------
+💡 אפשר לשלב עם Retry Logic לכל פרומפט
+💡 לכמויות גדולות, שקול להשתמש ב-threading או async
+💡 אפשר להוסיף progress bar לעיבוד ארוך
+💡 שמור תוצאות לקובץ JSON לעיבוד מאוחר יותר
+
+```python
+def process_batch(prompts, model):
+    """עבד על מספר בקשות"""
+    results = []
+    for prompt in prompts:
+        try:
+            response = model.generate_content(prompt)
+            results.append({
+                "prompt": prompt,
+                "result": response.text,
+                "success": True
+            })
+        except Exception as e:
+            results.append({
+                "prompt": prompt,
+                "error": str(e),
+                "success": False
+            })
+    return results
+
+# שימוש
+prompts = [
+    "מה זה Python?",
+    "מה זה JavaScript?",
+    "מה זה AI?"
+]
+model = genai.GenerativeModel("gemini-1.5-flash")
+results = process_batch(prompts, model)
+for result in results:
+    if result["success"]:
+        print(f"{result['prompt']}: {result['result']}")
+    else:
+        print(f"שגיאה ב-{result['prompt']}: {result['error']}")
+```
+
+דוגמה 11: מערכת עם Caching
+=============================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת cache ששומרת תוצאות כדי לחסוך בקשות API וכסף.
+
+איך זה עובד?
+------------
+1. **יצירת מפתח**: יוצר hash מהפרומפט כמפתח ייחודי
+2. **בדיקת cache**: בודק אם יש תוצאה שמורה לפרומפט הזה
+3. **שימוש ב-cache**: אם יש, מחזיר את התוצאה השמורה
+4. **שמירה**: אם אין, שולח בקשה למודל ושומר את התוצאה
+
+מה כל חלק בקוד?
+----------------
+- `get_cache_key()`: יוצר hash (MD5) מהפרומפט - מפתח ייחודי
+- `get_cached()`: בודק אם יש תוצאה שמורה במערכת הקבצים
+- `cache_result()`: שומר תוצאה חדשה ב-cache
+- `generate_with_cache()`: פונקציה ראשית שמשלבת הכל
+
+מתי להשתמש?
+------------
+✓ פרומפטים שחוזרים על עצמם
+✓ חיסכון בעלויות API
+✓ שיפור ביצועים - תשובות מיידיות
+✓ מערכות עם בקשות דומות
+
+טיפים:
+------
+💡 Cache חוסך כסף - בקשות חוזרות לא עולות כסף
+💡 MD5 hash יוצר מפתח ייחודי לכל פרומפט
+💡 אפשר להוסיף TTL (Time To Live) - למחוק cache ישן
+💡 לפרויקטים גדולים, שקול להשתמש ב-Redis או Memcached
+
+```python
+import hashlib
+import json
+import os
+
+CACHE_DIR = "api_cache"
+
+def get_cache_key(prompt):
+    """קבל מפתח cache"""
+    return hashlib.md5(prompt.encode()).hexdigest()
+
+def get_cached(prompt):
+    """קבל מ-cache"""
+    if not os.path.exists(CACHE_DIR):
+        return None
+    
+    cache_key = get_cache_key(prompt)
+    cache_path = os.path.join(CACHE_DIR, f"{cache_key}.json")
+    
+    if os.path.exists(cache_path):
+        with open(cache_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return None
+
+def cache_result(prompt, result):
+    """שמור ב-cache"""
+    if not os.path.exists(CACHE_DIR):
+        os.makedirs(CACHE_DIR)
+    
+    cache_key = get_cache_key(prompt)
+    cache_path = os.path.join(CACHE_DIR, f"{cache_key}.json")
+    
+    with open(cache_path, "w", encoding="utf-8") as f:
+        json.dump({"prompt": prompt, "result": result}, f, ensure_ascii=False)
+
+def generate_with_cache(model, prompt):
+    """יצירת תוכן עם cache"""
+    cached = get_cached(prompt)
+    if cached:
+        return cached["result"]
+    
+    response = model.generate_content(prompt)
+    result = response.text
+    cache_result(prompt, result)
+    return result
+
+# שימוש
+model = genai.GenerativeModel("gemini-1.5-flash")
+result = generate_with_cache(model, "מה זה AI?")
+print(result)
+```
+
+דוגמה 12: מערכת מולטי-מודאלית
+=================================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח טקסט ותמונה יחד - אחת היכולות החזקות של Gemini.
+
+איך זה עובד?
+------------
+1. **טעינת תמונה**: טוען את התמונה מהקובץ
+2. **מודל Vision**: משתמש ב-`gemini-1.5-pro-vision` לעיבוד תמונות
+3. **קלט משולב**: מעביר גם טקסט וגם תמונה למודל
+4. **ניתוח משולב**: המודל מנתח את הקשר בין הטקסט לתמונה
+
+מה כל חלק בקוד?
+----------------
+- `PIL.Image.open()`: טוען תמונה מהקובץ
+- `gemini-1.5-pro-vision`: מודל עם יכולות ראייה
+- `[prompt, img]`: מעביר רשימה עם טקסט ותמונה - המודל מבין את הקשר
+- הפרומפט: מנחה את המודל לנתח את הקשר בין הטקסט לתמונה
+
+מתי להשתמש?
+------------
+✓ ניתוח מוצרים עם תיאור טקסטואלי
+✓ בדיקת התאמה בין תמונה לטקסט
+✓ יצירת תיאורים משולבים
+✓ ניתוח תוכן שיווקי
+
+טיפים:
+------
+💡 Gemini מבין את הקשר בין טקסט לתמונה בצורה מצוינת
+💡 אפשר לשאול שאלות ספציפיות: "האם התמונה תואמת לטקסט?"
+💡 מודל Vision תומך גם בווידאו (frames)
+💡 לניתוח מורכב, השתמש ב-`gemini-1.5-pro` עם חלון הקשר גדול
+
+```python
+def analyze_multimodal(text, image_path):
+    """נתח טקסט ותמונה יחד"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    
+    prompt = f"""נתח את הטקסט והתמונה הבאים:
+    
+טקסט: {text}
+תמונה: [תמונה מצורפת]
+
+מה הקשר ביניהם?"""
+    
+    response = model.generate_content([prompt, img])
+    return response.text
+
+# שימוש
+analysis = analyze_multimodal("זה מוצר חדש", "product.jpg")
+print(analysis)
+```
+
+סיכום
+======
+
+דוגמאות מעשיות:
+✓ צ'אטבוט בסיסי
+✓ סיכום טקסט
+✓ תרגום
+✓ ניתוח סנטימנט
+✓ מחולל קוד
+✓ ניתוח תמונה
+✓ מערכת Q&A
+✓ מחולל תוכן
+✓ Retry logic
+✓ Batch processing
+✓ Caching
+✓ מולטי-מודאלי
+
+כל הדוגמאות כוללות:
+• קוד מלא
+• הסברים
+• שימוש מעשי
+
+---
+© 2026 Google AI Academy
+דוגמאות Python ל-Gemini API

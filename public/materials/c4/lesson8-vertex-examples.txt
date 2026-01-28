@@ -1,0 +1,622 @@
+דוגמאות קוד ל-Vertex AI
+=========================
+
+אוסף דוגמאות מעשיות
+=====================
+
+דוגמה 1: שימוש בסיסי
+======================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך להתחיל לעבוד עם Vertex AI - שירות ה-AI של Google Cloud Platform.
+
+איך זה עובד?
+------------
+1. **ייבוא**: מייבא את הספרייה של Vertex AI
+2. **אתחול**: `vertexai.init()` מגדיר את ה-project ID וה-location
+3. **יצירת מודל**: יוצר מודל Gemini דרך Vertex AI
+4. **יצירת תוכן**: שולח פרומפט ומקבל תשובה
+
+מה כל חלק בקוד?
+----------------
+- `vertexai.init()`: מגדיר את ה-project ID וה-location (חובה!)
+- `project`: ה-Google Cloud Project ID שלך
+- `location`: האזור הגיאוגרפי (us-central1, europe-west1, וכו')
+- `GenerativeModel()`: יוצר מודל - כאן משתמשים ב-`gemini-1.5-pro`
+- `generate_content()`: שולח פרומפט ומחזיר תשובה
+
+מתי להשתמש?
+------------
+✓ כשעובדים עם Google Cloud Platform
+✓ כשצריך אינטגרציה עם שירותי GCP אחרים
+✓ כשצריך שליטה מלאה על התשתית
+✓ לפרויקטים ארגוניים גדולים
+
+טיפים:
+------
+💡 צריך Google Cloud Project פעיל
+💡 צריך להפעיל את Vertex AI API ב-GCP Console
+💡 צריך authentication - דרך gcloud CLI או service account
+💡 Location חשוב - בחר קרוב למשתמשים שלך
+💡 התקנה: `pip install google-cloud-aiplatform`
+
+```python
+import vertexai
+from vertexai.generative_models import GenerativeModel
+
+# אתחל
+vertexai.init(project="your-project-id", location="us-central1")
+
+# צור מודל
+model = GenerativeModel("gemini-1.5-pro")
+
+# יצירת תוכן
+response = model.generate_content("מה זה Python?")
+print(response.text)
+```
+
+דוגמה 2: עם Configuration
+===========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך להגדיר פרמטרים מתקדמים ליצירת תוכן ב-Vertex AI.
+
+איך זה עובד?
+------------
+1. **ייבוא GenerationConfig**: מייבא את המחלקה להגדרת פרמטרים
+2. **יצירת config**: מגדיר את כל הפרמטרים הרצויים
+3. **שימוש ב-config**: מעביר את ה-config ל-`generate_content()`
+
+מה כל חלק בקוד?
+----------------
+- `GenerationConfig`: מחלקה להגדרת פרמטרים מתקדמים
+- `temperature`: רמת יצירתיות (0.0-1.0) - כאן 0.7 = יצירתי
+- `top_p`: Nucleus sampling - מגביל את בחירת המילים
+- `top_k`: מגביל את מספר המילים המועמדות
+- `max_output_tokens`: מגביל את אורך התשובה
+
+מתי להשתמש?
+------------
+✓ כשצריך שליטה מדויקת על יצירת התוכן
+✓ כשצריך תוצאות עקביות
+✓ כשצריך להגביל את אורך התשובה
+✓ למיקרו-אופטימיזציה של תוצאות
+
+טיפים:
+------
+💡 `temperature` גבוה (0.7-0.9) = יצירתי יותר
+💡 `temperature` נמוך (0.1-0.3) = מדויק יותר
+💡 `top_p` ו-`top_k` עוזרים לשלוט על מגוון התשובות
+💡 `max_output_tokens` חשוב לשליטה בעלויות
+
+```python
+from vertexai.generative_models import GenerativeModel, GenerationConfig
+
+model = GenerativeModel("gemini-1.5-pro")
+
+config = GenerationConfig(
+    temperature=0.7,
+    top_p=0.95,
+    top_k=40,
+    max_output_tokens=2000
+)
+
+response = model.generate_content(
+    "כתוב סיפור",
+    generation_config=config
+)
+print(response.text)
+```
+
+דוגמה 3: Chat
+===============
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור שיחה רציפה עם Vertex AI שמשמרת את הקשר השיחה.
+
+איך זה עובד?
+------------
+1. **יצירת מודל**: יוצר מודל Gemini
+2. **התחלת שיחה**: `start_chat()` מתחיל שיחה חדשה
+3. **שליחת הודעות**: `send_message()` שולח הודעות ומשמר הקשר
+4. **היסטוריה אוטומטית**: ההיסטוריה נשמרת אוטומטית
+
+מה כל חלק בקוד?
+----------------
+- `start_chat()`: מתחיל שיחה חדשה (ללא היסטוריה)
+- `send_message()`: שולח הודעה ומקבל תשובה תוך שמירה על הקשר
+- ההיסטוריה נשמרת אוטומטית - אין צורך לנהל אותה ידנית
+
+מתי להשתמש?
+------------
+✓ שיחות אינטראקטיביות עם AI
+✓ בוטים ועוזרים וירטואליים
+✓ מערכות שאלות ותשובות
+✓ שיחות ארוכות שדורשות הקשר
+
+טיפים:
+------
+💡 ההיסטוריה נשמרת אוטומטית - המודל זוכר את השיחה הקודמת
+💡 כדי לנקות היסטוריה, צור צ'אט חדש עם `start_chat()`
+💡 אפשר להעביר היסטוריה ידנית: `start_chat(history=[...])`
+💡 שימושי מאוד לבוטים ומערכות שיחה
+
+```python
+model = GenerativeModel("gemini-1.5-pro")
+chat = model.start_chat()
+
+# הודעה ראשונה
+response = chat.send_message("מה זה AI?")
+print(response.text)
+
+# הודעה שנייה
+response = chat.send_message("תן לי דוגמה")
+print(response.text)
+```
+
+דוגמה 4: עבודה עם תמונות
+===========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח תמונות ב-Vertex AI - כאן התמונות נטענות מ-Google Cloud Storage.
+
+איך זה עובד?
+------------
+1. **מודל Vision**: משתמש ב-`gemini-1.5-pro-vision` לעיבוד תמונות
+2. **Part.from_uri()**: יוצר Part מתמונה ב-Google Cloud Storage
+3. **URI**: הנתיב לתמונה ב-GCS (gs://bucket-name/file.jpg)
+4. **ניתוח**: המודל מנתח את התמונה ומחזיר תיאור
+
+מה כל חלק בקוד?
+----------------
+- `Part`: מחלקה לייצוג חלקי קלט (טקסט, תמונה, וכו')
+- `from_uri()`: יוצר Part מ-URI (כאן מ-GCS)
+- `gs://`: פרוטוקול Google Cloud Storage
+- `mime_type`: סוג הקובץ (jpeg, png, וכו')
+- רשימה: מעביר רשימה עם תמונה וטקסט
+
+מתי להשתמש?
+------------
+✓ ניתוח תמונות שנשמרות ב-Cloud Storage
+✓ עיבוד תמונות בכמות גדולה
+✓ אינטגרציה עם שירותי GCP אחרים
+✓ מערכות ארגוניות עם תשתית Cloud
+
+טיפים:
+------
+💡 התמונה חייבת להיות ב-Google Cloud Storage
+💡 צריך הרשאות לקרוא מה-bucket
+💡 אפשר גם להעלות תמונה ישירות (לא רק מ-GCS)
+💡 מודל Vision תומך גם בווידאו (frames)
+💡 לניתוח מורכב, השתמש ב-`gemini-1.5-pro-vision`
+
+```python
+from vertexai.generative_models import GenerativeModel, Part
+
+model = GenerativeModel("gemini-1.5-pro-vision")
+
+# תמונה מ-GCS
+image_part = Part.from_uri(
+    uri="gs://your-bucket/image.jpg",
+    mime_type="image/jpeg"
+)
+
+response = model.generate_content([image_part, "תאר את התמונה"])
+print(response.text)
+```
+
+דוגמה 5: JSON Mode
+===================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לקבל תשובות מובנות ב-JSON ב-Vertex AI באמצעות Schema מוגדר מראש.
+
+איך זה עובד?
+------------
+1. **ייבוא Schema**: מייבא את המחלקה Schema להגדרת מבנה JSON
+2. **הגדרת Schema**: מגדיר את המבנה המדויק של התשובה
+3. **שימוש ב-Schema**: מעביר את ה-Schema ב-generation_config
+4. **תשובה מובנית**: המודל מחזיר תשובה בפורמט JSON לפי ה-Schema
+
+מה כל חלק בקוד?
+----------------
+- `Schema`: מחלקה להגדרת מבנה JSON
+- `Schema.Type.OBJECT`: מגדיר שהתשובה תהיה אובייקט
+- `properties`: מגדיר את השדות באובייקט
+- `Schema.Type.STRING/NUMBER`: מגדיר את סוג הנתונים
+- `required`: מגדיר שדות חובה
+
+מתי להשתמש?
+------------
+✓ כשצריך תשובות מובנות לעיבוד אוטומטי
+✓ יצירת APIs שמחזירות JSON
+✓ עיבוד נתונים מובנה
+✓ אינטגרציה עם מערכות אחרות
+
+טיפים:
+------
+💡 Schema מבטיח תשובה מובנית שניתן לעבד בקלות
+💡 אפשר להגדיר מבנים מורכבים (nested objects, arrays)
+💡 `required` מבטיח שדות חשובים תמיד יהיו בתשובה
+💡 שימושי מאוד ל-APIs ומערכות אוטומטיות
+
+```python
+from vertexai.generative_models import GenerativeModel, Schema
+
+model = GenerativeModel("gemini-1.5-pro")
+
+response_schema = Schema(
+    type=Schema.Type.OBJECT,
+    properties={
+        "name": Schema(type=Schema.Type.STRING),
+        "age": Schema(type=Schema.Type.NUMBER)
+    },
+    required=["name", "age"]
+)
+
+response = model.generate_content(
+    "צור פרופיל משתמש",
+    generation_config={"response_schema": response_schema}
+)
+print(response.text)
+```
+
+דוגמה 6: Batch Processing
+===========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לעבד מספר פרומפטים בבת אחת ב-Vertex AI.
+
+איך זה עובד?
+------------
+1. **פונקציה**: יוצרת פונקציה שמעבדת רשימת פרומפטים
+2. **לולאה**: עובר על כל פרומפט ברשימה
+3. **עיבוד**: מעבד כל פרומפט בנפרד
+4. **איסוף תוצאות**: אוסף את כל התוצאות ברשימה
+
+מה כל חלק בקוד?
+----------------
+- `process_batch()`: פונקציה שמקבלת רשימת פרומפטים
+- `for` loop: עובר על כל פרומפט
+- `results`: רשימה שמכילה את כל התוצאות
+- `zip()`: מחבר פרומפטים ותוצאות להדפסה
+
+מתי להשתמש?
+------------
+✓ עיבוד כמות גדולה של טקסטים
+✓ ניתוח מספר מסמכים
+✓ יצירת תוכן מרובה
+✓ עיבוד נתונים בכמות
+
+טיפים:
+------
+💡 אפשר להוסיף error handling לכל פרומפט
+💡 לכמויות גדולות, שקול להשתמש ב-threading או async
+💡 אפשר להוסיף progress bar לעיבוד ארוך
+💡 שמור תוצאות לקובץ לעיבוד מאוחר יותר
+
+```python
+def process_batch(prompts):
+    model = GenerativeModel("gemini-1.5-pro")
+    results = []
+    
+    for prompt in prompts:
+        response = model.generate_content(prompt)
+        results.append(response.text)
+    
+    return results
+
+# שימוש
+prompts = ["מה זה Python?", "מה זה JavaScript?"]
+results = process_batch(prompts)
+for prompt, result in zip(prompts, results):
+    print(f"{prompt}: {result}")
+```
+
+דוגמה 7: עם Error Handling
+============================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת חזקה ב-Vertex AI שמתמודדת עם שגיאות על ידי ניסיונות חוזרים.
+
+איך זה עובד?
+------------
+1. **ניסיונות חוזרים**: מנסה עד `max_retries` פעמים
+2. **Exponential Backoff**: מחכה זמן הולך וגדל בין ניסיונות (1s, 2s, 4s...)
+3. **Error Handling**: תופס שגיאות ומטפל בהן בצורה אלגנטית
+4. **תוצאה מובנית**: מחזיר dictionary עם סטטוס ותוצאה או שגיאה
+
+מה כל חלק בקוד?
+----------------
+- `try/except`: תופס שגיאות ומטפל בהן
+- `time.sleep()`: מחכה לפני ניסיון נוסף
+- `2 ** attempt`: יוצר Exponential Backoff (1, 2, 4, 8...)
+- תוצאה מובנית: מחזיר dict עם `success`, `text` או `error`
+
+מתי להשתמש?
+------------
+✓ יישומים שצריכים להיות אמינים
+✓ מערכות ייצור שצריכות להתמודד עם שגיאות רשת
+✓ עיבוד batch של בקשות רבות
+✓ מערכות קריטיות שלא יכולות להיכשל
+
+טיפים:
+------
+💡 Exponential Backoff עוזר לא להעמיס על השרת
+💡 הגדר `max_retries` לפי הצורך - 3 בדרך כלל מספיק
+💡 אפשר להוסיף לוגים לניטור בעיות
+💡 לבדיקות, אפשר להדפיס את השגיאה המדויקת
+
+```python
+import time
+
+def safe_generate(model, prompt, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = model.generate_content(prompt)
+            return {"success": True, "text": response.text}
+        except Exception as e:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+                continue
+            return {"success": False, "error": str(e)}
+    return {"success": False, "error": "נכשל אחרי כל הניסיונות"}
+
+# שימוש
+model = GenerativeModel("gemini-1.5-pro")
+result = safe_generate(model, "טקסט")
+if result["success"]:
+    print(result["text"])
+else:
+    print(f"שגיאה: {result['error']}")
+```
+
+דוגמה 8: מערכת עם Caching
+===========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת cache ב-Vertex AI ששומרת תוצאות כדי לחסוך בקשות וכסף.
+
+איך זה עובד?
+------------
+1. **יצירת מפתח**: יוצר hash מהפרומפט כמפתח ייחודי
+2. **בדיקת cache**: בודק אם יש תוצאה שמורה לפרומפט הזה
+3. **שימוש ב-cache**: אם יש, מחזיר את התוצאה השמורה
+4. **שמירה**: אם אין, שולח בקשה למודל ושומר את התוצאה
+
+מה כל חלק בקוד?
+----------------
+- `get_cache_key()`: יוצר hash (MD5) מהפרומפט - מפתח ייחודי
+- `get_cached()`: בודק אם יש תוצאה שמורה במערכת הקבצים
+- `cache_result()`: שומר תוצאה חדשה ב-cache
+- `generate_with_cache()`: פונקציה ראשית שמשלבת הכל
+
+מתי להשתמש?
+------------
+✓ פרומפטים שחוזרים על עצמם
+✓ חיסכון בעלויות API
+✓ שיפור ביצועים - תשובות מיידיות
+✓ מערכות עם בקשות דומות
+
+טיפים:
+------
+💡 Cache חוסך כסף - בקשות חוזרות לא עולות כסף
+💡 MD5 hash יוצר מפתח ייחודי לכל פרומפט
+💡 אפשר להוסיף TTL (Time To Live) - למחוק cache ישן
+💡 לפרויקטים גדולים, שקול להשתמש ב-Cloud Storage או Redis
+
+```python
+import hashlib
+import json
+import os
+
+CACHE_DIR = "vertex_cache"
+
+def get_cache_key(prompt):
+    return hashlib.md5(prompt.encode()).hexdigest()
+
+def get_cached(prompt):
+    if not os.path.exists(CACHE_DIR):
+        return None
+    
+    cache_key = get_cache_key(prompt)
+    cache_path = os.path.join(CACHE_DIR, f"{cache_key}.json")
+    
+    if os.path.exists(cache_path):
+        with open(cache_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return None
+
+def cache_result(prompt, result):
+    if not os.path.exists(CACHE_DIR):
+        os.makedirs(CACHE_DIR)
+    
+    cache_key = get_cache_key(prompt)
+    cache_path = os.path.join(CACHE_DIR, f"{cache_key}.json")
+    
+    with open(cache_path, "w", encoding="utf-8") as f:
+        json.dump({"prompt": prompt, "result": result}, f, ensure_ascii=False)
+
+def generate_with_cache(model, prompt):
+    cached = get_cached(prompt)
+    if cached:
+        return cached["result"]
+    
+    response = model.generate_content(prompt)
+    result = response.text
+    cache_result(prompt, result)
+    return result
+
+# שימוש
+model = GenerativeModel("gemini-1.5-pro")
+result = generate_with_cache(model, "מה זה AI?")
+print(result)
+```
+
+דוגמה 9: מערכת מולטי-מודאלית
+===============================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח טקסט ותמונה יחד ב-Vertex AI - אחת היכולות החזקות של Gemini.
+
+איך זה עובד?
+------------
+1. **מודל Vision**: משתמש ב-`gemini-1.5-pro-vision` לעיבוד תמונות
+2. **טעינת תמונה**: טוען תמונה מ-Google Cloud Storage
+3. **קלט משולב**: מעביר גם טקסט וגם תמונה למודל
+4. **ניתוח משולב**: המודל מנתח את הקשר בין הטקסט לתמונה
+
+מה כל חלק בקוד?
+----------------
+- `gemini-1.5-pro-vision`: מודל עם יכולות ראייה
+- `Part.from_uri()`: טוען תמונה מ-GCS
+- `gs://`: פרוטוקול Google Cloud Storage
+- רשימה: מעביר רשימה עם טקסט ותמונה - המודל מבין את הקשר
+
+מתי להשתמש?
+------------
+✓ ניתוח מוצרים עם תיאור טקסטואלי
+✓ בדיקת התאמה בין תמונה לטקסט
+✓ יצירת תיאורים משולבים
+✓ ניתוח תוכן שיווקי
+
+טיפים:
+------
+💡 Gemini מבין את הקשר בין טקסט לתמונה בצורה מצוינת
+💡 אפשר לשאול שאלות ספציפיות: "האם התמונה תואמת לטקסט?"
+💡 מודל Vision תומך גם בווידאו (frames)
+💡 לניתוח מורכב, השתמש ב-`gemini-1.5-pro-vision`
+
+```python
+from vertexai.generative_models import GenerativeModel, Part
+
+model = GenerativeModel("gemini-1.5-pro-vision")
+
+# טקסט ותמונה
+text = "זה מוצר חדש"
+image_part = Part.from_uri(
+    uri="gs://your-bucket/product.jpg",
+    mime_type="image/jpeg"
+)
+
+prompt = f"{text}\n\nנתח את המוצר בתמונה."
+response = model.generate_content([prompt, image_part])
+print(response.text)
+```
+
+דוגמה 10: מערכת עם Monitoring
+================================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת ניטור ב-Vertex AI שמעקבת אחרי ביצועים, שגיאות, וזמני תגובה.
+
+איך זה עובד?
+------------
+1. **מחלקה מותאמת**: יוצרת מחלקה שעוטפת את המודל
+2. **ניטור**: עוקב אחרי מספר בקשות, שגיאות, וזמני תגובה
+3. **לוגים**: מדפיס לוגים לכל בקשה
+4. **סטטיסטיקות**: מספק פונקציה לקבלת סטטיסטיקות
+
+מה כל חלק בקוד?
+----------------
+- `MonitoredModel`: מחלקה שעוטפת את המודל המקורי
+- `request_count`: סופר את מספר הבקשות
+- `error_count`: סופר את מספר השגיאות
+- `total_time`: אוסף את סכום הזמנים
+- `get_stats()`: מחזיר סטטיסטיקות כוללות
+- `logging`: משתמש ב-logging מובנה של Python
+
+מתי להשתמש?
+------------
+✓ מערכות ייצור שצריכות ניטור
+✓ דיבוג בעיות ביצועים
+✓ מעקב אחרי עלויות ושימוש
+✓ אופטימיזציה של מערכת
+
+טיפים:
+------
+💡 Monitoring עוזר להבין את הביצועים של המערכת
+💡 אפשר להוסיף ניטור נוסף: עלויות, tokens, וכו'
+💡 אפשר לשלוח סטטיסטיקות ל-Cloud Monitoring
+💡 שימושי מאוד לניפוי באגים ואופטימיזציה
+
+```python
+import logging
+import time
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class MonitoredModel:
+    def __init__(self, model_name):
+        self.model = GenerativeModel(model_name)
+        self.request_count = 0
+        self.error_count = 0
+        self.total_time = 0
+    
+    def generate_content(self, prompt):
+        start_time = time.time()
+        self.request_count += 1
+        
+        try:
+            response = self.model.generate_content(prompt)
+            duration = time.time() - start_time
+            self.total_time += duration
+            
+            logger.info(f"בקשה #{self.request_count} הושלמה ב-{duration:.2f} שניות")
+            return response.text
+        except Exception as e:
+            self.error_count += 1
+            logger.error(f"שגיאה בבקשה #{self.request_count}: {e}")
+            raise
+    
+    def get_stats(self):
+        avg_time = self.total_time / self.request_count if self.request_count > 0 else 0
+        return {
+            "total_requests": self.request_count,
+            "errors": self.error_count,
+            "success_rate": (self.request_count - self.error_count) / self.request_count if self.request_count > 0 else 0,
+            "avg_time": avg_time
+        }
+
+# שימוש
+monitored_model = MonitoredModel("gemini-1.5-pro")
+result = monitored_model.generate_content("טקסט")
+print(result)
+stats = monitored_model.get_stats()
+print(f"סטטיסטיקות: {stats}")
+```
+
+סיכום
+======
+
+דוגמאות מעשיות:
+✓ שימוש בסיסי
+✓ Configuration
+✓ Chat
+✓ תמונות
+✓ JSON Mode
+✓ Batch Processing
+✓ Error Handling
+✓ Caching
+✓ מולטי-מודאלי
+✓ Monitoring
+
+כל הדוגמאות כוללות:
+• קוד מלא
+• הסברים
+• שימוש מעשי
+
+---
+© 2026 Google AI Academy
+דוגמאות קוד ל-Vertex AI

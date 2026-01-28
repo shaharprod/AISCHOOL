@@ -1,0 +1,425 @@
+טיפים מתקדמים לעבודה עם תמונות
+=================================
+
+טיפים לשיפור ביצועים ואיכות
+==============================
+
+1. אופטימיזציה של תמונות
+==========================
+
+לפני העלאה:
+```python
+from PIL import Image
+import io
+
+def optimize_image(image_path, max_size=(2048, 2048), quality=85):
+    """אופטמז תמונה לפני העלאה"""
+    img = Image.open(image_path)
+    
+    # שנה גודל אם גדול מדי
+    if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
+        img.thumbnail(max_size, Image.Resampling.LANCZOS)
+    
+    # שמור ב-bytes
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG', quality=quality, optimize=True)
+    buffer.seek(0)
+    
+    return Image.open(buffer)
+
+# שימוש
+optimized_img = optimize_image("large_image.jpg")
+```
+
+2. עיבוד batch של תמונות
+==========================
+
+```python
+def process_multiple_images(image_paths, prompt):
+    """עבד על מספר תמונות"""
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    results = []
+    
+    for path in image_paths:
+        try:
+            img = PIL.Image.open(path)
+            response = model.generate_content([prompt, img])
+            results.append({
+                "path": path,
+                "result": response.text,
+                "status": "success"
+            })
+        except Exception as e:
+            results.append({
+                "path": path,
+                "error": str(e),
+                "status": "error"
+            })
+    
+    return results
+
+# שימוש
+images = ["img1.jpg", "img2.jpg", "img3.jpg"]
+results = process_multiple_images(
+    images,
+    "תאר את התמונה"
+)
+```
+
+3. Caching של תוצאות
+=====================
+
+```python
+import hashlib
+import json
+import os
+
+CACHE_DIR = "image_cache"
+
+def get_image_hash(image_path):
+    """חשב hash של תמונה"""
+    with open(image_path, "rb") as f:
+        return hashlib.md5(f.read()).hexdigest()
+
+def get_cached_result(image_path, prompt):
+    """קבל תוצאה מ-cache אם קיימת"""
+    if not os.path.exists(CACHE_DIR):
+        os.makedirs(CACHE_DIR)
+    
+    img_hash = get_image_hash(image_path)
+    prompt_hash = hashlib.md5(prompt.encode()).hexdigest()
+    cache_key = f"{img_hash}_{prompt_hash}.json"
+    cache_path = os.path.join(CACHE_DIR, cache_key)
+    
+    if os.path.exists(cache_path):
+        with open(cache_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return None
+
+def cache_result(image_path, prompt, result):
+    """שמור תוצאה ב-cache"""
+    img_hash = get_image_hash(image_path)
+    prompt_hash = hashlib.md5(prompt.encode()).hexdigest()
+    cache_key = f"{img_hash}_{prompt_hash}.json"
+    cache_path = os.path.join(CACHE_DIR, cache_key)
+    
+    with open(cache_path, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False)
+
+# שימוש
+def analyze_with_cache(image_path, prompt):
+    cached = get_cached_result(image_path, prompt)
+    if cached:
+        return cached
+    
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    response = model.generate_content([prompt, img])
+    result = response.text
+    
+    cache_result(image_path, prompt, result)
+    return result
+```
+
+4. טיפול בשגיאות מתקדם
+========================
+
+```python
+def safe_image_analysis(image_path, prompt, max_retries=3):
+    """ניתוח תמונה עם retry logic"""
+    for attempt in range(max_retries):
+        try:
+            # בדוק שהקובץ קיים
+            if not os.path.exists(image_path):
+                raise FileNotFoundError(f"קובץ לא נמצא: {image_path}")
+            
+            # בדוק גודל קובץ
+            file_size = os.path.getsize(image_path)
+            if file_size > 20 * 1024 * 1024:  # 20MB
+                raise ValueError("קובץ גדול מדי (מקסימום 20MB)")
+            
+            # טען תמונה
+            img = PIL.Image.open(image_path)
+            
+            # בדוק פורמט
+            if img.format not in ["JPEG", "PNG", "WebP"]:
+                raise ValueError(f"פורמט לא נתמך: {img.format}")
+            
+            # ניתוח
+            model = genai.GenerativeModel("gemini-1.5-pro-vision")
+            response = model.generate_content([prompt, img])
+            
+            if not response.text:
+                raise ValueError("תגובה ריקה")
+            
+            return {
+                "success": True,
+                "result": response.text
+            }
+            
+        except FileNotFoundError as e:
+            return {
+                "success": False,
+                "error": f"קובץ לא נמצא: {e}"
+            }
+        except ValueError as e:
+            return {
+                "success": False,
+                "error": f"שגיאת validation: {e}"
+            }
+        except Exception as e:
+            if attempt < max_retries - 1:
+                time.sleep(1)  # המתן לפני retry
+                continue
+            return {
+                "success": False,
+                "error": f"שגיאה: {e}"
+            }
+    
+    return {
+        "success": False,
+        "error": "נכשל אחרי מספר ניסיונות"
+    }
+```
+
+5. שילוב עם System Instructions
+==================================
+
+```python
+def analyze_with_context(image_path, prompt, context=""):
+    """ניתוח תמונה עם הקשר"""
+    img = PIL.Image.open(image_path)
+    
+    system_instruction = f"""אתה מומחה בניתוח תמונות.
+{context}
+תמיד תן תשובות מפורטות ומדויקות."""
+    
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        system_instruction=system_instruction
+    )
+    
+    response = model.generate_content([prompt, img])
+    return response.text
+
+# שימוש
+context = "התמונות הן ממוצרי אופנה לקמפיין שיווקי"
+result = analyze_with_context(
+    "fashion.jpg",
+    "תאר את המוצר",
+    context
+)
+```
+
+6. עיבוד אסינכרוני
+====================
+
+```python
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+async def analyze_image_async(image_path, prompt):
+    """ניתוח תמונה אסינכרוני"""
+    loop = asyncio.get_event_loop()
+    executor = ThreadPoolExecutor(max_workers=5)
+    
+    def analyze():
+        img = PIL.Image.open(image_path)
+        model = genai.GenerativeModel("gemini-1.5-pro-vision")
+        response = model.generate_content([prompt, img])
+        return response.text
+    
+    result = await loop.run_in_executor(executor, analyze)
+    return result
+
+# שימוש
+async def process_multiple_async(image_paths, prompt):
+    tasks = [
+        analyze_image_async(path, prompt)
+        for path in image_paths
+    ]
+    results = await asyncio.gather(*tasks)
+    return results
+
+# הרצה
+results = asyncio.run(process_multiple_async(
+    ["img1.jpg", "img2.jpg", "img3.jpg"],
+    "תאר את התמונה"
+))
+```
+
+7. מדידת ביצועים
+==================
+
+```python
+import time
+
+def analyze_with_timing(image_path, prompt):
+    """ניתוח עם מדידת זמן"""
+    start_time = time.time()
+    
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    response = model.generate_content([prompt, img])
+    
+    end_time = time.time()
+    duration = end_time - start_time
+    
+    return {
+        "result": response.text,
+        "duration": duration,
+        "image_size": os.path.getsize(image_path)
+    }
+
+# שימוש
+result = analyze_with_timing("photo.jpg", "תאר את התמונה")
+print(f"זמן עיבוד: {result['duration']:.2f} שניות")
+```
+
+8. שימוש עם תמונות מ-URL
+==========================
+
+```python
+import requests
+from io import BytesIO
+
+def analyze_from_url(image_url, prompt):
+    """ניתוח תמונה מ-URL"""
+    # הורד תמונה
+    response = requests.get(image_url)
+    response.raise_for_status()
+    
+    # טען כ-PIL Image
+    img = Image.open(BytesIO(response.content))
+    
+    # ניתוח
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    result = model.generate_content([prompt, img])
+    
+    return result.text
+
+# שימוש
+url = "https://example.com/image.jpg"
+result = analyze_from_url(url, "תאר את התמונה")
+```
+
+9. שילוב עם תמונות מרובות
+============================
+
+```python
+def compare_and_analyze(image_paths, comparison_prompt):
+    """השווה ונתח מספר תמונות"""
+    images = [PIL.Image.open(path) for path in image_paths]
+    model = genai.GenerativeModel("gemini-1.5-pro-vision")
+    
+    content = [comparison_prompt] + images
+    response = model.generate_content(content)
+    
+    return response.text
+
+# שימוש
+images = ["before.jpg", "after.jpg"]
+comparison = compare_and_analyze(
+    images,
+    "השווה בין שתי התמונות ותאר את השינויים"
+)
+```
+
+10. יצירת דוחות ניתוח
+======================
+
+```python
+def create_analysis_report(image_path, detailed_prompt):
+    """צור דוח ניתוח מפורט"""
+    img = PIL.Image.open(image_path)
+    model = genai.GenerativeModel(
+        "gemini-1.5-pro-vision",
+        generation_config={
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "summary": {"type": "string"},
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "category": {"type": "string"},
+                                "description": {"type": "string"},
+                                "confidence": {"type": "number"}
+                            }
+                        }
+                    },
+                    "recommendations": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    }
+                },
+                "required": ["summary", "details"]
+            }
+        }
+    )
+    
+    response = model.generate_content([detailed_prompt, img])
+    return json.loads(response.text)
+
+# שימוש
+report = create_analysis_report(
+    "product.jpg",
+    "צור דוח ניתוח מפורט של המוצר"
+)
+print(f"סיכום: {report['summary']}")
+```
+
+טיפים כלליים
+==============
+
+1. אופטימיזציה
+---------------
+• אופטמז תמונות לפני עיבוד
+• השתמש ב-caching
+• עבד ב-batch כשאפשר
+
+2. טיפול בשגיאות
+-----------------
+• בדוק קובצי קלט
+• Handle exceptions נכון
+• הוסף retry logic
+
+3. ביצועים
+-----------
+• עבד אסינכרונית
+• מדוד זמנים
+• אופטמז לפי צורך
+
+4. איכות
+---------
+• השתמש ב-System Instructions
+• הוסף הקשר
+• בדוק תוצאות
+
+סיכום
+======
+
+טיפים עיקריים:
+✓ אופטימיזציה של תמונות
+✓ עיבוד batch
+✓ Caching
+✓ טיפול בשגיאות
+✓ System Instructions
+✓ עיבוד אסינכרוני
+✓ מדידת ביצועים
+✓ תמונות מ-URL
+✓ תמונות מרובות
+✓ דוחות ניתוח
+
+זכור:
+• אופטמז לפני עיבוד
+• Handle errors נכון
+• מדוד ביצועים
+• שפר בהדרגה
+
+---
+© 2026 Google AI Academy
+טיפים מתקדמים לעבודה עם תמונות

@@ -1,0 +1,343 @@
+דוגמאות קונפיגורציה מעשיות
+=============================
+
+דוגמה 1: צ'אטבוט תמיכה טכנית
+==============================
+
+מטרה: לענות על שאלות טכניות בצורה מדויקת ומפורטת
+
+קונפיגורציה:
+```python
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.3,
+        "top_p": 0.6,
+        "top_k": 20,
+        "max_output_tokens": 2000,
+        "stop_sequences": ["\n\n---"]
+    },
+    system_instruction="""אתה עוזר טכני מנוסה.
+תמיד תן תשובות מדויקות ומפורטות.
+השתמש בדוגמאות קוד כשצריך.
+היה ידידותי ומקצועי."""
+)
+
+response = model.generate_content("איך מתקינים Python?")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature נמוך = דיוק
+• Top-P/Top-K מאוזנים = תשובות טובות
+• Max tokens גבוה = תשובות מפורטות
+• System instruction = התנהגות עקבית
+
+דוגמה 2: מחולל תוכן שיווקי
+============================
+
+מטרה: ליצור תוכן שיווקי יצירתי ומשכנע
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-pro",
+    generation_config={
+        "temperature": 0.9,
+        "top_p": 0.95,
+        "top_k": 40,
+        "max_output_tokens": 1500,
+        "stop_sequences": ["\n\n## קריאה לפעולה"]
+    },
+    system_instruction="""אתה copywriter שיווקי מנוסה.
+כתוב תוכן משכנע ומעורר פעולה.
+השתמש ב-psychology של שיווק.
+הוסף קריאה לפעולה ברורה."""
+)
+
+response = model.generate_content("כתוב פוסט שיווקי למוצר AI חדש")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature גבוה = יצירתיות
+• Top-P/Top-K גבוהים = מגוון
+• Stop sequence = פורמט קבוע
+• System instruction = סגנון שיווקי
+
+דוגמה 3: מתרגם מקצועי
+========================
+
+מטרה: לתרגם טקסטים בצורה מדויקת
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.15,
+        "top_p": 0.4,
+        "top_k": 8,
+        "max_output_tokens": 3000
+    },
+    system_instruction="""אתה מתרגם מקצועי עברית-אנגלית.
+תרגם בצורה מדויקת תוך שמירה על טון ומשמעות.
+התאם ביטויים תרבותיים.
+שמור על עקביות טרמינולוגיה."""
+)
+
+response = model.generate_content("תרגם את הטקסט הבא: [טקסט]")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature נמוך מאוד = דיוק מקסימלי
+• Top-P/Top-K נמוכים = תשובות חזויות
+• Max tokens גבוה = טקסטים ארוכים
+• System instruction = איכות תרגום
+
+דוגמה 4: עוזר קוד
+===================
+
+מטרה: לכתוב קוד נקי ומתועד
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.2,
+        "top_p": 0.4,
+        "top_k": 10,
+        "max_output_tokens": 4000,
+        "stop_sequences": ["```"]
+    },
+    system_instruction="""אתה מפתח Python מנוסה.
+כתוב קוד נקי, מתועד וניתן לתחזוקה.
+עקוב אחר PEP 8.
+הוסף type hints ו-docstrings."""
+)
+
+response = model.generate_content("כתוב פונקציה לחישוב ממוצע")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature נמוך = קוד עקבי
+• Top-P/Top-K נמוכים = קוד מדויק
+• Max tokens גבוה = קוד מפורט
+• Stop sequence = פורמט קוד
+
+דוגמה 5: סיכום מסמכים
+========================
+
+מטרה: לסכם מסמכים ארוכים בצורה תמציתית
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.2,
+        "top_p": 0.6,
+        "top_k": 20,
+        "max_output_tokens": 800,
+        "stop_sequences": ["\n\n## סיכום"]
+    },
+    system_instruction="""אתה מומחה בסיכום מסמכים.
+צור סיכומים תמציתיים ומדויקים.
+הדגש נקודות מפתח.
+השתמש ב-formatting ברור."""
+)
+
+response = model.generate_content("סכם את המסמך הבא: [מסמך]")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature נמוך = דיוק
+• Max tokens נמוך = תמציתי
+• Stop sequence = פורמט קבוע
+• System instruction = איכות סיכום
+
+דוגמה 6: סיעור מוחות
+======================
+
+מטרה: ליצור רעיונות חדשניים
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-pro",
+    generation_config={
+        "temperature": 1.6,
+        "top_p": 0.98,
+        "top_k": 40,
+        "max_output_tokens": 2500
+    },
+    system_instruction="""אתה יועץ יצירתי מנוסה.
+צור רעיונות חדשניים ומקוריים.
+חשוב מחוץ לקופסה.
+הצג רעיונות מגוונים."""
+)
+
+response = model.generate_content("צור רעיונות למוצר AI חדש")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature גבוה מאוד = יצירתיות מקסימלית
+• Top-P/Top-K גבוהים = מגוון רחב
+• System instruction = חשיבה יצירתית
+
+דוגמה 7: ניתוח נתונים
+=======================
+
+מטרה: לנתח נתונים ולהציג תובנות
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-pro",
+    generation_config={
+        "temperature": 0.3,
+        "top_p": 0.6,
+        "top_k": 20,
+        "max_output_tokens": 3000,
+        "stop_sequences": ["\n\n## מסקנות"]
+    },
+    system_instruction="""אתה Data Analyst מנוסה.
+נתח נתונים בצורה מדויקת ומפורטת.
+השתמש ב-visualizations כשצריך.
+הצג תובנות מעשיות ו-actionable."""
+)
+
+response = model.generate_content("נתח את הנתונים הבאים: [נתונים]")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature נמוך = דיוק
+• Max tokens גבוה = ניתוח מפורט
+• Stop sequence = פורמט קבוע
+• System instruction = איכות ניתוח
+
+דוגמה 8: עוזר כתיבה
+=====================
+
+מטרה: לעזור בכתיבת תוכן מקצועי
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 30,
+        "max_output_tokens": 2000
+    },
+    system_instruction="""אתה עוזר כתיבה מקצועי.
+עזור לכתוב תוכן ברור ומעניין.
+השתמש ב-formatting טוב.
+הוסף דוגמאות כשצריך."""
+)
+
+response = model.generate_content("עזור לי לכתוב מאמר על AI")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature מאוזן = יצירתי אבל מדויק
+• Top-P/Top-K מאוזנים = תשובות טובות
+• System instruction = עזרה מקצועית
+
+דוגמה 9: מורה פרטי
+====================
+
+מטרה: להסביר מושגים מורכבים בפשטות
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.6,
+        "top_p": 0.8,
+        "top_k": 25,
+        "max_output_tokens": 2000,
+        "stop_sequences": ["\n\n## סיכום"]
+    },
+    system_instruction="""אתה מורה פרטי מנוסה וסבלני.
+הסבר מושגים מורכבים בפשטות.
+השתמש בדוגמאות מעשיות.
+עודד שאלות ובדוק הבנה."""
+)
+
+response = model.generate_content("הסבר מה זה machine learning")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature מאוזן = ידידותי אבל מדויק
+• Stop sequence = פורמט שיעור
+• System instruction = גישה פדגוגית
+
+דוגמה 10: עורך תוכן
+=====================
+
+מטרה: לערוך ולשפר תוכן קיים
+
+קונפיגורציה:
+```python
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config={
+        "temperature": 0.15,
+        "top_p": 0.35,
+        "top_k": 8,
+        "max_output_tokens": 3000
+    },
+    system_instruction="""אתה עורך תוכן מקצועי.
+בדוק דיוק, בהירות וסגנון.
+הצע שיפורים ב-structure ו-flow.
+שמור על voice ו-tone עקביים."""
+)
+
+response = model.generate_content("ערוך את הטקסט הבא: [טקסט]")
+print(response.text)
+```
+
+למה זה עובד:
+• Temperature נמוך מאוד = שינויים מינימליים
+• Top-P/Top-K נמוכים = עריכה מדויקת
+• System instruction = איכות עריכה
+
+סיכום
+======
+
+דוגמאות קונפיגורציה לפי use case:
+✓ צ'אטבוט תמיכה - דיוק
+✓ מחולל תוכן - יצירתיות
+✓ מתרגם - דיוק מקסימלי
+✓ עוזר קוד - קוד נקי
+✓ סיכום - תמציתי
+✓ סיעור מוחות - יצירתיות מקסימלית
+✓ ניתוח נתונים - דיוק ומפורט
+✓ עוזר כתיבה - מאוזן
+✓ מורה פרטי - ידידותי ומדויק
+✓ עורך תוכן - שינויים מינימליים
+
+טיפים:
+• התאם לפי use case
+• בדוק עם דוגמאות
+• מדוד ביצועים
+• שפר בהדרגה
+
+---
+© 2026 Google AI Academy
+דוגמאות קונפיגורציה מעשיות

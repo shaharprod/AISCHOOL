@@ -1,0 +1,836 @@
+דוגמאות JavaScript ל-Gemini API
+==================================
+
+אוסף דוגמאות מעשיות
+=====================
+
+דוגמה 1: צ'אטבוט בסיסי
+========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור צ'אטבוט אינטראקטיבי עם Gemini API ב-JavaScript שמאפשר שיחה רציפה עם זיכרון הקשר.
+
+איך זה עובד?
+------------
+1. **ייבוא הספרייה**: `require("@google/generative-ai")` - מייבא את הספרייה של Google Generative AI
+2. **יצירת מופע**: `new GoogleGenerativeAI()` - יוצר מופע עם מפתח API
+3. **יצירת מודל**: `getGenerativeModel()` - יוצר מודל Gemini מהיר וחסכוני
+4. **התחלת שיחה**: `startChat({ history: [] })` - מתחיל שיחה חדשה עם היסטוריה ריקה
+5. **שליחת הודעות**: `sendMessage()` - שולח הודעה ומקבל תשובה תוך שמירה על הקשר השיחה
+
+מה כל חלק בקוד?
+----------------
+- `GoogleGenerativeAI`: מחלקה ראשית ליצירת מופע עם API Key
+- `getGenerativeModel()`: יוצר מודל - כאן משתמשים ב-`gemini-1.5-flash` למהירות
+- `createChatbot()`: פונקציה async שיוצרת מופע חדש של צ'אטבוט
+- `chat()`: פונקציה async ששולחת הודעה ומחזירה תשובה
+- `async/await`: משתמש ב-async/await לטיפול ב-promises
+
+מתי להשתמש?
+------------
+✓ כשצריך שיחה אינטראקטיבית עם AI ב-Node.js
+✓ כשצריך שמירה על הקשר השיחה
+✓ לבניית בוטים, עוזרים וירטואליים, או ממשקי שיחה
+
+טיפים:
+------
+💡 השתמש ב-`gemini-1.5-flash` למהירות, או `gemini-1.5-pro` לאיכות גבוהה יותר
+💡 היסטוריית השיחה נשמרת אוטומטית - אין צורך לנהל אותה ידנית
+💡 כדי לנקות את ההיסטוריה, צור צ'אט חדש עם `startChat({ history: [] })`
+💡 שמור את ה-API Key בקובץ `.env` ולא בקוד ישירות
+💡 ב-Node.js, ודא שהתקנת: `npm install @google/generative-ai`
+
+```javascript
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI("YOUR_API_KEY");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+async function createChatbot() {
+    const chat = model.startChat({ history: [] });
+    return chat;
+}
+
+async function chat(chatSession, message) {
+    const result = await chatSession.sendMessage(message);
+    return result.response.text();
+}
+
+// שימוש
+async function main() {
+    const chatbot = await createChatbot();
+    
+    // דוגמה לשיחה
+    const response1 = await chat(chatbot, "מה זה AI?");
+    console.log("בוט:", response1);
+    
+    const response2 = await chat(chatbot, "תן לי דוגמה");
+    console.log("בוט:", response2);
+}
+
+main();
+```
+
+דוגמה 2: מערכת סיכום טקסט
+=============================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת סיכום טקסט אוטומטית ב-JavaScript שמקצרת טקסטים ארוכים לטקסט קצר וממוקד.
+
+איך זה עובד?
+------------
+1. **פונקציית סיכום**: `summarizeText()` מקבלת טקסט ואורך מקסימלי
+2. **הגדרת מודל**: יוצר מודל עם הגדרות מיוחדות לסיכום
+3. **Temperature נמוך**: `temperature: 0.2` - עוזר לקבל תשובות מדויקות וענייניות
+4. **הגבלת אורך**: `maxOutputTokens` - מגביל את אורך התשובה
+5. **פרומפט מותאם**: מבקש מהמודל לסכם את הטקסט
+
+מה כל חלק בקוד?
+----------------
+- `async function`: פונקציה אסינכרונית שמחזירה Promise
+- `generationConfig`: אובייקט עם הגדרות ליצירת תוכן
+- `temperature: 0.2`: ערך נמוך = תשובות מדויקות יותר, פחות יצירתיות
+- `maxOutputTokens`: מגביל את מספר המילים בתשובה
+- `.then()`: מטפל בתוצאה של Promise
+
+מתי להשתמש?
+------------
+✓ סיכום מאמרים ארוכים
+✓ יצירת תקצירים ממסמכים
+✓ עיבוד טקסטים ארוכים לפני ניתוח
+✓ יצירת תקצירי חדשות או דוחות
+
+טיפים:
+------
+💡 השתמש ב-temperature נמוך (0.1-0.3) לסיכומים מדויקים
+💡 הגדר `maxOutputTokens` לפי הצורך - 200 טוקנים = כ-150 מילים
+💡 אפשר להוסיף הוראות ספציפיות בפרומפט: "סכם ב-3 נקודות עיקריות"
+💡 לטקסטים ארוכים מאוד, חלק אותם לחלקים וסכם כל חלק בנפרד
+
+```javascript
+async function summarizeText(text, maxLength = 200) {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: maxLength
+        }
+    });
+    
+    const prompt = `סכם את הטקסט הבא בקצרה:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+const longText = "טקסט ארוך מאוד...";
+summarizeText(longText).then(summary => {
+    console.log(summary);
+});
+```
+
+דוגמה 3: מתרגם
+================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת תרגום מקצועית ב-JavaScript שמתרגמת טקסט בין שפות תוך שמירה על טון ומשמעות.
+
+איך זה עובד?
+------------
+1. **System Instruction**: מגדיר את המודל כמתרגם מקצועי
+2. **Temperature נמוך מאוד**: `0.1` - מבטיח תרגום מדויק ועקבי
+3. **פרומפט מותאם**: מבקש תרגום לשפה המבוקשת
+4. **שמירה על טון**: ה-System Instruction מבקש לשמור על טון ומשמעות
+
+מה כל חלק בקוד?
+----------------
+- `systemInstruction`: הוראות כלליות למודל - כאן מגדירים אותו כמתרגם מקצועי
+- `temperature: 0.1`: ערך נמוך מאוד = תרגום מדויק, ללא יצירתיות מיותרת
+- `targetLanguage`: פרמטר שמאפשר לבחור את שפת היעד (ברירת מחדל: English)
+- Template literals: משתמש ב-backticks (`) לפרומפט דינמי
+
+מתי להשתמש?
+------------
+✓ תרגום מסמכים עסקיים
+✓ תרגום תוכן לאתרים
+✓ תרגום תקשורת בינלאומית
+✓ תרגום ספרותי או טכני
+
+טיפים:
+------
+💡 השתמש ב-temperature נמוך מאוד (0.1) לתרגום מדויק
+💡 System Instruction עוזר לקבל תרגום עקבי ואיכותי
+💡 לטקסטים טכניים, הוסף הוראות: "תרגם תוך שמירה על מונחים טכניים"
+💡 לטקסטים ארוכים, חלק אותם למשפטים או פסקאות קצרות
+
+```javascript
+async function translateText(text, targetLanguage = "English") {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 2000
+        },
+        systemInstruction: "אתה מתרגם מקצועי. תרגם בצורה מדויקת תוך שמירה על טון ומשמעות."
+    });
+    
+    const prompt = `תרגם את הטקסט הבא ל-${targetLanguage}:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+const hebrewText = "שלום עולם";
+translateText(hebrewText, "English").then(englishText => {
+    console.log(englishText);
+});
+```
+
+דוגמה 4: ניתוח סנטימנט
+=========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח את הסנטימנט (רגש) של טקסט ב-JavaScript ולקבל תוצאה מובנית ב-JSON עם מידע מפורט.
+
+איך זה עובד?
+------------
+1. **JSON Mode**: `responseMimeType: "application/json"` - מבקש תשובה בפורמט JSON
+2. **Schema מוגדר**: מגדיר בדיוק איך התשובה תיראה
+3. **ניתוח**: המודל מנתח את הטקסט ומחזיר סנטימנט, רמת ביטחון, וביטויים מפתח
+4. **Parsing**: `JSON.parse()` ממיר את התשובה לאובייקט JavaScript
+
+מה כל חלק בקוד?
+----------------
+- `responseMimeType`: מגדיר שהתשובה תהיה JSON
+- `responseSchema`: מגדיר את המבנה המדויק של התשובה (camelCase ב-JS)
+- `sentiment`: חיובי/שלילי/ניטרלי (enum - רק אחד משלושה)
+- `confidence`: רמת ביטחון בין 0 ל-1
+- `keyPhrases`: מערך של ביטויים מפתח (אופציונלי)
+- `required`: מגדיר שדות חובה
+
+מתי להשתמש?
+------------
+✓ ניתוח ביקורות לקוחות
+✓ ניתוח תגובות ברשתות חברתיות
+✓ מעקב אחרי דעת קהל
+✓ ניתוח משוב על מוצרים או שירותים
+
+טיפים:
+------
+💡 JSON Mode מבטיח תשובה מובנית שניתן לעבד בקלות
+💡 Schema מוגדר מראש עוזר לקבל תשובות עקביות
+💡 `confidence` עוזר להבין כמה בטוח המודל בניתוח
+💡 שים לב: ב-JS השתמש ב-camelCase (`keyPhrases`) ולא ב-snake_case
+
+```javascript
+async function analyzeSentiment(text) {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: "object",
+                properties: {
+                    sentiment: {
+                        type: "string",
+                        enum: ["positive", "negative", "neutral"]
+                    },
+                    confidence: {
+                        type: "number",
+                        minimum: 0,
+                        maximum: 1
+                    },
+                    keyPhrases: {
+                        type: "array",
+                        items: { type: "string" }
+                    }
+                },
+                required: ["sentiment", "confidence"]
+            }
+        }
+    });
+    
+    const prompt = `נתח את הסנטימנט של הטקסט הבא:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return JSON.parse(result.response.text());
+}
+
+// שימוש
+const text = "המוצר הזה מעולה! אני מאוד מרוצה.";
+analyzeSentiment(text).then(sentiment => {
+    console.log(`סנטימנט: ${sentiment.sentiment}`);
+    console.log(`ביטחון: ${sentiment.confidence}`);
+});
+```
+
+דוגמה 5: מחולל קוד
+====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת שמגנרט קוד בשפות תכנות שונות ב-JavaScript לפי תיאור טקסטואלי.
+
+איך זה עובד?
+------------
+1. **System Instruction דינמי**: מגדיר את המודל כמפתח בשפה המבוקשת
+2. **Temperature בינוני**: `0.2` - איזון בין יצירתיות למדויקות
+3. **טוקנים רבים**: `4000` - מאפשר ליצור קוד ארוך
+4. **פרומפט מותאם**: מבקש קוד לפי תיאור
+
+מה כל חלק בקוד?
+----------------
+- `systemInstruction`: מגדיר את המודל כמפתח מנוסה - עוזר לקבל קוד איכותי
+- `temperature: 0.2`: ערך נמוך-בינוני = קוד מדויק אבל לא נוקשה מדי
+- `maxOutputTokens: 4000`: מאפשר ליצור פונקציות או קבצים ארוכים
+- Template literals: משתמש ב-backticks (`) לפרומפט דינמי
+- `.then()`: מטפל בתוצאה של Promise
+
+מתי להשתמש?
+------------
+✓ יצירת פונקציות לפי תיאור
+✓ המרת קוד משפה אחת לאחרת
+✓ יצירת קוד לדוגמה או הדגמה
+✓ אוטומציה של כתיבת קוד חוזר
+
+טיפים:
+------
+💡 System Instruction עוזר לקבל קוד נקי ומתועד
+💡 אפשר להוסיף דרישות: "כתוב קוד עם error handling"
+💡 לבדיקות, בקש גם unit tests
+💡 תמיד בדוק את הקוד שנוצר לפני שימוש בייצור
+
+```javascript
+async function generateCode(language, description) {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 4000
+        },
+        systemInstruction: `אתה מפתח ${language} מנוסה. כתוב קוד נקי ומתועד.`
+    });
+    
+    const prompt = `כתוב קוד ${language} ש-${description}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+generateCode("Python", "מחשב ממוצע של רשימת מספרים").then(code => {
+    console.log(code);
+});
+```
+
+דוגמה 6: ניתוח תמונה
+=======================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לנתח תמונות עם Gemini ב-JavaScript - זיהוי אובייקטים, תיאור סצנות, וניתוח תוכן ויזואלי.
+
+איך זה עובד?
+------------
+1. **קריאת קובץ**: `fs.readFileSync()` קורא את התמונה מהקובץ
+2. **המרה ל-base64**: ממיר את התמונה ל-base64 string
+3. **יצירת imagePart**: יוצר אובייקט עם הנתונים בפורמט הנדרש
+4. **מודל Vision**: משתמש ב-`gemini-1.5-pro-vision` לעיבוד תמונות
+5. **ניתוח**: המודל מנתח את התמונה ומחזיר תיאור
+
+מה כל חלק בקוד?
+----------------
+- `fs`: מודול FileSystem של Node.js לקריאת קבצים
+- `readFileSync()`: קורא את הקובץ בצורה סינכרונית
+- `toString("base64")`: ממיר את הנתונים ל-base64 string
+- `inlineData`: פורמט לשליחת תמונה ישירות (לא מ-URL)
+- `mimeType`: סוג הקובץ (jpeg, png, וכו')
+
+מתי להשתמש?
+------------
+✓ ניתוח תמונות מוצרים
+✓ תיאור תמונות לאנשים עם לקות ראייה
+✓ זיהוי אובייקטים או טקסט בתמונות (OCR)
+✓ ניתוח תוכן ויזואלי למטרות שיווקיות
+
+טיפים:
+------
+💡 השתמש ב-`gemini-1.5-pro-vision` לניתוח תמונות (לא flash)
+💡 אפשר לשאול שאלות ספציפיות: "מה הצבעים העיקריים?" או "כמה אנשים יש?"
+💡 המודל תומך בפורמטים: JPEG, PNG, GIF, WebP
+💡 לטקסט בתמונות, בקש במפורש: "קרא את הטקסט בתמונה"
+💡 ב-Node.js, ודא שהתקנת: `npm install @google/generative-ai`
+
+```javascript
+const fs = require("fs");
+
+async function analyzeImage(imagePath, question = "תאר את התמונה") {
+    const imageData = fs.readFileSync(imagePath);
+    const imagePart = {
+        inlineData: {
+            data: imageData.toString("base64"),
+            mimeType: "image/jpeg"
+        }
+    };
+    
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-vision" });
+    const result = await model.generateContent([question, imagePart]);
+    return result.response.text();
+}
+
+// שימוש
+analyzeImage("photo.jpg", "מה יש בתמונה?").then(description => {
+    console.log(description);
+});
+```
+
+דוגמה 7: מערכת Q&A
+=====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת שאלות ותשובות ב-JavaScript שמשיבה על בסיס הקשר ספציפי שמוגדר מראש.
+
+איך זה עובד?
+------------
+1. **יצירת מערכת**: `createQASystem()` יוצרת מודל עם הקשר מותאם
+2. **System Instruction**: מגדיר את ההקשר והתנהגות של המודל
+3. **שאלות**: `askQuestion()` שואלת שאלות על ההקשר שהוגדר
+4. **תשובות מבוססות הקשר**: המודל משיב רק על בסיס ההקשר שסופק
+
+מה כל חלק בקוד?
+----------------
+- `context`: הטקסט או המידע שהמערכת צריכה להבין
+- `systemInstruction`: הוראות למודל איך להתנהג
+- `createQASystem()`: פונקציה רגילה (לא async) שיוצרת מודל
+- `askQuestion()`: פונקציה async ששואלת שאלה ומחזירה תשובה
+
+מתי להשתמש?
+------------
+✓ מערכת FAQ מבוססת מסמכים
+✓ עוזר וירטואלי עם ידע ספציפי
+✓ מערכת תמיכה ללקוחות
+✓ שאלות על מסמכים או מדריכים
+
+טיפים:
+------
+💡 הקשר יכול להיות מסמך, מדריך, או כל טקסט רלוונטי
+💡 System Instruction עוזר לקבל תשובות עקביות ומדויקות
+💡 אפשר לעדכן את ההקשר על ידי יצירת מודל חדש
+💡 לטקסטים ארוכים, השתמש ב-`gemini-1.5-pro` עם חלון הקשר גדול יותר
+
+```javascript
+function createQASystem(context) {
+    return genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: `אתה עוזר AI שמשיב על שאלות בהתבסס על הקשר הבא:
+${context}
+
+תמיד תן תשובות מדויקות ומבוססות על הקשר.`
+    });
+}
+
+async function askQuestion(model, question) {
+    const result = await model.generateContent(question);
+    return result.response.text();
+}
+
+// שימוש
+const context = "Python היא שפת תכנות פופולרית...";
+const qaModel = createQASystem(context);
+askQuestion(qaModel, "מה זה Python?").then(answer => {
+    console.log(answer);
+});
+```
+
+דוגמה 8: מחולל תוכן
+=====================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור תוכן מסוגים שונים ב-JavaScript (בלוגים, מאמרים, פוסטים) בסגנונות שונים.
+
+איך זה עובד?
+------------
+1. **Temperature דינמי**: משתנה לפי הסגנון - יצירתי = גבוה, מקצועי = בינוני
+2. **System Instruction**: מגדיר את המודל ככותב תוכן בסגנון מסוים
+3. **פרמטרים גמישים**: מאפשר לבחור סוג תוכן, נושא, וסגנון
+4. **יצירת תוכן**: המודל יוצר תוכן מותאם לפי הפרמטרים
+
+מה כל חלק בקוד?
+----------------
+- `contentType`: סוג התוכן (פוסט בלוג, מאמר, וכו')
+- `topic`: הנושא עליו לכתוב
+- `style`: הסגנון - משפיע על ה-temperature
+- `temperature` דינמי: יצירתי = 0.8 (יותר יצירתיות), מקצועי = 0.6 (יותר מדויק)
+- Ternary operator: `style === "creative" ? 0.8 : 0.6` - בוחר temperature לפי סגנון
+
+מתי להשתמש?
+------------
+✓ יצירת תוכן לאתרים
+✓ כתיבת בלוגים או מאמרים
+✓ יצירת פוסטים לרשתות חברתיות
+✓ כתיבת תוכן שיווקי
+
+טיפים:
+------
+💡 Temperature גבוה (0.7-0.9) = תוכן יצירתי ומגוון יותר
+💡 Temperature נמוך (0.3-0.5) = תוכן מדויק ומקצועי יותר
+💡 אפשר להוסיף פרמטרים נוספים: אורך, קהל יעד, טון
+💡 תמיד ערוך את התוכן שנוצר לפני פרסום
+
+```javascript
+async function generateContent(contentType, topic, style = "professional") {
+    const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+            temperature: style === "creative" ? 0.8 : 0.6,
+            maxOutputTokens: 2000
+        },
+        systemInstruction: `אתה כותב תוכן מקצועי. כתוב בסגנון ${style}.`
+    });
+    
+    const prompt = `צור ${contentType} על הנושא: ${topic}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
+
+// שימוש
+generateContent("פוסט בלוג", "AI", "creative").then(blogPost => {
+    console.log(blogPost);
+});
+```
+
+דוגמה 9: מערכת עם Retry
+==========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת חזקה ב-JavaScript שמתמודדת עם שגיאות רשת או שרת על ידי ניסיונות חוזרים.
+
+איך זה עובד?
+------------
+1. **ניסיונות חוזרים**: מנסה עד `maxRetries` פעמים
+2. **Exponential Backoff**: מחכה זמן הולך וגדל בין ניסיונות (1s, 2s, 4s...)
+3. **Error Handling**: תופס שגיאות ומטפל בהן בצורה אלגנטית
+4. **תוצאה מובנית**: מחזיר אובייקט עם סטטוס ותוצאה או שגיאה
+
+מה כל חלק בקוד?
+----------------
+- `for` loop: עובר על הניסיונות
+- `try/catch`: תופס שגיאות ומטפל בהן
+- `Math.pow(2, attempt)`: יוצר Exponential Backoff (1, 2, 4, 8...)
+- `setTimeout` עם Promise: מחכה לפני ניסיון נוסף
+- `error.message`: מקבל את הודעת השגיאה
+
+מתי להשתמש?
+------------
+✓ יישומים שצריכים להיות אמינים
+✓ מערכות ייצור שצריכות להתמודד עם שגיאות רשת
+✓ עיבוד batch של בקשות רבות
+✓ מערכות קריטיות שלא יכולות להיכשל
+
+טיפים:
+------
+💡 Exponential Backoff עוזר לא להעמיס על השרת
+💡 הגדר `maxRetries` לפי הצורך - 3 בדרך כלל מספיק
+💡 אפשר להוסיף לוגים לניטור בעיות
+💡 לבדיקות, אפשר להדפיס את השגיאה המדויקת
+
+```javascript
+async function generateWithRetry(model, prompt, maxRetries = 3) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            const result = await model.generateContent(prompt);
+            return { success: true, text: result.response.text() };
+        } catch (error) {
+            if (attempt < maxRetries - 1) {
+                const waitTime = Math.pow(2, attempt); // Exponential backoff
+                console.log(`נכשל, מנסה שוב בעוד ${waitTime} שניות...`);
+                await new Promise(resolve => setTimeout(resolve, waitTime * 1000));
+                continue;
+            }
+            return { success: false, error: error.message };
+        }
+    }
+    return { success: false, error: "נכשל אחרי כל הניסיונות" };
+}
+
+// שימוש
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+generateWithRetry(model, "טקסט לבקשה").then(result => {
+    if (result.success) {
+        console.log(result.text);
+    } else {
+        console.log(`שגיאה: ${result.error}`);
+    }
+});
+```
+
+דוגמה 10: מערכת Batch Processing
+===================================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך לעבד מספר בקשות בבת אחת ב-JavaScript - שימושי לעיבוד כמות גדולה של פרומפטים.
+
+איך זה עובד?
+------------
+1. **לולאה על פרומפטים**: עובר על כל פרומפט ברשימה
+2. **עיבוד נפרד**: כל פרומפט מעובד בנפרד עם error handling
+3. **איסוף תוצאות**: כל תוצאה נשמרת עם הפרומפט המקורי
+4. **תוצאה מובנית**: מחזיר מערך של תוצאות עם סטטוס
+
+מה כל חלק בקוד?
+----------------
+- `prompts`: מערך של פרומפטים לעיבוד
+- `for...of`: עובר על כל פרומפט במערך
+- `try/catch`: כל פרומפט מעובד בנפרד - שגיאה באחד לא עוצרת את השאר
+- `results`: מערך שמכיל את כל התוצאות
+- `forEach()`: עובר על התוצאות ומדפיס אותן
+
+מתי להשתמש?
+------------
+✓ עיבוד כמות גדולה של טקסטים
+✓ ניתוח מספר מסמכים
+✓ יצירת תוכן מרובה
+✓ עיבוד נתונים בכמות
+
+טיפים:
+------
+💡 אפשר לשלב עם Retry Logic לכל פרומפט
+💡 לכמויות גדולות, שקול להשתמש ב-Promise.all() לעיבוד מקבילי
+💡 אפשר להוסיף progress bar לעיבוד ארוך
+💡 שמור תוצאות לקובץ JSON לעיבוד מאוחר יותר
+
+```javascript
+async function processBatch(prompts, model) {
+    const results = [];
+    
+    for (const prompt of prompts) {
+        try {
+            const result = await model.generateContent(prompt);
+            results.push({
+                prompt: prompt,
+                result: result.response.text(),
+                success: true
+            });
+        } catch (error) {
+            results.push({
+                prompt: prompt,
+                error: error.message,
+                success: false
+            });
+        }
+    }
+    
+    return results;
+}
+
+// שימוש
+const prompts = [
+    "מה זה Python?",
+    "מה זה JavaScript?",
+    "מה זה AI?"
+];
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+processBatch(prompts, model).then(results => {
+    results.forEach(result => {
+        if (result.success) {
+            console.log(`${result.prompt}: ${result.result}`);
+        } else {
+            console.log(`שגיאה ב-${result.prompt}: ${result.error}`);
+        }
+    });
+});
+```
+
+דוגמה 11: מערכת עם Caching
+=============================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור מערכת cache ב-JavaScript ששומרת תוצאות כדי לחסוך בקשות API וכסף.
+
+איך זה עובד?
+------------
+1. **יצירת מפתח**: יוצר hash מהפרומפט כמפתח ייחודי
+2. **בדיקת cache**: בודק אם יש תוצאה שמורה לפרומפט הזה
+3. **שימוש ב-cache**: אם יש, מחזיר את התוצאה השמורה
+4. **שמירה**: אם אין, שולח בקשה למודל ושומר את התוצאה
+
+מה כל חלק בקוד?
+----------------
+- `crypto`: מודול מובנה של Node.js ליצירת hash
+- `createHash("md5")`: יוצר hash MD5 מהפרומפט - מפתח ייחודי
+- `fs.existsSync()`: בודק אם תיקייה או קובץ קיימים
+- `path.join()`: מחבר נתיבים בצורה בטוחה לכל מערכת הפעלה
+- `JSON.stringify()`: ממיר אובייקט ל-JSON string
+- `JSON.parse()`: ממיר JSON string לאובייקט
+
+מתי להשתמש?
+------------
+✓ פרומפטים שחוזרים על עצמם
+✓ חיסכון בעלויות API
+✓ שיפור ביצועים - תשובות מיידיות
+✓ מערכות עם בקשות דומות
+
+טיפים:
+------
+💡 Cache חוסך כסף - בקשות חוזרות לא עולות כסף
+💡 MD5 hash יוצר מפתח ייחודי לכל פרומפט
+💡 אפשר להוסיף TTL (Time To Live) - למחוק cache ישן
+💡 לפרויקטים גדולים, שקול להשתמש ב-Redis או Memcached
+💡 `fs.existsSync()` ו-`readFileSync()` הם סינכרוניים - OK לקריאות קבצים קטנות
+
+```javascript
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
+
+const CACHE_DIR = "api_cache";
+
+function getCacheKey(prompt) {
+    return crypto.createHash("md5").update(prompt).digest("hex");
+}
+
+function getCached(prompt) {
+    if (!fs.existsSync(CACHE_DIR)) {
+        return null;
+    }
+    
+    const cacheKey = getCacheKey(prompt);
+    const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
+    
+    if (fs.existsSync(cachePath)) {
+        const data = fs.readFileSync(cachePath, "utf8");
+        return JSON.parse(data);
+    }
+    return null;
+}
+
+function cacheResult(prompt, result) {
+    if (!fs.existsSync(CACHE_DIR)) {
+        fs.mkdirSync(CACHE_DIR);
+    }
+    
+    const cacheKey = getCacheKey(prompt);
+    const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
+    
+    fs.writeFileSync(cachePath, JSON.stringify({
+        prompt: prompt,
+        result: result
+    }, null, 2), "utf8");
+}
+
+async function generateWithCache(model, prompt) {
+    const cached = getCached(prompt);
+    if (cached) {
+        return cached.result;
+    }
+    
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+    cacheResult(prompt, text);
+    return text;
+}
+
+// שימוש
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+generateWithCache(model, "מה זה AI?").then(result => {
+    console.log(result);
+});
+```
+
+דוגמה 12: Express.js API
+==========================
+
+מה זה עושה?
+-----------
+דוגמה זו מראה איך ליצור שרת Express.js שמחבר את Gemini API ל-API endpoint - מאפשר גישה דרך HTTP requests.
+
+איך זה עובד?
+------------
+1. **יצירת שרת Express**: יוצר שרת HTTP עם Express.js
+2. **Middleware**: `express.json()` מאפשר קריאת JSON מה-request body
+3. **יצירת מודל**: יוצר מודל Gemini פעם אחת בהתחלה
+4. **API Endpoint**: יוצר route POST שמקבל הודעות ומחזיר תשובות
+5. **Error Handling**: תופס שגיאות ומחזיר תשובות HTTP מתאימות
+
+מה כל חלק בקוד?
+----------------
+- `express()`: יוצר אפליקציית Express
+- `app.use(express.json())`: middleware שמאפשר קריאת JSON
+- `app.post()`: מגדיר route מסוג POST
+- `req.body`: גישה לנתונים שנשלחו ב-request
+- `res.json()`: שולח תשובה ב-JSON
+- `res.status()`: מגדיר סטטוס HTTP (500 = שגיאת שרת)
+- `app.listen()`: מתחיל את השרת על פורט מסוים
+
+מתי להשתמש?
+------------
+✓ יצירת API backend ל-frontend
+✓ שילוב Gemini באפליקציות web
+✓ בניית שירותים מיקרו (microservices)
+✓ יצירת API לצד שלישי
+
+טיפים:
+------
+💡 ודא שהתקנת: `npm install express @google/generative-ai`
+💡 הוסף CORS אם צריך גישה מדומיין אחר
+💡 הוסף authentication ו-rate limiting לייצור
+💡 אפשר להוסיף routes נוספים: GET, PUT, DELETE
+💡 שמור את ה-API Key ב-environment variables
+
+```javascript
+const express = require("express");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const app = express();
+app.use(express.json());
+
+const genAI = new GoogleGenerativeAI("YOUR_API_KEY");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+app.post("/api/chat", async (req, res) => {
+    try {
+        const { message } = req.body;
+        const result = await model.generateContent(message);
+        res.json({ response: result.response.text() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.listen(3000, () => {
+    console.log("שרת פועל על פורט 3000");
+});
+```
+
+סיכום
+======
+
+דוגמאות מעשיות:
+✓ צ'אטבוט בסיסי
+✓ סיכום טקסט
+✓ תרגום
+✓ ניתוח סנטימנט
+✓ מחולל קוד
+✓ ניתוח תמונה
+✓ מערכת Q&A
+✓ מחולל תוכן
+✓ Retry logic
+✓ Batch processing
+✓ Caching
+✓ Express.js API
+
+כל הדוגמאות כוללות:
+• קוד מלא
+• הסברים
+• שימוש מעשי
+
+---
+© 2026 Google AI Academy
+דוגמאות JavaScript ל-Gemini API

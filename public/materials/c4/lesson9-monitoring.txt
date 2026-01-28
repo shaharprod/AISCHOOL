@@ -1,0 +1,186 @@
+ניטור ובקרה - Production Monitoring
+=====================================
+
+שיעור 9: ניטור ובקרה
+======================
+
+מה זה Monitoring?
+==================
+
+Monitoring הוא תהליך מעקב אחר ביצועי האפליקציה:
+• Logs
+• Metrics
+• Alerts
+• Dashboards
+
+למה זה חשוב?
+=============
+
+• זיהוי בעיות מוקדם
+• הבנת שימוש
+• אופטימיזציה
+• אמינות
+
+סוגי Monitoring
+================
+
+1. Application Logs
+--------------------
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+def generate_content(prompt):
+    logger.info(f"Generating content for: {prompt[:50]}...")
+    try:
+        response = model.generate_content(prompt)
+        logger.info("Content generated successfully")
+        return response.text
+    except Exception as e:
+        logger.error(f"Error generating content: {e}", exc_info=True)
+        raise
+```
+
+2. Metrics
+-----------
+
+```python
+from prometheus_client import Counter, Histogram, start_http_server
+
+# Metrics
+request_count = Counter("requests_total", "Total requests")
+request_duration = Histogram("request_duration_seconds", "Request duration")
+
+def generate_with_metrics(prompt):
+    request_count.inc()
+    with request_duration.time():
+        response = model.generate_content(prompt)
+        return response.text
+
+# Start metrics server
+start_http_server(8000)
+```
+
+3. Error Tracking
+------------------
+
+```python
+import sentry_sdk
+
+sentry_sdk.init("YOUR_SENTRY_DSN")
+
+def generate_content(prompt):
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        raise
+```
+
+4. Performance Monitoring
+--------------------------
+
+```python
+import time
+
+class PerformanceMonitor:
+    def __init__(self):
+        self.request_times = []
+    
+    def track_request(self, func):
+        def wrapper(*args, **kwargs):
+            start = time.time()
+            result = func(*args, **kwargs)
+            duration = time.time() - start
+            self.request_times.append(duration)
+            return result
+        return wrapper
+    
+    def get_stats(self):
+        if not self.request_times:
+            return {}
+        return {
+            "avg": sum(self.request_times) / len(self.request_times),
+            "min": min(self.request_times),
+            "max": max(self.request_times),
+            "total": len(self.request_times)
+        }
+
+monitor = PerformanceMonitor()
+
+@monitor.track_request
+def generate_content(prompt):
+    return model.generate_content(prompt).text
+```
+
+5. Health Checks
+-----------------
+
+```python
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/health")
+def health():
+    try:
+        # בדוק חיבור ל-API
+        test_response = model.generate_content("test")
+        return jsonify({
+            "status": "healthy",
+            "api": "connected"
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "unhealthy",
+            "error": str(e)
+        }), 500
+```
+
+6. Alerts
+----------
+
+```python
+def send_alert(message):
+    # שלח alert (email, Slack, וכו')
+    print(f"ALERT: {message}")
+
+def check_health():
+    try:
+        model.generate_content("test")
+    except Exception as e:
+        send_alert(f"API Error: {e}")
+```
+
+סיכום
+======
+
+Monitoring כולל:
+✓ Logs
+✓ Metrics
+✓ Error tracking
+✓ Performance monitoring
+✓ Health checks
+✓ Alerts
+
+Best Practices:
+• לוג הכל
+• מדוד ביצועים
+• Track errors
+• Set up alerts
+
+---
+© 2026 Google AI Academy
+ניטור ובקרה - Production Monitoring
