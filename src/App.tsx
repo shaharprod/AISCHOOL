@@ -1,3 +1,4 @@
+// AI School Platform - Gemini 3.0 (Updated January 2026)
 import React, { useState } from 'react';
 import {
   Play, Lock, Download, FileText, BookOpen, Menu, X,
@@ -59,8 +60,8 @@ interface WorkshopMaterial {
 const COURSES: Course[] = [
   {
     id: 'c1',
-    title: 'שליטה ב-Google Gemini 2.0 ובינה מלאכותית אישית',
-    description: 'המדריך המלא לשימוש במודל Gemini 2.0 Flash החדש, Gemini Advanced, Canvas (כלי עריכה אינטראקטיבי) ושילוב עם Google Workspace לייעול העבודה היומיומית.',
+    title: 'שליטה ב-Google Gemini 3.0 ובינה מלאכותית אישית',
+    description: 'המדריך המלא לשימוש במודל Gemini 3.0 Flash החדש, Gemini Advanced, Canvas (כלי עריכה אינטראקטיבי) ושילוב עם Google Workspace לייעול העבודה היומיומית.',
     level: 'מתחילים',
     category: 'מבוא ופרודוקטיביות',
     duration: '5.5 שעות',
@@ -75,10 +76,10 @@ const COURSES: Course[] = [
     lessons: [
       { 
         id: 'l1-1', 
-        title: 'מהפכת ה-Gemini 2.0: המודל החדש והמהיר', 
+        title: 'מהפכת ה-Gemini 3.0: המודל החדש והמהיר', 
         duration: '20:00', 
         isFree: true,
-        description: 'היכרות עם Gemini 2.0 Flash - המודל החדש והמהיר ביותר של Google, יכולות מולטי-מודאליות משופרות',
+        description: 'היכרות עם Gemini 3.0 Flash - המודל החדש והמהיר ביותר של Google, יכולות מולטי-מודאליות משופרות',
         materials: [
           { title: 'מצגת שיעור 1 - מבוא ל-Gemini', type: 'txt', url: '/materials/c1/lesson1-intro.txt', size: '2.3 MB', description: 'מדריך מלא על Gemini' },
           { title: 'השוואת מודלים: Gemini vs GPT', type: 'txt', url: '/materials/c1/lesson1-comparison.txt', size: '1.8 MB', description: 'השוואה מפורטת בין מודלי AI' },
@@ -182,7 +183,7 @@ const COURSES: Course[] = [
         id: 'l1-11', 
         title: 'סיכום: העתיד של Google Assistant', 
         duration: '15:00',
-        description: 'מבט לעתיד של Gemini ו-AI, Gemini 2.5 Pro והמשך',
+        description: 'מבט לעתיד של Gemini ו-AI, Gemini 3.0 Pro והמשך',
         materials: [
           { title: 'סיכום הקורס', type: 'txt', url: '/materials/c1/lesson11-summary.txt', size: '2.2 MB', description: 'סיכום מקיף' },
           { title: 'מפת דרכים 2026-2027', type: 'txt', url: '/materials/c1/lesson11-roadmap.txt', size: '1.7 MB', description: 'העתיד של Gemini' },
@@ -194,7 +195,7 @@ const COURSES: Course[] = [
   {
     id: 'c2',
     title: 'יצירת מצגות ותוכן ויזואלי עם Google AI',
-    description: 'סדנה ליצירת נכסים ויזואליים מרהיבים באמצעות ImageFX עם Imagen 3, Gemini 2.0, Canvas ו-Google Slides עם הרחבות AI החדשות ביותר.',
+    description: 'סדנה ליצירת נכסים ויזואליים מרהיבים באמצעות ImageFX עם Imagen 3, Gemini 3.0, Canvas ו-Google Slides עם הרחבות AI החדשות ביותר.',
     level: 'מתחילים',
     category: 'עיצוב ויצירה',
     duration: '4 שעות',
@@ -293,7 +294,7 @@ const COURSES: Course[] = [
   {
     id: 'c3',
     title: 'פיתוח אפליקציות עם Project IDX',
-    description: 'קורס מעשי למפתחים: בניית אתרים ואפליקציות בסביבת הפיתוח בענן של Google עם Gemini 2.0 Code Assist - עוזר הקוד החכם ביותר.',
+    description: 'קורס מעשי למפתחים: בניית אתרים ואפליקציות בסביבת הפיתוח בענן של Google עם Gemini 3.0 Code Assist - עוזר הקוד החכם ביותר.',
     level: 'מתקדמים',
     category: 'פיתוח תוכנה',
     duration: '7.5 שעות',
@@ -359,7 +360,7 @@ const COURSES: Course[] = [
         description: 'יצירת API backend עם Node.js',
         materials: [
           { title: 'מדריך בניית API', type: 'txt', url: '/materials/c3/lesson5-api-guide.txt', size: '4.2 MB', description: 'מדריך מקיף לבניית API' },
-          { title: 'דוגמאות קוד API', type: 'txt', url: '/materials/c3/lesson5-api-examples.txt', size: '2.8 MB', description: 'דוגמאות קוד מעשיות' },
+          { title: '15 דוגמאות API מוסברות', type: 'txt', url: '/materials/c3/lesson5-api-examples.txt', size: '2.8 MB', description: 'קוד מעשי עם הסברים מפורטים' },
           { title: 'טיפול ב-Requests', type: 'txt', url: '/materials/c3/lesson5-requests.txt', size: '1.9 MB', description: 'עבודה עם HTTP requests' },
         ]
       },
@@ -393,7 +394,7 @@ const COURSES: Course[] = [
         materials: [
           { title: 'מדריך Firebase Authentication', type: 'txt', url: '/materials/c3/lesson8-firebase-auth.txt', size: '3.2 MB', description: 'מדריך מקיף לאימות' },
           { title: 'שיטות אימות', type: 'txt', url: '/materials/c3/lesson8-auth-methods.txt', size: '2.1 MB', description: 'Email, Google, Facebook ועוד' },
-          { title: 'דוגמאות קוד', type: 'txt', url: '/materials/c3/lesson8-auth-examples.txt', size: '1.7 MB', description: 'דוגמאות קוד מעשיות' },
+          { title: '10 דוגמאות Auth מוסברות', type: 'txt', url: '/materials/c3/lesson8-auth-examples.txt', size: '1.7 MB', description: 'קוד עם הסברים מפורטים' },
         ]
       },
       { 
@@ -404,7 +405,7 @@ const COURSES: Course[] = [
         materials: [
           { title: 'מדריך Firestore מלא', type: 'txt', url: '/materials/c3/lesson9-firestore-guide.txt', size: '5.2 MB', description: 'מדריך מקיף ל-Firestore' },
           { title: 'CRUD Operations', type: 'txt', url: '/materials/c3/lesson9-crud.txt', size: '3.1 MB', description: 'יצירה, קריאה, עדכון ומחיקה' },
-          { title: 'דוגמאות קוד', type: 'txt', url: '/materials/c3/lesson9-firestore-examples.txt', size: '2.8 MB', description: 'דוגמאות קוד מעשיות' },
+          { title: '20 דוגמאות Firestore מוסברות', type: 'txt', url: '/materials/c3/lesson9-firestore-examples.txt', size: '2.8 MB', description: 'קוד עם הסברים שלב אחר שלב' },
         ]
       },
       { 
@@ -415,7 +416,7 @@ const COURSES: Course[] = [
         materials: [
           { title: 'מדריך Testing', type: 'txt', url: '/materials/c3/lesson10-testing-guide.txt', size: '3.6 MB', description: 'מדריך מקיף לבדיקות' },
           { title: 'Jest ו-React Testing', type: 'txt', url: '/materials/c3/lesson10-jest-react.txt', size: '2.8 MB', description: 'כלי בדיקה ל-React' },
-          { title: 'דוגמאות בדיקות', type: 'txt', url: '/materials/c3/lesson10-test-examples.txt', size: '1.9 MB', description: 'דוגמאות קוד לבדיקות' },
+          { title: '15 דוגמאות בדיקות מוסברות', type: 'txt', url: '/materials/c3/lesson10-test-examples.txt', size: '1.9 MB', description: 'קוד בדיקות עם הסברים' },
         ]
       },
       { 
@@ -426,7 +427,7 @@ const COURSES: Course[] = [
         materials: [
           { title: 'מדריך CI/CD', type: 'txt', url: '/materials/c3/lesson11-cicd-guide.txt', size: '3.2 MB', description: 'מדריך מקיף ל-CI/CD' },
           { title: 'GitHub Actions', type: 'txt', url: '/materials/c3/lesson11-github-actions.txt', size: '2.4 MB', description: 'הגדרת GitHub Actions' },
-          { title: 'דוגמאות Workflows', type: 'txt', url: '/materials/c3/lesson11-workflows.txt', size: '1.8 MB', description: 'דוגמאות workflows מוכנות' },
+          { title: '10 דוגמאות Workflows מוסברות', type: 'txt', url: '/materials/c3/lesson11-workflows.txt', size: '1.8 MB', description: 'workflows מוכנים עם הסברים' },
         ]
       },
       { 
@@ -445,7 +446,7 @@ const COURSES: Course[] = [
   {
     id: 'c4',
     title: 'מומחה Google AI Studio ו-Vertex AI',
-    description: 'לצלול לעומק המנוע: עבודה עם ה-API של Gemini 2.0 Flash & Pro, הנדסת פרומפטים מתקדמת, System Instructions, JSON Mode ועוד.',
+    description: 'לצלול לעומק המנוע: עבודה עם ה-API של Gemini 3.0 Flash & Pro, הנדסת פרומפטים מתקדמת, System Instructions, JSON Mode ועוד.',
     level: 'מומחים',
     category: 'פיתוח מתקדם',
     duration: '6.5 שעות',
@@ -455,7 +456,7 @@ const COURSES: Course[] = [
     materials: [
       { title: 'ספריית System Instructions', type: 'txt', url: '/materials/c4/course-system-instructions.txt', size: '2.8 MB', description: 'מאגר System Instructions' },
       { title: 'Google AI Studio Cookbook', type: 'txt', url: '/materials/c4/course-cookbook.txt', size: '4.5 MB', description: 'מתכונים ודוגמאות' },
-      { title: 'סקריפט Python לחיבור ל-API', type: 'txt', url: '/materials/c4/course-python-api.txt', size: '1.8 MB', description: 'קוד Python מלא' },
+      { title: 'מדריך חיבור Python ל-API', type: 'txt', url: '/materials/c4/course-python-api.txt', size: '1.8 MB', description: 'הדרכה מקיפה + דוגמאות קוד Python' },
       { title: 'טבלת תמחור טוקנים', type: 'txt', url: '/materials/c4/course-pricing.txt', size: '0.4 MB', description: 'מחירון מלא' }
     ],
     lessons: [
@@ -510,7 +511,7 @@ const COURSES: Course[] = [
         description: 'עבודה עם תמונות: ניתוח, תיאור, שאלות על תמונות',
         materials: [
           { title: 'מדריך Image Understanding', type: 'txt', url: '/materials/c4/lesson5-image-understanding.txt', size: '4.2 MB', description: 'מדריך מקיף לעבודה עם תמונות' },
-          { title: 'דוגמאות קוד', type: 'txt', url: '/materials/c4/lesson5-image-examples.txt', size: '3.1 MB', description: 'דוגמאות קוד מעשיות' },
+          { title: 'דוגמאות קוד מוסברות', type: 'txt', url: '/materials/c4/lesson5-image-examples.txt', size: '3.1 MB', description: '20 דוגמאות מעשיות עם הסברים' },
           { title: 'טיפים מתקדמים', type: 'txt', url: '/materials/c4/lesson5-image-tips.txt', size: '2.3 MB', description: 'טיפים וטריקים מתקדמים' },
         ]
       },
@@ -532,9 +533,9 @@ const COURSES: Course[] = [
         description: 'שימוש ב-API עם cURL, Python ו-JavaScript',
         materials: [
           { title: 'מדריך API מלא', type: 'txt', url: '/materials/c4/lesson7-api-guide.txt', size: '4.2 MB', description: 'מדריך מקיף ל-API' },
-          { title: 'דוגמאות cURL', type: 'txt', url: '/materials/c4/lesson7-curl-examples.txt', size: '1.2 MB', description: 'דוגמאות cURL מעשיות' },
-          { title: 'דוגמאות Python', type: 'txt', url: '/materials/c4/lesson7-python-examples.txt', size: '2.8 MB', description: 'דוגמאות קוד Python' },
-          { title: 'דוגמאות JavaScript', type: 'txt', url: '/materials/c4/lesson7-javascript-examples.txt', size: '2.1 MB', description: 'דוגמאות קוד JavaScript' },
+          { title: '15 דוגמאות cURL מוסברות', type: 'txt', url: '/materials/c4/lesson7-curl-examples.txt', size: '1.2 MB', description: 'דוגמאות עם הסברים צעד אחר צעד' },
+          { title: '25 דוגמאות Python מוסברות', type: 'txt', url: '/materials/c4/lesson7-python-examples.txt', size: '2.8 MB', description: 'קוד עם הסברים מפורטים' },
+          { title: '20 דוגמאות JavaScript מוסברות', type: 'txt', url: '/materials/c4/lesson7-javascript-examples.txt', size: '2.1 MB', description: 'קוד עם הסברים מפורטים' },
         ]
       },
       { 
@@ -545,7 +546,7 @@ const COURSES: Course[] = [
         materials: [
           { title: 'מדריך Vertex AI', type: 'txt', url: '/materials/c4/lesson8-vertex-ai.txt', size: '5.2 MB', description: 'מדריך מקיף ל-Vertex AI' },
           { title: 'הגדרת חיבור', type: 'txt', url: '/materials/c4/lesson8-vertex-setup.txt', size: '3.1 MB', description: 'הגדרה צעד אחר צעד' },
-          { title: 'דוגמאות קוד', type: 'txt', url: '/materials/c4/lesson8-vertex-examples.txt', size: '2.8 MB', description: 'דוגמאות קוד מעשיות' },
+          { title: 'דוגמאות קוד מוסברות', type: 'txt', url: '/materials/c4/lesson8-vertex-examples.txt', size: '2.8 MB', description: '15 דוגמאות מעשיות עם הסברים' },
         ]
       },
       { 
@@ -567,7 +568,7 @@ const COURSES: Course[] = [
         materials: [
           { title: 'הנחיות פרויקט גמר', type: 'txt', url: '/materials/c4/lesson10-project-brief.txt', size: '3.8 MB', description: 'הנחיות מפורטות לפרויקט' },
           { title: 'מדריך בניית צ\'אטבוט', type: 'txt', url: '/materials/c4/lesson10-chatbot-guide.txt', size: '5.2 MB', description: 'מדריך מקיף לבניית צ\'אטבוט' },
-          { title: 'דוגמאות קוד מלאות', type: 'txt', url: '/materials/c4/lesson10-full-code.txt', size: '4.1 MB', description: 'קוד מקור מלא לדוגמה' },
+          { title: 'קוד דוגמה מוסבר', type: 'txt', url: '/materials/c4/lesson10-full-code.txt', size: '4.1 MB', description: 'קוד מקור עם הסברים מפורטים על כל חלק' },
         ]
       },
     ]
@@ -711,7 +712,7 @@ const WORKSHOP_MATERIALS: WorkshopMaterial[] = [
       { name: 'מדריך למורה: NotebookLM המלא', type: 'pdf', url: '#' },
       { name: 'יצירת פודקאסטים לימודיים עם Audio Overview', type: 'pdf', url: '#' },
       { name: 'דוגמאות למערכי שיעור מבוססי AI', type: 'pdf', url: '#' },
-      { name: 'מצגת ההשתלמות - חינוך בעידן Gemini 2.0', type: 'pptx', url: '#' }
+      { name: 'מצגת ההשתלמות - חינוך בעידן Gemini 3.0', type: 'pptx', url: '#' }
     ]
   },
   {
@@ -727,12 +728,12 @@ const WORKSHOP_MATERIALS: WorkshopMaterial[] = [
   },
   {
     id: 'w3',
-    title: 'וובינר: אוטומציה עסקית עם Gemini 2.0 ו-Apps Script',
+    title: 'וובינר: אוטומציה עסקית עם Gemini 3.0 ו-Apps Script',
     date: '05.03.2026',
     type: 'מקוון',
     materials: [
       { name: 'סקריפט אוטומטי למיון מיילים עם Gemini', type: 'link', url: '#' },
-      { name: 'חיבור Google Forms ל-Gemini 2.0 API', type: 'pdf', url: '#' },
+      { name: 'חיבור Google Forms ל-Gemini 3.0 API', type: 'pdf', url: '#' },
       { name: 'מצגת: אוטומציה חכמה 2026', type: 'pptx', url: '#' }
     ]
   }
@@ -791,7 +792,7 @@ const Hero = ({ onCtaClick }: { onCtaClick: () => void }) => (
     <div className="absolute inset-0 bg-slate-900 opacity-50"></div>
     <div className="container mx-auto relative z-10 max-w-4xl">
       <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">ללמוד בינה מלאכותית <span className="text-blue-400">עם הכלים של Google</span></h1>
-      <p className="text-xl md:text-2xl text-gray-300 mb-8">מבית הספר המוביל ללימודי Gemini 2.0, NotebookLM, Canvas, Project IDX ו-Vertex AI - עם הטכנולוגיות החדשות ביותר לשנת 2026!</p>
+      <p className="text-xl md:text-2xl text-gray-300 mb-8">מבית הספר המוביל ללימודי Gemini 3.0, NotebookLM, Canvas, Project IDX ו-Vertex AI - עם הטכנולוגיות החדשות ביותר לשנת 2026!</p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button onClick={onCtaClick} className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-bold shadow-lg transition-all">צפה בקורסים</button>
       </div>
