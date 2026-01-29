@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
   Play, Lock, Download, FileText, BookOpen, Menu, X,
   ChevronRight, MonitorPlay, BrainCircuit, Presentation, Code, MessageSquare,
-  Video, Eye, ExternalLink
+  Video, Eye, ExternalLink, Sparkles
 } from 'lucide-react';
 
 // --- Types ---
@@ -194,8 +194,8 @@ const COURSES: Course[] = [
   },
   {
     id: 'c2',
-    title: 'יצירת מצגות ותוכן ויזואלי עם Google AI',
-    description: 'סדנה ליצירת נכסים ויזואליים מרהיבים באמצעות ImageFX עם Imagen 3, Gemini 3.0, Canvas ו-Google Slides עם הרחבות AI החדשות ביותר.',
+    title: 'יצירת מצגות ואינפוגראפיקות עם Canvas ו-Google Slides',
+    description: 'סדנה ליצירת מצגות ואינפוגראפיקות מקצועיות עם Canvas ו-Google Slides בשילוב Gemini, ויצירת ועריכת תמונות עם לננו בננה (Nano Banana).',
     level: 'מתחילים',
     category: 'עיצוב ויצירה',
     duration: '4 שעות',
@@ -203,89 +203,89 @@ const COURSES: Course[] = [
     icon: <Presentation className="w-6 h-6" />,
     price: 300,
     materials: [
+      { title: 'מדריך Canvas + Google Slides', type: 'txt', url: '/materials/c2/course-canvas-slides.txt', size: '1.8 MB', description: 'יצירת מצגות ואינפוגראפיקות' },
       { title: 'תבנית מצגת Google Slides מותאמת AI', type: 'txt', url: '/materials/c2/course-slides-template.txt', size: '1.5 MB', description: 'מדריך ליצירת מצגות' },
-      { title: 'מדריך סגנונות (Styles Guide) ל-ImageFX', type: 'txt', url: '/materials/c2/course-styles-guide.txt', size: '2.1 MB', description: 'כל סגנונות ImageFX' },
-      { title: 'מאגר תמונות להורדה', type: 'link', url: 'https://drive.google.com/drive/folders/imagefx-examples', size: '-', description: 'דוגמאות תמונות' }
+      { title: 'מדריך לננו בננה - יצירה ועריכת תמונות', type: 'txt', url: '/materials/c2/course-nanobanana-guide.txt', size: '2.0 MB', description: 'כל סגנונות ויכולות לננו בננה' }
     ],
     lessons: [
       { 
         id: 'l2-1', 
-        title: 'הכרות עם ImageFX ו-Imagen 3', 
+        title: 'Canvas ו-Google Slides - מבוא ליצירת מצגות ואינפוגראפיקות', 
         duration: '20:00', 
         isFree: true,
-        description: 'כלי יצירת התמונות החדש של Google',
+        description: 'היכרות עם Canvas ו-Google Slides ליצירת תוכן ויזואלי מקצועי',
         materials: [
-          { title: 'מבוא ל-ImageFX', type: 'txt', url: '/materials/c2/lesson1-imagefx-intro.txt', size: '1.8 MB', description: 'מדריך מקיף על ImageFX וטכנולוגיית Imagen 3' },
-          { title: 'השוואת Imagen 3 למתחרות', type: 'txt', url: '/materials/c2/lesson1-comparison.txt', size: '1.5 MB', description: 'השוואה מפורטת עם DALL-E, Midjourney ו-Stable Diffusion' },
-          { title: 'גלריית דוגמאות וסגנונות', type: 'txt', url: '/materials/c2/lesson1-gallery.txt', size: '2.2 MB', description: 'אוסף דוגמאות תמונות וסגנונות יצירה' },
+          { title: 'מבוא ל-Canvas ולגוגל סליידס', type: 'txt', url: '/materials/c2/lesson1-canvas-slides-intro.txt', size: '1.8 MB', description: 'מדריך מקיף ליצירת מצגות ואינפוגראפיקות' },
+          { title: 'השוואה בין Canvas ל-Slides', type: 'txt', url: '/materials/c2/lesson1-comparison.txt', size: '1.5 MB', description: 'מתי להשתמש בכל כלי' },
+          { title: 'דוגמאות מצגות ואינפוגראפיקות', type: 'txt', url: '/materials/c2/lesson1-gallery.txt', size: '2.2 MB', description: 'אוסף דוגמאות ורעיונות' },
         ]
       },
       { 
         id: 'l2-2', 
-        title: 'כתיבת פרומפטים ליצירת תמונות', 
+        title: 'Google Slides + Gemini: בניית שקפים', 
         duration: '30:00',
-        description: 'אמנות הפרומפט לתמונות מושלמות',
+        description: 'יצירת מצגות מרשימות עם AI ב-Google Slides',
         materials: [
-          { title: 'מדריך כתיבת פרומפטים', type: 'txt', url: '/materials/c2/lesson2-prompt-guide.txt', size: '2.3 MB', description: 'מדריך מקיף לכתיבת פרומפטים אפקטיביים לתמונות' },
-          { title: '50+ פרומפטים מוכנים לשימוש', type: 'txt', url: '/materials/c2/lesson2-prompts.txt', size: '1.8 MB', description: 'אוסף פרומפטים מוכנים לקטגוריות שונות' },
-          { title: 'מילון סגנונות אומנותיים', type: 'txt', url: '/materials/c2/lesson2-art-styles.txt', size: '2.1 MB', description: 'מילון מקיף של סגנונות אומנות וטכניקות יצירה' },
+          { title: 'מדריך Slides עם Gemini', type: 'txt', url: '/materials/c2/lesson3-slides-guide.txt', size: '2.3 MB', description: 'מדריך מלא ליצירת מצגות עם Google Slides ו-Gemini' },
+          { title: 'תבניות ורעיונות למצגות', type: 'txt', url: '/materials/c2/lesson3-templates.txt', size: '1.9 MB', description: 'תבניות מוכנות ו-30 רעיונות למצגות' },
+          { title: 'טיפים וטריקים למצגות', type: 'txt', url: '/materials/c2/lesson3-tips.txt', size: '1.2 MB', description: 'טיפים מתקדמים ליצירת מצגות' },
         ]
       },
       { 
         id: 'l2-3', 
-        title: 'Google Slides + Gemini: יצירת שקפים', 
+        title: 'אינפוגראפיקות עם Canvas', 
         duration: '35:00',
-        description: 'בניית מצגות מרשימות עם AI',
+        description: 'בניית אינפוגראפיקות מקצועיות עם Canvas ו-Gemini',
         materials: [
-          { title: 'מדריך Slides עם Gemini', type: 'txt', url: '/materials/c2/lesson3-slides-guide.txt', size: '2.5 MB', description: 'מדריך מלא ליצירת מצגות עם Google Slides ו-Gemini' },
-          { title: 'תבניות ורעיונות למצגות', type: 'txt', url: '/materials/c2/lesson3-templates.txt', size: '1.9 MB', description: 'תבניות מוכנות ו-30 רעיונות למצגות מקצועיות' },
-          { title: 'טיפים וטריקים למצגות', type: 'txt', url: '/materials/c2/lesson3-tips.txt', size: '1.2 MB', description: 'טיפים מתקדמים ליצירת מצגות מרשימות' },
+          { title: 'מדריך אינפוגראפיקות ב-Canvas', type: 'txt', url: '/materials/c2/lesson3-canvas-infographics.txt', size: '2.5 MB', description: 'מדריך מלא ליצירת אינפוגראפיקות' },
+          { title: 'תבניות אינפוגראפיקות', type: 'txt', url: '/materials/c2/lesson3-templates.txt', size: '1.9 MB', description: 'תבניות מוכנות לאינפוגראפיקות' },
+          { title: 'טיפים לעיצוב אינפוגראפיקות', type: 'txt', url: '/materials/c2/lesson3-tips.txt', size: '1.2 MB', description: 'טיפים לעיצוב ויזואלי' },
           { title: 'וידאו הדרכה מלא', type: 'link', url: 'https://youtube.com/watch?v=slides', size: '-' },
         ]
       },
       { 
         id: 'l2-4', 
-        title: 'יצירת תמונות רקע לשיחות וידאו', 
-        duration: '15:00',
-        description: 'רקעים מקצועיים ל-Zoom ו-Meet',
+        title: 'לננו בננה - הכרות ויצירת תמונות', 
+        duration: '25:00',
+        description: 'כלי יצירה ועריכת תמונות עם AI',
         materials: [
-          { title: 'מדריך יצירת רקעים', type: 'txt', url: '/materials/c2/lesson4-backgrounds.txt', size: '1.8 MB', description: 'מדריך מקיף ליצירת רקעים מקצועיים לשיחות וידאו' },
-          { title: 'פרומפטים לרקעים מקצועיים', type: 'txt', url: '/materials/c2/lesson4-prompts.txt', size: '1.2 MB', description: 'אוסף פרומפטים מוכנים ליצירת רקעים' },
-          { title: 'טיפים לעיצוב רקעים', type: 'txt', url: '/materials/c2/lesson4-tips.txt', size: '0.9 MB', description: 'טיפים וטריקים לעיצוב רקעים מושלמים' },
-          { title: '20 רקעים מוכנים', type: 'link', url: 'https://drive.google.com/backgrounds', size: '-' },
+          { title: 'מבוא ללננו בננה', type: 'txt', url: '/materials/c2/lesson4-nanobanana-intro.txt', size: '1.8 MB', description: 'מדריך מקיף ליצירת תמונות עם לננו בננה' },
+          { title: 'פרומפטים ליצירת תמונות', type: 'txt', url: '/materials/c2/lesson4-prompts.txt', size: '1.2 MB', description: 'אוסף פרומפטים מוכנים' },
+          { title: 'סגנונות ורעיונות', type: 'txt', url: '/materials/c2/lesson4-tips.txt', size: '0.9 MB', description: 'טיפים ליצירת תמונות מושלמות' },
+          { title: 'דוגמאות תמונות', type: 'link', url: 'https://drive.google.com/backgrounds', size: '-' },
         ]
       },
       { 
         id: 'l2-5', 
-        title: 'עריכת תמונות ב-Google Photos', 
+        title: 'לננו בננה - עריכת תמונות', 
         duration: '25:00',
-        description: 'כלי עריכה חכמים ב-Photos',
+        description: 'כלי עריכה מתקדמים בתמונות',
         materials: [
-          { title: 'מדריך Google Photos AI', type: 'txt', url: '/materials/c2/lesson5-photos-guide.txt', size: '2.1 MB', description: 'מדריך מלא לכלי העריכה החכמים ב-Google Photos' },
-          { title: 'טריקים לעריכה מתקדמת', type: 'txt', url: '/materials/c2/lesson5-editing-tricks.txt', size: '1.6 MB', description: 'טריקים וטכניקות מתקדמות לעריכת תמונות' },
+          { title: 'מדריך עריכת תמונות בלננו בננה', type: 'txt', url: '/materials/c2/lesson5-nanobanana-editing.txt', size: '2.1 MB', description: 'מדריך מלא לעריכת תמונות' },
+          { title: 'טריקים לעריכה מתקדמת', type: 'txt', url: '/materials/c2/lesson5-editing-tricks.txt', size: '1.6 MB', description: 'טכניקות מתקדמות לעריכה' },
           { title: 'תמונות לתרגול עריכה', type: 'link', url: 'https://drive.google.com/practice', size: '-' },
         ]
       },
       { 
         id: 'l2-6', 
-        title: 'יצירת לוגו ונכסי מותג', 
+        title: 'שילוב תמונות במצגות וזהות ויזואלית', 
         duration: '30:00',
-        description: 'בניית זהות ויזואלית עם AI',
+        description: 'שילוב לננו בננה ו-Canvas ללוגו ומותג',
         materials: [
-          { title: 'מדריך עיצוב לוגו', type: 'txt', url: '/materials/c2/lesson6-logo-design.txt', size: '2.4 MB', description: 'מדריך מקיף לעיצוב לוגואים מקצועיים עם AI' },
-          { title: 'דוגמאות לוגואים וזהות מותג', type: 'txt', url: '/materials/c2/lesson6-brand-examples.txt', size: '2.8 MB', description: 'אוסף דוגמאות לוגואים ומדריך לזהות מותג' },
-          { title: 'תבנית מדריך סגנון', type: 'txt', url: '/materials/c2/lesson6-style-guide.txt', size: '1.7 MB', description: 'תבנית ומדריך ליצירת מדריך סגנון מותג' },
+          { title: 'מדריך עיצוב לוגו', type: 'txt', url: '/materials/c2/lesson6-logo-design.txt', size: '2.4 MB', description: 'עיצוב לוגואים עם לננו בננה ו-Canvas' },
+          { title: 'דוגמאות לוגואים וזהות מותג', type: 'txt', url: '/materials/c2/lesson6-brand-examples.txt', size: '2.8 MB', description: 'אוסף דוגמאות וזהות מותג' },
+          { title: 'תבנית מדריך סגנון', type: 'txt', url: '/materials/c2/lesson6-style-guide.txt', size: '1.7 MB', description: 'מדריך סגנון מותג' },
         ]
       },
       { 
         id: 'l2-7', 
-        title: 'פרויקט מסכם: מצגת עסקית', 
+        title: 'פרויקט מסכם: מצגת ואינפוגראפיקה', 
         duration: '40:00',
-        description: 'פרויקט גמר - מצגת מלאה מ-A עד Z',
+        description: 'פרויקט גמר - מצגת ואינפוגראפיקה מלאה מ-A עד Z',
         materials: [
-          { title: 'הנחיות פרויקט גמר', type: 'txt', url: '/materials/c2/lesson7-project-brief.txt', size: '1.9 MB', description: 'הנחיות מפורטות לפרויקט הגמר - מצגת עסקית' },
-          { title: 'רשימת בדיקה (Checklist)', type: 'txt', url: '/materials/c2/lesson7-checklist.txt', size: '1.1 MB', description: 'רשימת בדיקה מקיפה לפרויקט הגמר' },
-          { title: 'משאבים וטיפים נוספים', type: 'txt', url: '/materials/c2/lesson7-resources.txt', size: '1.4 MB', description: 'משאבים נוספים, טיפים ודוגמאות לפרויקט' },
+          { title: 'הנחיות פרויקט גמר', type: 'txt', url: '/materials/c2/lesson7-project-brief.txt', size: '1.9 MB', description: 'הנחיות מפורטות לפרויקט הגמר' },
+          { title: 'רשימת בדיקה (Checklist)', type: 'txt', url: '/materials/c2/lesson7-checklist.txt', size: '1.1 MB', description: 'רשימת בדיקה מקיפה' },
+          { title: 'משאבים וטיפים נוספים', type: 'txt', url: '/materials/c2/lesson7-resources.txt', size: '1.4 MB', description: 'משאבים וטיפים לפרויקט' },
           { title: 'משאבים נוספים', type: 'link', url: 'https://design.google', size: '-' },
         ]
       },
@@ -696,6 +696,89 @@ const COURSES: Course[] = [
           { title: 'הנחיות פרויקט גמר', type: 'txt', url: '/materials/c5/lesson10-final-project.txt', size: '3.2 MB', description: 'הנחיות מפורטות' },
           { title: 'רשימת בדיקה', type: 'txt', url: '/materials/c5/lesson10-checklist.txt', size: '1.4 MB', description: 'Checklist מלא' },
           { title: 'דוגמאות פרויקטים', type: 'txt', url: '/materials/c5/lesson10-project-examples.txt', size: '2.9 MB', description: '5 דוגמאות מצוינות' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'c6',
+    title: 'Gems in Gemini - עוזרי AI מותאמים אישית',
+    description: 'למד ליצור Gems ב-Gemini: עוזרי AI מותאמים אישית עם הוראות, ידע ומגבלות משלך. שיתוף Gems, אינטגרציה עם Workspace ועבודה צוותית.',
+    level: 'מתחילים',
+    category: 'מבוא ופרודוקטיביות',
+    duration: '2.5 שעות',
+    lessonsCount: 6,
+    icon: <Sparkles className="w-6 h-6" />,
+    price: 220,
+    materials: [
+      { title: 'מדריך Gems המלא', type: 'txt', url: '/materials/c6/course-gems-guide.txt', size: '2.2 MB', description: 'מדריך מקיף ל-Gems' },
+      { title: 'תבניות Gems מוכנות', type: 'txt', url: '/materials/c6/course-gems-templates.txt', size: '1.5 MB', description: 'תבניות לשימוש מידי' },
+      { title: 'דוגמאות Gems פופולריים', type: 'txt', url: '/materials/c6/course-gems-examples.txt', size: '1.8 MB', description: 'אוסף Gems לדוגמה' }
+    ],
+    lessons: [
+      { 
+        id: 'l6-1', 
+        title: 'מה זה Gems ב-Gemini?', 
+        duration: '20:00', 
+        isFree: true,
+        description: 'היכרות עם Gems - עוזרי AI מותאמים אישית ב-Gemini',
+        materials: [
+          { title: 'מבוא ל-Gems', type: 'txt', url: '/materials/c6/lesson1-gems-intro.txt', size: '2.0 MB', description: 'מדריך מקיף למתחילים' },
+          { title: 'יתרונות Gems', type: 'txt', url: '/materials/c6/lesson1-benefits.txt', size: '1.4 MB', description: 'למה ליצור Gems?' },
+          { title: 'Gems מובנים vs Gems מותאמים', type: 'txt', url: '/materials/c6/lesson1-comparison.txt', size: '1.5 MB', description: 'השוואה והבדלים' },
+        ]
+      },
+      { 
+        id: 'l6-2', 
+        title: 'יצירת Gem ראשון', 
+        duration: '25:00',
+        description: 'צעד אחר צעד - בניית Gem מותאם',
+        materials: [
+          { title: 'מדריך יצירת Gem', type: 'txt', url: '/materials/c6/lesson2-create-gem.txt', size: '2.5 MB', description: 'צעד אחר צעד' },
+          { title: 'הוראות מערכת (System Instructions)', type: 'txt', url: '/materials/c6/lesson2-system-instructions.txt', size: '2.0 MB', description: 'כתיבת הוראות ל-Gem' },
+          { title: 'טיפים להגדרה', type: 'txt', url: '/materials/c6/lesson2-tips.txt', size: '1.2 MB', description: 'הגדרה יעילה' },
+        ]
+      },
+      { 
+        id: 'l6-3', 
+        title: 'הוספת מקורות ידע ל-Gem', 
+        duration: '25:00',
+        description: 'העלאת קבצים ו-URLs כידע ל-Gem',
+        materials: [
+          { title: 'מדריך מקורות ידע', type: 'txt', url: '/materials/c6/lesson3-knowledge-sources.txt', size: '2.2 MB', description: 'העלאת קבצים וקישורים' },
+          { title: 'סוגי מקורות נתמכים', type: 'txt', url: '/materials/c6/lesson3-source-types.txt', size: '1.6 MB', description: 'PDF, Docs, קישורים' },
+          { title: 'ארגון ידע', type: 'txt', url: '/materials/c6/lesson3-organization.txt', size: '1.3 MB', description: 'ניהול מקורות יעיל' },
+        ]
+      },
+      { 
+        id: 'l6-4', 
+        title: 'הגדרות ומגבלות', 
+        duration: '20:00',
+        description: 'הגדרת התנהגות, טון ומגבלות ל-Gem',
+        materials: [
+          { title: 'מדריך הגדרות Gem', type: 'txt', url: '/materials/c6/lesson4-settings.txt', size: '2.0 MB', description: 'הגדרות מלאות' },
+          { title: 'דוגמאות הוראות', type: 'txt', url: '/materials/c6/lesson4-examples.txt', size: '1.8 MB', description: 'דוגמאות להגדרות' },
+        ]
+      },
+      { 
+        id: 'l6-5', 
+        title: 'שיתוף ו-Publishing', 
+        duration: '20:00',
+        description: 'שיתוף Gems עם אחרים ופרסום',
+        materials: [
+          { title: 'מדריך שיתוף Gems', type: 'txt', url: '/materials/c6/lesson5-sharing.txt', size: '1.9 MB', description: 'שיתוף ופרסום' },
+          { title: 'הרשאות וגישה', type: 'txt', url: '/materials/c6/lesson5-permissions.txt', size: '1.4 MB', description: 'ניהול גישה' },
+        ]
+      },
+      { 
+        id: 'l6-6', 
+        title: 'פרויקט: Gem מקצועי', 
+        duration: '30:00',
+        description: 'בניית Gem מלא - עוזר מותאם לנושא שבחרת',
+        materials: [
+          { title: 'הנחיות פרויקט', type: 'txt', url: '/materials/c6/lesson6-project.txt', size: '2.2 MB', description: 'הנחיות מפורטות' },
+          { title: 'רשימת בדיקה', type: 'txt', url: '/materials/c6/lesson6-checklist.txt', size: '1.0 MB', description: 'Checklist מלא' },
+          { title: 'דוגמאות Gems', type: 'txt', url: '/materials/c6/lesson6-examples.txt', size: '1.6 MB', description: '5 דוגמאות מצוינות' },
         ]
       },
     ]
