@@ -1,34 +1,64 @@
 הגדרות מומלצות ל-Project IDX
 ===============================
 
-הגדרות עורך:
-{
-  "editor.fontSize": 14,
-  "editor.tabSize": 2,
-  "editor.wordWrap": "on",
-  "editor.formatOnSave": true,
-  "editor.minimap.enabled": true
-}
+מבוא
+====
+קובץ זה מציג הגדרות מומלצות לסביבת Project IDX – עורך הקוד, Gemini Code Assist, והטרמינל. כל הגדרה מוסברת למטה – מה היא עושה ומתי לשנות.
 
-הגדרות Gemini Code Assist:
-{
-  "gemini.enabled": true,
-  "gemini.autoComplete": true,
-  "gemini.contextAware": true,
-  "gemini.maxSuggestions": 3
-}
+הגדרות עורך (Editor)
+=====================
 
-הגדרות Terminal:
-{
-  "terminal.integrated.fontSize": 12,
-  "terminal.integrated.shell.windows": "PowerShell"
-}
+מה כל הגדרה עושה:
+------------------
+• editor.fontSize: 14 – גודל הגופן בעורך. 14 נוח לרוב; אפשר להקטין (12) או להגדיל (16) לפי צורך.
+• editor.tabSize: 2 – רוחב Tab ברווחים. 2 נפוץ ב-JavaScript/React; חלק משתמשים ב-4.
+• editor.wordWrap: "on" – שורות ארוכות עוברות שורה (wrap). מונע גלילה אופקית; כבה ("off") אם מעדיף שורה אחת ארוכה.
+• editor.formatOnSave: true – עורך את הקוד אוטומטית בשמירה. דורש Prettier או formatter אחר; שומר על סגנון אחיד.
+• editor.minimap.enabled: true – מפת קוד בצד. עוזר לנווט בקבצים ארוכים; כבה אם מפריע.
 
-Extensions מומלצות:
-- Gemini Code Assist
-- GitLens
-- Prettier
-- ESLint
-- Auto Rename Tag
+מתי לשנות?
+-----------
+• אם המסך קטן – הקטן fontSize או כבה minimap.
+• אם הפרויקט משתמש ב-tabSize 4 – שנה ל-4.
+• אם לא רוצה format אוטומטי – שנה formatOnSave ל-false.
 
+הגדרות Gemini Code Assist
+==========================
+
+מה כל הגדרה עושה:
+------------------
+• gemini.enabled: true – מפעיל את Gemini Code Assist. כבה (false) אם לא משתמש.
+• gemini.autoComplete: true – השלמות אוטומטיות מקוד. מציע קוד בזמן הקלדה.
+• gemini.contextAware: true – ההצעות מתחשבות בהקשר הקובץ והפרויקט. מומלץ להשאיר true.
+• gemini.maxSuggestions: 3 – כמות ההצעות המקסימלית. הגדל אם רוצה יותר אפשרויות; הקטן אם המסך עמוס.
+
+מתי לשנות?
+-----------
+• אם ההשלמות מאטות – נסה להקטין maxSuggestions.
+• אם רוצה רק עזרה ידנית (בלי השלמות) – כבה autoComplete.
+
+הגדרות Terminal
+================
+
+מה כל הגדרה עושה:
+------------------
+• terminal.integrated.fontSize: 12 – גודל גופן בטרמינל. מתאים לרוב המסכים.
+• terminal.integrated.shell.windows: "PowerShell" – שורת הפקודה ב-Windows. אפשר "Command Prompt" או Git Bash לפי העדפה.
+
+Extensions מומלצות
+==================
+
+למה כל אחת?
+------------
+• Gemini Code Assist – עזרת קוד עם AI בתוך העורך.
+• GitLens – הצגת היסטוריית Git, blames, branches – עוזר בעבודה עם Git.
+• Prettier – עיצוב קוד אוטומטי (format) – עקביות בפרויקט.
+• ESLint – זיהוי שגיאות וסגנון קוד – איכות ותחזוקה.
+• Auto Rename Tag – שינוי תג HTML/JSX משנה גם את התג הסוגר – חוסך זמן ב-React.
+
+איך להתקין?
+-----------
+בתפריט Extensions (או Ctrl+Shift+X) – חפש כל שם והתקן. אחרי התקנה, הפעל מחדש אם נדרש.
+
+---
 © Google AI Academy 2026

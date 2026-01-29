@@ -6,8 +6,21 @@ Jest ו-React Testing
 
 מבוא
 ====
+מדריך מקיף ל-Jest ו-React Testing Library – כלים לכתיבת בדיקות אוטומטיות לרכיבי React. כל דוגמה למטה מוסברת: מה הבדיקה בודקת, איך render ו-screen עובדים, ומתי להשתמש ב-fireEvent או userEvent.
 
-מדריך מקיף ל-Jest ו-React Testing Library.
+למה לבדוק React?
+-----------------
+• וידוא שרכיבים מציגים תוכן נכון – למשל כפתור עם הטקסט "Click me".
+• וידוא שאירועים (לחיצה, הקלדה) מפעילים את הלוגיקה – למשל onClick נקרא.
+• מניעת regressions – אחרי שינוי קוד, הבדיקות מגלות אם משהו נשבר.
+
+מה כל פונקציה עושה?
+---------------------
+• render(component) – מציג את הרכיב בסביבה וירטואלית (לא בדפדפן אמיתי).
+• screen – גישה לאלמנטים במסך (getByText, getByRole, וכו').
+• fireEvent / userEvent – סימולציה של פעולות משתמש (click, type).
+• expect(...).toBeInTheDocument() – בודק שהאלמנט קיים ב-DOM.
+• expect(...).toHaveBeenCalled() – בודק שפונקציה (למשל onClick) נקראה.
 
 התקנה
 ======

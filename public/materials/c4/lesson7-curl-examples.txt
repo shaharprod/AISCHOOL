@@ -1,7 +1,34 @@
-דוגמאות cURL ל-Gemini API
-===========================
+דוגמאות cURL ל-Gemini API - עם הסברים
+========================================
 
-1. בקשה בסיסית:
+מבוא
+====
+cURL מאפשר לשלוח בקשות HTTP מ-terminal. כאן דוגמאות ל-Gemini API – כל דוגמה מוסברת: מה היא עושה, אילו פרמטרים, ומתי להשתמש. החלף תמיד YOUR_API_KEY במפתח ה-API האמיתי שלך (מ-Google AI Studio).
+
+דוגמה 1: בקשה בסיסית
+=====================
+
+מה זה עושה?
+------------
+שולח שאלה טקסטואלית אחת ל-Gemini (מודל gemini-pro) ומקבל תשובה אחת.
+
+איך זה עובד?
+-------------
+• POST ל-URL של generateContent עם מפתח ב-query.
+• Body: JSON עם "contents" – מערך של הודעות; כאן הודעה אחת עם "parts" שמכיל "text".
+• התשובה תחזור ב-JSON עם הטקסט שנוצר.
+
+מתי להשתמש?
+------------
+✓ בדיקה מהירה של ה-API מ-terminal.
+✓ סקריפטים פשוטים שצריכים תשובה אחת.
+
+פרמטרים חשובים:
+----------------
+• key=YOUR_API_KEY – חובה. מפתח מ-Google AI Studio.
+• "text" – השאלה או הפקודה ל-Gemini.
+
+```bash
 curl -X POST \
   "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -12,8 +39,26 @@ curl -X POST \
       }]
     }]
   }'
+```
 
-2. עם System Instructions:
+דוגמה 2: עם System Instructions
+================================
+
+מה זה עושה?
+------------
+שולח בקשה עם "system instruction" – הוראה קבועה ל-Gemini (תפקיד, טון, מגבלות). התשובות יתאימו להוראה הזו.
+
+איך זה עובד?
+-------------
+• בנוסף ל-contents מוסיפים "system_instruction" עם "parts" ו-"text".
+• System instruction נשמר לאורך השיחה (בשיחה עם history). כאן זו בקשה בודדת אז זה חל רק על התשובה הזו.
+
+מתי להשתמש?
+------------
+✓ כשאתה רוצה ש-Gemini יתנהג כמורה, עוזר, מתרגם וכו'.
+✓ כבסיס ל-Gems – ה-system instruction מגדיר את האישיות.
+
+```bash
 curl -X POST \
   "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -29,8 +74,30 @@ curl -X POST \
       }]
     }]
   }'
+```
 
-3. שאילתה עם תמונה (Multimodal):
+דוגמה 3: שאילתה עם תמונה (Multimodal)
+=======================================
+
+מה זה עושה?
+------------
+שולח תמונה + שאלה ל-Gemini (מודל vision, למשל gemini-pro-vision). Gemini מנתח את התמונה ועונה.
+
+איך זה עובד?
+-------------
+• משתמשים ב-endpoint של מודל שתומך ב-vision.
+• ב-contents יש שני parts: "text" (השאלה) ו-"inline_data" עם "mime_type" ו-"data" (תוכן התמונה ב-Base64).
+• יש להמיר את קובץ התמונה ל-Base64 ולהדביק במקום BASE64_IMAGE_DATA.
+
+מתי להשתמש?
+------------
+✓ ניתוח תמונות, OCR, תיאור תמונה, שאלות על תוכן ויזואלי.
+
+הערה:
+-----
+בפועל קל יותר להשתמש ב-SDK (Python/Node) להעלאת תמונה – cURL דורש Base64 ידני.
+
+```bash
 curl -X POST \
   "https://generativelanguage.googleapis.com/v1/models/gemini-pro-vision:generateContent?key=YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -47,8 +114,27 @@ curl -X POST \
       ]
     }]
   }'
+```
 
-4. Streaming Response:
+דוגמה 4: Streaming Response
+=============================
+
+מה זה עושה?
+------------
+מקבל את התשובה כ-stream – טקסט מגיע בחלקים (chunks) בזמן אמת, במקום לחכות לתשובה המלאה.
+
+איך זה עובד?
+-------------
+• משתמשים ב-endpoint streamGenerateContent (ולא generateContent).
+• הדגל -N ב-curl שומר על streaming (לא buffer).
+• התשובה תגיע כרשימת chunks ב-JSON; כל chunk מכיל חלק מהטקסט.
+
+מתי להשתמש?
+------------
+✓ כשאתה בונה ממשק שמציג תשובה בזמן אמת (כמו ChatGPT).
+✓ כשהתשובות ארוכות ורוצים להציג progress.
+
+```bash
 curl -N -X POST \
   "https://generativelanguage.googleapis.com/v1/models/gemini-pro:streamGenerateContent?key=YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -59,11 +145,13 @@ curl -N -X POST \
       }]
     }]
   }'
+```
 
-הערות חשובות:
-- החלף YOUR_API_KEY במפתח ה-API שלך
-- שמור על ה-API Key במקום מאובטח
-- אל תחשוף את המפתח בקוד או ב-Git
+הערות אבטחה
+============
+• החלף YOUR_API_KEY במפתח האמיתי – ואל תחשוף אותו ב-Git או בציבור.
+• שמור מפתחות ב-environment variables או ב-Secrets (בשרת/CI).
+• מדריך מלא: https://ai.google.dev/docs
 
-מדריך מלא: https://ai.google.dev/docs
+---
 © Google AI Academy 2026
