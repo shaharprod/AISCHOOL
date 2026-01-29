@@ -54,7 +54,7 @@ Google Slides – חסרונות
 =================
 • התחל ב-Canvas – צור אינפוגראפיקה או מבנה עם Gemini.
 • העבר/העתק תוכן ל-Slides – אם צריך מצגת שקפים מלאה או שיתוף בפורמט Slides.
-• תמונות: צור בלננו בננה (Nano Banana) והוסף ל-Canvas או ל-Slides.
+• תמונות: צור בננו בננה (Nano Banana) והוסף ל-Canvas או ל-Slides.
 
 ---
 © 2026 Google AI Academy - השוואה Canvas vs Slides

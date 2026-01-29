@@ -195,7 +195,7 @@ const COURSES: Course[] = [
   {
     id: 'c2',
     title: 'יצירת מצגות ואינפוגראפיקות עם Canvas ו-Google Slides',
-    description: 'סדנה ליצירת מצגות ואינפוגראפיקות מקצועיות עם Canvas ו-Google Slides בשילוב Gemini, ויצירת ועריכת תמונות עם לננו בננה (Nano Banana).',
+    description: 'סדנה ליצירת מצגות ואינפוגראפיקות מקצועיות עם Canvas ו-Google Slides בשילוב Gemini, ויצירת ועריכת תמונות עם ננו בננה (Nano Banana).',
     level: 'מתחילים',
     category: 'עיצוב ויצירה',
     duration: '4 שעות',
@@ -205,7 +205,7 @@ const COURSES: Course[] = [
     materials: [
       { title: 'מדריך Canvas + Google Slides', type: 'txt', url: '/materials/c2/course-canvas-slides.txt', size: '1.8 MB', description: 'יצירת מצגות ואינפוגראפיקות' },
       { title: 'תבנית מצגת Google Slides מותאמת AI', type: 'txt', url: '/materials/c2/course-slides-template.txt', size: '1.5 MB', description: 'מדריך ליצירת מצגות' },
-      { title: 'מדריך לננו בננה - יצירה ועריכת תמונות', type: 'txt', url: '/materials/c2/course-nanobanana-guide.txt', size: '2.0 MB', description: 'כל סגנונות ויכולות לננו בננה' }
+      { title: 'מדריך ננו בננה - יצירה ועריכת תמונות', type: 'txt', url: '/materials/c2/course-nanobanana-guide.txt', size: '2.0 MB', description: 'כל סגנונות ויכולות ננו בננה' }
     ],
     lessons: [
       { 
@@ -245,11 +245,11 @@ const COURSES: Course[] = [
       },
       { 
         id: 'l2-4', 
-        title: 'לננו בננה - הכרות ויצירת תמונות', 
+        title: 'ננו בננה - הכרות ויצירת תמונות', 
         duration: '25:00',
         description: 'כלי יצירה ועריכת תמונות עם AI',
         materials: [
-          { title: 'מבוא ללננו בננה', type: 'txt', url: '/materials/c2/lesson4-nanobanana-intro.txt', size: '1.8 MB', description: 'מדריך מקיף ליצירת תמונות עם לננו בננה' },
+          { title: 'מבוא לננו בננה', type: 'txt', url: '/materials/c2/lesson4-nanobanana-intro.txt', size: '1.8 MB', description: 'מדריך מקיף ליצירת תמונות עם ננו בננה' },
           { title: 'פרומפטים ליצירת תמונות', type: 'txt', url: '/materials/c2/lesson4-prompts.txt', size: '1.2 MB', description: 'אוסף פרומפטים מוכנים' },
           { title: 'סגנונות ורעיונות', type: 'txt', url: '/materials/c2/lesson4-tips.txt', size: '0.9 MB', description: 'טיפים ליצירת תמונות מושלמות' },
           { title: 'דוגמאות תמונות', type: 'link', url: 'https://drive.google.com/backgrounds', size: '-' },
@@ -257,11 +257,11 @@ const COURSES: Course[] = [
       },
       { 
         id: 'l2-5', 
-        title: 'לננו בננה - עריכת תמונות', 
+        title: 'ננו בננה - עריכת תמונות', 
         duration: '25:00',
         description: 'כלי עריכה מתקדמים בתמונות',
         materials: [
-          { title: 'מדריך עריכת תמונות בלננו בננה', type: 'txt', url: '/materials/c2/lesson5-nanobanana-editing.txt', size: '2.1 MB', description: 'מדריך מלא לעריכת תמונות' },
+          { title: 'מדריך עריכת תמונות בננו בננה', type: 'txt', url: '/materials/c2/lesson5-nanobanana-editing.txt', size: '2.1 MB', description: 'מדריך מלא לעריכת תמונות' },
           { title: 'טריקים לעריכה מתקדמת', type: 'txt', url: '/materials/c2/lesson5-editing-tricks.txt', size: '1.6 MB', description: 'טכניקות מתקדמות לעריכה' },
           { title: 'תמונות לתרגול עריכה', type: 'link', url: 'https://drive.google.com/practice', size: '-' },
         ]
@@ -270,9 +270,9 @@ const COURSES: Course[] = [
         id: 'l2-6', 
         title: 'שילוב תמונות במצגות וזהות ויזואלית', 
         duration: '30:00',
-        description: 'שילוב לננו בננה ו-Canvas ללוגו ומותג',
+        description: 'שילוב ננו בננה ו-Canvas ללוגו ומותג',
         materials: [
-          { title: 'מדריך עיצוב לוגו', type: 'txt', url: '/materials/c2/lesson6-logo-design.txt', size: '2.4 MB', description: 'עיצוב לוגואים עם לננו בננה ו-Canvas' },
+          { title: 'מדריך עיצוב לוגו', type: 'txt', url: '/materials/c2/lesson6-logo-design.txt', size: '2.4 MB', description: 'עיצוב לוגואים עם ננו בננה ו-Canvas' },
           { title: 'דוגמאות לוגואים וזהות מותג', type: 'txt', url: '/materials/c2/lesson6-brand-examples.txt', size: '2.8 MB', description: 'אוסף דוגמאות וזהות מותג' },
           { title: 'תבנית מדריך סגנון', type: 'txt', url: '/materials/c2/lesson6-style-guide.txt', size: '1.7 MB', description: 'מדריך סגנון מותג' },
         ]
